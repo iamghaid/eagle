@@ -1,0 +1,278 @@
+<!--
+  ====================================================
+  Global Eagle Travel — Loading Screen (FIXED)
+  ✅ بدون صور خارجية — النسر SVG خالص
+  ✅ الموقع يظهر بعد الأنيميشن مباشرة
+  ====================================================
+  كيفية الإضافة للموقع:
+  1. CSS  → انسخه قبل </head>
+  2. HTML → أول شي بعد <body>
+  3. JS   → قبل </body>
+  ====================================================
+-->
+
+<!-- ✅ الخطوة 1: CSS — قبل </head> -->
+<style>
+#gel-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(ellipse at 50% 60%, #001d5c 0%, #00113a 55%, #000a22 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.2s ease;
+}
+#gel-loader.gel-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.gel-star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: gel-twk 3s ease-in-out infinite;
+}
+@keyframes gel-twk {
+  0%,100% { opacity: .15; }
+  50%      { opacity: 1;   }
+}
+.gel-float {
+  animation: gel-soar 5s cubic-bezier(.23,1,.32,1) both;
+}
+@keyframes gel-soar {
+  0%   { transform: translateY(110px) scale(.25) rotate(-6deg); opacity: 0; }
+  40%  { transform: translateY(-18px) scale(1.07) rotate(2deg); opacity: 1; }
+  65%  { transform: translateY(8px)  scale(.97)  rotate(-1deg); }
+  85%  { transform: translateY(-4px) scale(1.02); }
+  100% { transform: translateY(0)   scale(1)    rotate(0);    opacity: 1; }
+}
+.gel-bob {
+  animation: gel-bob 3.5s ease-in-out infinite;
+  animation-delay: 5.2s;
+}
+@keyframes gel-bob {
+  0%,100% { transform: translateY(0)   rotate(0);    }
+  30%     { transform: translateY(-7px) rotate(1deg); }
+  70%     { transform: translateY(4px)  rotate(-.5deg); }
+}
+.gel-glow {
+  animation: gel-glow 2.8s ease-in-out infinite;
+  animation-delay: 5s;
+}
+@keyframes gel-glow {
+  0%,100% { filter: drop-shadow(0 0 18px rgba(212,175,55,.45)); }
+  50%     { filter: drop-shadow(0 0 40px rgba(212,175,55,.8))
+                    drop-shadow(0 0 70px rgba(212,175,55,.3)); }
+}
+.gel-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,.15);
+  opacity: 0;
+  animation: gel-ring 2s ease-in-out infinite;
+  animation-delay: 5.5s;
+}
+@keyframes gel-ring {
+  0%   { transform: translate(-50%,-50%) scale(.85); opacity: 0; }
+  50%  { opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(1.25); opacity: 0; }
+}
+.gel-name {
+  color: #D4AF37;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-top: 22px;
+  opacity: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  text-shadow: 0 0 30px rgba(212,175,55,.4);
+  animation: gel-up .9s cubic-bezier(.16,1,.3,1) forwards;
+  animation-delay: 2.6s;
+}
+.gel-sub {
+  color: rgba(255,255,255,.55);
+  font-size: 12px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  margin-top: 7px;
+  opacity: 0;
+  font-family: 'Manrope', Arial, sans-serif;
+  font-weight: 300;
+  animation: gel-up .9s cubic-bezier(.16,1,.3,1) forwards;
+  animation-delay: 3.1s;
+}
+@keyframes gel-up {
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+.gel-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  width: 0;
+  margin: 14px auto;
+  animation: gel-line 1s ease forwards;
+  animation-delay: 3.3s;
+}
+@keyframes gel-line { to { width: 190px; } }
+.gel-bar-wrap {
+  width: 220px; height: 2px;
+  background: rgba(255,255,255,.1);
+  border-radius: 1px;
+  margin-top: 38px;
+  overflow: hidden;
+  opacity: 0;
+  animation: gel-fi .5s forwards;
+  animation-delay: 3.6s;
+}
+@keyframes gel-fi { to { opacity: 1; } }
+.gel-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #D4AF37, #f5dc70, #D4AF37);
+  background-size: 200%;
+  border-radius: 1px;
+  animation: gel-prog 3.8s cubic-bezier(.4,0,.2,1) forwards,
+             gel-shim 1.2s linear infinite;
+  animation-delay: 3.6s, 3.6s;
+}
+@keyframes gel-prog {
+  0%  { width: 0;   }
+  35% { width: 45%; }
+  75% { width: 78%; }
+  95% { width: 93%; }
+  100%{ width: 100%;}
+}
+@keyframes gel-shim {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.gel-hint {
+  color: rgba(255,255,255,.35);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-top: 11px;
+  font-family: Arial, sans-serif;
+  opacity: 0;
+  animation: gel-fi .5s forwards;
+  animation-delay: 4.2s;
+}
+</style>
+
+
+<!-- ✅ الخطوة 2: HTML — أول شي بعد <body> -->
+<div id="gel-loader">
+
+  <div id="gel-stars-wrap" style="position:absolute;inset:0;overflow:hidden;pointer-events:none"></div>
+
+  <div style="position:relative">
+    <div class="gel-ring"></div>
+    <div class="gel-bob">
+      <div class="gel-float">
+        <div class="gel-glow">
+
+          <!-- النسر SVG — بدون أي صورة خارجية -->
+          <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- الكرة الأرضية -->
+            <circle cx="148" cy="108" r="50" fill="none" stroke="#D4AF37" stroke-width="2.2"/>
+            <ellipse cx="148" cy="108" rx="50" ry="19" fill="none" stroke="#D4AF37" stroke-width="1.4"/>
+            <ellipse cx="148" cy="108" rx="32" ry="50" fill="none" stroke="#D4AF37" stroke-width="1.4"/>
+            <line x1="148" y1="58" x2="148" y2="158" stroke="#D4AF37" stroke-width="1.4"/>
+            <line x1="98"  y1="108" x2="198" y2="108" stroke="#D4AF37" stroke-width="1.4"/>
+
+            <!-- الطائرة -->
+            <g transform="translate(153,48) rotate(-38)" fill="#D4AF37">
+              <ellipse cx="0" cy="0" rx="17" ry="4"/>
+              <path d="M-2,-3 L-8,-13 L5,-13 L8,-3 Z"/>
+              <path d="M-2,3 L-7,10 L3,10 L6,3 Z"/>
+              <path d="M-16,-2 L-22,-7 L-17,-2 Z"/>
+            </g>
+
+            <!-- المنقار -->
+            <path d="M22,90 L44,83 L51,91 L35,98 Z" fill="#D4AF37"/>
+            <path d="M22,90 L35,98 L48,95 L51,91 Z" fill="#BF9B30"/>
+
+            <!-- رأس النسر -->
+            <path d="M51,91 C56,80 62,67 73,61 C83,55 96,59 98,72 C101,83 94,96 85,102 C76,108 61,107 54,100 Z" fill="#D4AF37"/>
+
+            <!-- العين -->
+            <circle cx="74" cy="75" r="5" fill="#00113a"/>
+            <circle cx="73" cy="74" r="1.8" fill="#D4AF37" opacity="0.4"/>
+
+            <!-- ريش التاج -->
+            <path d="M82,61 C84,51 88,45 93,41 C91,50 91,58 88,63 Z" fill="#D4AF37"/>
+            <path d="M89,63 C94,54 100,50 104,46 C101,55 99,62 95,67 Z" fill="#D4AF37"/>
+
+            <!-- جسم النسر -->
+            <path d="M85,102 C93,112 104,125 117,138 C128,150 140,162 146,172 C130,168 113,159 98,148 C83,137 71,120 66,106 C62,96 70,92 78,94 Z" fill="#D4AF37"/>
+
+            <!-- ريش الذيل -->
+            <path d="M117,138 C128,156 145,174 162,186 L152,171 C140,160 128,148 116,136 Z" fill="#D4AF37"/>
+            <path d="M105,148 C116,167 133,183 152,193 L143,178 C131,166 119,153 108,142 Z" fill="#C8A02A"/>
+            <path d="M92,155  C100,174 114,189 133,198 L126,183 C115,170 105,156 95,145 Z"  fill="#C8A02A"/>
+
+            <!-- تفاصيل الريش -->
+            <g stroke="#A07010" stroke-width="1.1" fill="none" opacity="0.75">
+              <path d="M85,102 C96,118 112,136 132,158 C142,170 148,178 152,184"/>
+              <path d="M80,108 C90,124 105,143 123,163 C132,175 138,183 141,188"/>
+              <path d="M76,116 C84,132 97,151 113,170 C121,181 126,188 129,193"/>
+              <path d="M72,124 C79,140 90,158 104,176 C111,186 116,193 119,198"/>
+              <path d="M68,132 C74,148 84,165 96,181"/>
+            </g>
+
+            <!-- صدر النسر -->
+            <path d="M78,94 C70,99 62,108 58,119 C54,130 59,140 67,142 C69,131 72,120 79,112 Z" fill="#D4AF37"/>
+          </svg>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gel-name">Global Eagle</div>
+  <div class="gel-line"></div>
+  <div class="gel-sub">For Travel &amp; Tourism</div>
+  <div class="gel-bar-wrap"><div class="gel-bar"></div></div>
+  <div class="gel-hint">Preparing your journey...</div>
+
+</div>
+
+
+<!-- ✅ الخطوة 3: JavaScript — قبل </body> -->
+<script>
+(function () {
+  // ---- نجوم الخلفية ----
+  var wrap = document.getElementById('gel-stars-wrap');
+  for (var i = 0; i < 75; i++) {
+    var s = document.createElement('div');
+    s.className = 'gel-star';
+    var sz = Math.random() * 2.2 + 0.4;
+    s.style.cssText =
+      'width:' + sz + 'px;' +
+      'height:' + sz + 'px;' +
+      'top:' + (Math.random() * 100) + '%;' +
+      'left:' + (Math.random() * 100) + '%;' +
+      'animation-delay:' + (Math.random() * 4) + 's;' +
+      'animation-duration:' + (2 + Math.random() * 2.5) + 's';
+    wrap.appendChild(s);
+  }
+
+  // ---- إخفاء الـ loader بعد الانتهاء ----
+  // غيّر 8200 (ملي ثانية = 8.2 ثواني) حسب ما تبغى
+  setTimeout(function () {
+    var loader = document.getElementById('gel-loader');
+    loader.classList.add('gel-out');
+    // إزالة كاملة من الـ DOM بعد انتهاء الـ transition
+    setTimeout(function () {
+      loader.remove();
+    }, 1300);
+  }, 8200);
+})();
+</script>
