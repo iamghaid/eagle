@@ -4,34 +4,85 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Global Eagle Travel | Rise Above. Aim High.</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <style>
 /* ─── RESET & BASE ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{
-  background:#111;
-  color:#fff;
-  font-family:'Manrope',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
   overflow-x:hidden;
   line-height:1.6;
+  transition:background .4s,color .4s;
 }
 img{display:block;max-width:100%;height:auto;}
 a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'Manrope',sans-serif;}
+button{cursor:pointer;font-family:var(--font-body);}
 
-/* ─── VARS ─── */
+/* ─── THEME VARS ─── */
 :root{
   --gold:#D4AF37;
   --gold2:#FFE47A;
   --gold3:#A07820;
-  --ink:#111111;
-  --ink2:#1C1C1C;
-  --white:#FFFFFF;
   --pad-x:clamp(20px,5vw,80px);
   --pad-y:clamp(60px,10vw,120px);
+  /* dark (default) */
+  --bg:#111111;
+  --bg2:#1C1C1C;
+  --bg3:#0a0a0a;
+  --text:#ffffff;
+  --text2:rgba(255,255,255,.65);
+  --text3:rgba(255,255,255,.38);
+  --border:rgba(212,175,55,.1);
+  --glass:rgba(255,255,255,.03);
+  --nav-bg:rgba(10,10,10,.25);
+  --nav-scroll:rgba(10,10,10,.96);
+  --card-bg:rgba(255,255,255,.03);
+  --font-body:'Manrope',sans-serif;
+  --font-ar:'Cairo',sans-serif;
 }
+[data-theme="light"]{
+  --bg:#F5F0E8;
+  --bg2:#EDE8DC;
+  --bg3:#E8E0D0;
+  --text:#1a1208;
+  --text2:rgba(26,18,8,.65);
+  --text3:rgba(26,18,8,.4);
+  --border:rgba(160,120,32,.2);
+  --glass:rgba(255,255,255,.6);
+  --nav-bg:rgba(245,240,232,.7);
+  --nav-scroll:rgba(245,240,232,.97);
+  --card-bg:rgba(255,255,255,.7);
+}
+[data-theme="light"] body{background:var(--bg);}
+[data-theme="light"] .sec{background:var(--bg)!important;}
+[data-theme="light"] #services{background:var(--bg2)!important;}
+[data-theme="light"] #how{background:var(--bg)!important;}
+[data-theme="light"] #contact{background:var(--bg2)!important;}
+[data-theme="light"] footer{background:var(--bg3)!important;}
+[data-theme="light"] .glass{background:var(--card-bg);border-color:var(--border);}
+[data-theme="light"] .sec-h2{color:var(--text);}
+[data-theme="light"] .step-title{color:var(--text);}
+[data-theme="light"] .b-title{color:var(--text);}
+[data-theme="light"] .footer-logo{color:var(--gold3);}
+[data-theme="light"] .pkg-title{color:#fff;}
+[data-theme="light"] ::-webkit-scrollbar-track{background:var(--bg2);}
+
+/* Arabic font override */
+[data-lang="ar"]{font-family:var(--font-ar)!important;}
+[data-lang="ar"] *{font-family:var(--font-ar)!important;}
+[data-lang="ar"] .hero-h1,[data-lang="ar"] .sec-h2,[data-lang="ar"] .b-title,[data-lang="ar"] .step-title{font-family:var(--font-ar)!important;}
+
+/* hide/show lang */
+.ar{display:none;}
+[data-lang="ar"] .en{display:none!important;}
+[data-lang="ar"] .ar{display:inline!important;}
+[data-lang="ar"] .ar-block{display:block!important;}
+[data-lang="ar"] .en-block{display:none!important;}
+.ar-block{display:none;}
 
 /* ─── SCROLLBAR ─── */
 ::-webkit-scrollbar{width:4px;}
@@ -83,11 +134,11 @@ button{cursor:pointer;font-family:'Manrope',sans-serif;}
   position:fixed;top:0;left:0;width:100%;z-index:500;
   display:flex;align-items:center;justify-content:space-between;
   padding:20px var(--pad-x);
-  background:rgba(10,10,10,.25);backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(212,175,55,.07);
+  background:var(--nav-bg);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
   transition:padding .4s,background .4s;
 }
-#nav.scrolled{padding:12px var(--pad-x);background:rgba(10,10,10,.96);}
+#nav.scrolled{padding:12px var(--pad-x);background:var(--nav-scroll);}
 .nav-logo{
   font-family:'Playfair Display',serif;font-size:1.2rem;
   color:var(--gold);letter-spacing:.18em;font-weight:700;white-space:nowrap;
@@ -95,28 +146,54 @@ button{cursor:pointer;font-family:'Manrope',sans-serif;}
 .nav-links{display:flex;gap:clamp(16px,3vw,40px);}
 .nav-links a{
   font-size:.72rem;letter-spacing:.1em;font-weight:600;
-  color:rgba(255,255,255,.7);text-transform:uppercase;
+  color:var(--text2);text-transform:uppercase;
   transition:color .25s;position:relative;
 }
+[data-lang="ar"] .nav-links a{letter-spacing:.02em;font-size:.82rem;}
 .nav-links a::after{
   content:'';position:absolute;bottom:-4px;left:0;
   width:0;height:1px;background:var(--gold);transition:width .3s;
 }
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
 .nav-socials{display:flex;gap:14px;color:rgba(212,175,55,.6);}
 .nav-socials a{transition:color .25s;font-size:.9rem;}
 .nav-socials a:hover{color:var(--gold);}
-.btn-nav{
-  border:1px solid var(--gold);color:var(--gold);background:transparent;
-  padding:9px 22px;font-size:.7rem;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;transition:all .3s;white-space:nowrap;
+
+/* Theme toggle */
+.btn-theme{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--border);background:var(--glass);
+  color:var(--gold);font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;backdrop-filter:blur(8px);
 }
-.btn-nav:hover{background:var(--gold);color:#000;}
+.btn-theme:hover{border-color:var(--gold);background:rgba(212,175,55,.1);}
+
+/* Lang toggle */
+.btn-lang{
+  display:flex;border:1px solid var(--border);border-radius:99px;
+  background:var(--glass);overflow:hidden;backdrop-filter:blur(8px);
+}
+.btn-lang span{
+  padding:7px 13px;font-size:.65rem;font-weight:700;letter-spacing:.1em;
+  color:var(--text2);transition:all .25s;cursor:pointer;
+}
+.btn-lang span.active{background:var(--gold);color:#000;}
+
+/* Inquire button - clearer */
+.btn-nav{
+  border:2px solid var(--gold);color:var(--gold);background:transparent;
+  padding:9px 20px;font-size:.72rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;transition:all .3s;white-space:nowrap;
+  border-radius:2px;
+}
+.btn-nav:hover{background:var(--gold);color:#000;box-shadow:0 0 20px rgba(212,175,55,.35);}
 /* hamburger */
 #ham{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;}
 #ham span{display:block;width:22px;height:1.5px;background:var(--gold);}
+[data-theme="light"] #ham span{background:var(--gold3);}
 
 /* ─── MOBILE NAV ─── */
 #mob-nav{
@@ -408,22 +485,22 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
 <!-- ════ MOBILE MENU ════ -->
 <div id="mob-nav">
   <button id="mob-close" onclick="closeMob()">✕</button>
-  <a href="#hero" onclick="closeMob()">Home</a>
-  <a href="#packages" onclick="closeMob()">Packages</a>
-  <a href="#services" onclick="closeMob()">Services</a>
-  <a href="#how" onclick="closeMob()">How It Works</a>
-  <a href="#contact" onclick="closeMob()">Contact</a>
+  <a href="#hero" onclick="closeMob()"><span class="en">Home</span><span class="ar">الرئيسية</span></a>
+  <a href="#packages" onclick="closeMob()"><span class="en">Packages</span><span class="ar">الباقات</span></a>
+  <a href="#services" onclick="closeMob()"><span class="en">Services</span><span class="ar">الخدمات</span></a>
+  <a href="#how" onclick="closeMob()"><span class="en">How It Works</span><span class="ar">كيف نعمل</span></a>
+  <a href="#contact" onclick="closeMob()"><span class="en">Contact</span><span class="ar">تواصل معنا</span></a>
 </div>
 
 <!-- ════ NAV ════ -->
 <nav id="nav">
   <div class="nav-logo">Global Eagle</div>
   <div class="nav-links">
-    <a href="#hero" class="active">Home</a>
-    <a href="#packages">Packages</a>
-    <a href="#services">Services</a>
-    <a href="#how">How It Works</a>
-    <a href="#contact">Contact</a>
+    <a href="#hero" class="active"><span class="en">Home</span><span class="ar">الرئيسية</span></a>
+    <a href="#packages"><span class="en">Packages</span><span class="ar">الباقات</span></a>
+    <a href="#services"><span class="en">Services</span><span class="ar">الخدمات</span></a>
+    <a href="#how"><span class="en">How It Works</span><span class="ar">كيف نعمل</span></a>
+    <a href="#contact"><span class="en">Contact</span><span class="ar">تواصل</span></a>
   </div>
   <div class="nav-right">
     <div class="nav-socials">
@@ -431,7 +508,21 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
       <a href="https://snapchat.com" target="_blank" class="footer-soc"><i class="fa-brands fa-snapchat"></i></a>
       <a href="https://tiktok.com" target="_blank" class="footer-soc"><i class="fa-brands fa-tiktok"></i></a>
     </div>
-    <button class="btn-nav" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Inquire Now</button>
+
+    <!-- Lang toggle -->
+    <div class="btn-lang" id="lang-toggle">
+      <span id="lang-en" class="active" onclick="setLang('en')">EN</span>
+      <span id="lang-ar" onclick="setLang('ar')">AR</span>
+    </div>
+
+    <!-- Theme toggle -->
+    <button class="btn-theme" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+      <span id="theme-icon">🌙</span>
+    </button>
+
+    <button class="btn-nav" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+      <span class="en">Inquire Now</span><span class="ar">تواصل الآن</span>
+    </button>
     <button id="ham" onclick="document.getElementById('mob-nav').classList.add('open')">
       <span></span><span></span><span></span>
     </button>
@@ -445,39 +536,39 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
   </div>
 
   <div class="hero-inner">
-    <div class="hero-tag rv">ELEVATING EVERY JOURNEY</div>
-    <h1 class="hero-h1 rv">Power. Vision.<br/><em>Freedom.</em></h1>
-    <p class="hero-p rv">Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.</p>
+    <div class="hero-tag rv"><span class="en">ELEVATING EVERY JOURNEY</span><span class="ar">نرتقي بكل رحلة</span></div>
+    <h1 class="hero-h1 rv"><span class="en">Power. Vision.<br/><em>Freedom.</em></span><span class="ar">القوة. الرؤية.<br/><em>الحرية.</em></span></h1>
+    <p class="hero-p rv"><span class="en">Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.</span><span class="ar">اكتشف العالم من خلال منظور الرفاهية الحقيقية. رحلاتنا الخاصة ووجهاتنا المختارة تعيد تعريف السفر الراقي.</span></p>
     <div class="hero-btns rv">
-      <button class="btn-gold" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})">Explore More</button>
-      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">▶ Our Services</button>
+      <button class="btn-gold" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})"><span class="en">Explore More</span><span class="ar">استكشف أكثر</span></button>
+      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">▶ <span class="en">Our Services</span><span class="ar">خدماتنا</span></button>
     </div>
   </div>
 
   <div class="scroll-cue">
-    <span>Scroll</span>
+    <span class="en">Scroll</span><span class="ar">انزل</span>
     <div class="scroll-line"></div>
   </div>
 
   <div class="hero-stats rv">
     <div class="stat-item">
       <div class="stat-val" id="s1">0</div>
-      <div class="stat-lbl">Global Destinations</div>
+      <div class="stat-lbl"><span class="en">Global Destinations</span><span class="ar">وجهة عالمية</span></div>
     </div>
     <div class="stat-sep"></div>
     <div class="stat-item">
       <div class="stat-val" id="s2">0</div>
-      <div class="stat-lbl">Private Fleet</div>
+      <div class="stat-lbl"><span class="en">Private Fleet</span><span class="ar">أسطول خاص</span></div>
     </div>
     <div class="stat-sep"></div>
     <div class="stat-item">
       <div class="stat-val" id="s3">0</div>
-      <div class="stat-lbl">K+ Elite Members</div>
+      <div class="stat-lbl"><span class="en">K+ Elite Members</span><span class="ar">ألف+ عضو مميز</span></div>
     </div>
     <div class="stat-sep"></div>
     <div class="stat-item">
       <div class="stat-val" id="s4">0</div>
-      <div class="stat-lbl">Years Excellence</div>
+      <div class="stat-lbl"><span class="en">Years Excellence</span><span class="ar">سنة تميّز</span></div>
     </div>
   </div>
 </section>
@@ -485,20 +576,20 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
 <!-- ════ MARQUEE ════ -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <div class="m-item">Tourist Visas <span class="m-dot"></span></div>
-    <div class="m-item">Hotel Bookings <span class="m-dot"></span></div>
-    <div class="m-item">Flight Tickets <span class="m-dot"></span></div>
-    <div class="m-item">Student Visas <span class="m-dot"></span></div>
-    <div class="m-item">International Licenses <span class="m-dot"></span></div>
-    <div class="m-item">Travel Insurance <span class="m-dot"></span></div>
-    <div class="m-item">VIP Concierge <span class="m-dot"></span></div>
-    <div class="m-item">Tourist Visas <span class="m-dot"></span></div>
-    <div class="m-item">Hotel Bookings <span class="m-dot"></span></div>
-    <div class="m-item">Flight Tickets <span class="m-dot"></span></div>
-    <div class="m-item">Student Visas <span class="m-dot"></span></div>
-    <div class="m-item">International Licenses <span class="m-dot"></span></div>
-    <div class="m-item">Travel Insurance <span class="m-dot"></span></div>
-    <div class="m-item">VIP Concierge <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Tourist Visas</span><span class="ar">تأشيرات سياحية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Hotel Bookings</span><span class="ar">حجوزات فندقية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Flight Tickets</span><span class="ar">تذاكر طيران</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Student Visas</span><span class="ar">تأشيرات طلابية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">International Licenses</span><span class="ar">رخص دولية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Travel Insurance</span><span class="ar">تأمين سفر</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">VIP Concierge</span><span class="ar">خدمة VIP</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Tourist Visas</span><span class="ar">تأشيرات سياحية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Hotel Bookings</span><span class="ar">حجوزات فندقية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Flight Tickets</span><span class="ar">تذاكر طيران</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Student Visas</span><span class="ar">تأشيرات طلابية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">International Licenses</span><span class="ar">رخص دولية</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">Travel Insurance</span><span class="ar">تأمين سفر</span> <span class="m-dot"></span></div>
+    <div class="m-item"><span class="en">VIP Concierge</span><span class="ar">خدمة VIP</span> <span class="m-dot"></span></div>
   </div>
 </div>
 
@@ -507,40 +598,40 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
   <div class="sec-inner">
     <div class="pkg-head rv">
       <div>
-        <span class="sec-tag">Curated Collections</span>
-        <h2 class="sec-h2">Signature Experiences</h2>
+        <span class="sec-tag"><span class="en">Curated Collections</span><span class="ar">مجموعات مختارة</span></span>
+        <h2 class="sec-h2"><span class="en">Signature Experiences</span><span class="ar">تجارب استثنائية</span></h2>
       </div>
-      <a href="#" class="pkg-link">View All Voyages →</a>
+      <a href="#" class="pkg-link"><span class="en">View All Voyages →</span><span class="ar">← عرض كل الرحلات</span></a>
     </div>
     <div class="pkg-grid">
       <!-- Card 1 -->
       <div class="pkg-card rv">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY" alt="Swiss Alps"/>
         <div class="pkg-overlay">
-          <div class="pkg-cat">Alpine Elite</div>
-          <div class="pkg-title">Swiss Peak Sanctuary</div>
+          <div class="pkg-cat"><span class="en">Alpine Elite</span><span class="ar">النخبة الجبلية</span></div>
+          <div class="pkg-title"><span class="en">Swiss Peak Sanctuary</span><span class="ar">ملاذ قمم سويسرا</span></div>
           <div class="pkg-line"></div>
-          <button class="pkg-btn">Discover More →</button>
+          <button class="pkg-btn"><span class="en">Discover More →</span><span class="ar">← اكتشف أكثر</span></button>
         </div>
       </div>
       <!-- Card 2 -->
       <div class="pkg-card rv">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY" alt="Maldives"/>
         <div class="pkg-overlay">
-          <div class="pkg-cat">Oceanic Escape</div>
-          <div class="pkg-title">Azure Maldives Villa</div>
+          <div class="pkg-cat"><span class="en">Oceanic Escape</span><span class="ar">هروب المحيط</span></div>
+          <div class="pkg-title"><span class="en">Azure Maldives Villa</span><span class="ar">فيلا المالديف الزرقاء</span></div>
           <div class="pkg-line"></div>
-          <button class="pkg-btn">Discover More →</button>
+          <button class="pkg-btn"><span class="en">Discover More →</span><span class="ar">← اكتشف أكثر</span></button>
         </div>
       </div>
       <!-- Card 3 -->
       <div class="pkg-card rv">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k" alt="Desert"/>
         <div class="pkg-overlay">
-          <div class="pkg-cat">Desert Majesty</div>
-          <div class="pkg-title">Golden Sands Safari</div>
+          <div class="pkg-cat"><span class="en">Desert Majesty</span><span class="ar">جلال الصحراء</span></div>
+          <div class="pkg-title"><span class="en">Golden Sands Safari</span><span class="ar">سفاري الرمال الذهبية</span></div>
           <div class="pkg-line"></div>
-          <button class="pkg-btn">Discover More →</button>
+          <button class="pkg-btn"><span class="en">Discover More →</span><span class="ar">← اكتشف أكثر</span></button>
         </div>
       </div>
     </div>
@@ -552,57 +643,29 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
   <div class="sec-inner">
     <div class="svc-head rv">
       <div>
-        <span class="sec-tag">What We Offer</span>
-        <h2 class="sec-h2">Global Eagle Services</h2>
+        <span class="sec-tag"><span class="en">What We Offer</span><span class="ar">ما نقدمه</span></span>
+        <h2 class="sec-h2"><span class="en">Global Eagle Services</span><span class="ar">خدمات جلوبال إيجل</span></h2>
       </div>
     </div>
     <div class="bento">
-      <!-- big -->
       <div class="glass b-big rv">
         <div class="b-big-icon">✈</div>
         <div>
-          <span class="sec-tag">Premium</span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#fff;margin-bottom:14px;line-height:1.2;">Global Eagle<br/>Concierge</h3>
-          <p class="b-desc" style="max-width:300px;">From visa processing to private transfers — seamless travel from start to finish.</p>
+          <span class="sec-tag"><span class="en">Premium</span><span class="ar">مميز</span></span>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--text);margin-bottom:14px;line-height:1.2;"><span class="en">Global Eagle<br/>Concierge</span><span class="ar">كونسيرج<br/>جلوبال إيجل</span></h3>
+          <p class="b-desc" style="max-width:300px;color:var(--text2);"><span class="en">From visa processing to private transfers — seamless travel from start to finish.</span><span class="ar">من التأشيرات إلى النقل الخاص — رحلة سلسة من البداية للنهاية.</span></p>
         </div>
-        <button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.68rem;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Explore Services</button>
+        <button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.68rem;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"><span class="en">Explore Services</span><span class="ar">استكشف الخدمات</span></button>
       </div>
-      <!-- cells -->
-      <div class="glass b-cell rv">
-        <div class="b-icon">🌍</div>
-        <div class="b-title">Tourist Visas</div>
-        <div class="b-desc">All global destinations covered with expert processing.</div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🏨</div>
-        <div class="b-title">Elite Stays</div>
-        <div class="b-desc">Verified luxury hotel partners worldwide.</div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">✈️</div>
-        <div class="b-title">Flight Tickets</div>
-        <div class="b-desc">Best rates across all major airlines.</div>
-      </div>
-      <!-- wide -->
+      <div class="glass b-cell rv"><div class="b-icon">🌍</div><div class="b-title"><span class="en">Tourist Visas</span><span class="ar">تأشيرات سياحية</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">All global destinations.</span><span class="ar">جميع الوجهات العالمية.</span></div></div>
+      <div class="glass b-cell rv"><div class="b-icon">🏨</div><div class="b-title"><span class="en">Elite Stays</span><span class="ar">إقامات فاخرة</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Verified luxury hotels.</span><span class="ar">فنادق فاخرة موثوقة.</span></div></div>
+      <div class="glass b-cell rv"><div class="b-icon">✈️</div><div class="b-title"><span class="en">Flight Tickets</span><span class="ar">تذاكر طيران</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Best airline rates.</span><span class="ar">أفضل أسعار الخطوط.</span></div></div>
       <div class="glass b-wide rv">
-        <div class="b-wide-icon-wrap">
-          <div class="b-icon" style="font-size:1.6rem;">🎓</div>
-        </div>
-        <div>
-          <div class="b-title" style="text-align:left;margin-bottom:8px;">Student Visas</div>
-          <div class="b-desc" style="text-align:left;">Full support for your international educational journey with expert guidance.</div>
-        </div>
+        <div class="b-wide-icon-wrap"><div class="b-icon" style="font-size:1.6rem;">🎓</div></div>
+        <div><div class="b-title" style="margin-bottom:8px;"><span class="en">Student Visas</span><span class="ar">تأشيرات طلابية</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Full support for your international educational journey.</span><span class="ar">دعم كامل لرحلتك التعليمية الدولية.</span></div></div>
       </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🚗</div>
-        <div class="b-title">Int'l Licenses</div>
-        <div class="b-desc">Drive legally in most countries worldwide.</div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🛡</div>
-        <div class="b-title">Travel Insurance</div>
-        <div class="b-desc">Complete medical & security coverage.</div>
-      </div>
+      <div class="glass b-cell rv"><div class="b-icon">🚗</div><div class="b-title"><span class="en">Int'l Licenses</span><span class="ar">رخص دولية</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Drive legally worldwide.</span><span class="ar">قُد قانونياً حول العالم.</span></div></div>
+      <div class="glass b-cell rv"><div class="b-icon">🛡</div><div class="b-title"><span class="en">Travel Insurance</span><span class="ar">تأمين السفر</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Full medical & security coverage.</span><span class="ar">تغطية طبية وأمنية كاملة.</span></div></div>
     </div>
   </div>
 </section>
@@ -611,34 +674,14 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
 <section id="how" class="sec" style="background:#1C1C1C;">
   <div class="sec-inner">
     <div style="text-align:center;" class="rv">
-      <span class="sec-tag">The Process</span>
-      <h2 class="sec-h2">How It Works</h2>
+      <span class="sec-tag"><span class="en">The Process</span><span class="ar">كيف نعمل</span></span>
+      <h2 class="sec-h2"><span class="en">How It Works</span><span class="ar">خطوات رحلتك</span></h2>
     </div>
     <div class="steps">
-      <div class="rv">
-        <div class="step-num">01</div>
-        <div class="step-line"></div>
-        <div class="step-title">Consultation</div>
-        <div class="step-desc">Share your vision and travel preferences with our dedicated expert team.</div>
-      </div>
-      <div class="rv">
-        <div class="step-num">02</div>
-        <div class="step-line"></div>
-        <div class="step-title">Planning</div>
-        <div class="step-desc">We craft a bespoke itinerary tailored exactly to your desires and budget.</div>
-      </div>
-      <div class="rv">
-        <div class="step-num">03</div>
-        <div class="step-line"></div>
-        <div class="step-title">Booking</div>
-        <div class="step-desc">Seamless reservations across our global network of premium partners.</div>
-      </div>
-      <div class="rv">
-        <div class="step-num">04</div>
-        <div class="step-line"></div>
-        <div class="step-title">24/7 Support</div>
-        <div class="step-desc">Our concierge team accompanies you every step of the journey.</div>
-      </div>
+      <div class="rv"><div class="step-num">01</div><div class="step-line"></div><div class="step-title"><span class="en">Consultation</span><span class="ar">الاستشارة</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">Share your vision with our expert team.</span><span class="ar">شاركنا رؤيتك مع فريق خبرائنا.</span></div></div>
+      <div class="rv"><div class="step-num">02</div><div class="step-line"></div><div class="step-title"><span class="en">Planning</span><span class="ar">التخطيط</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">We craft a bespoke itinerary for you.</span><span class="ar">نصمم خطة سفر مخصصة لك.</span></div></div>
+      <div class="rv"><div class="step-num">03</div><div class="step-line"></div><div class="step-title"><span class="en">Booking</span><span class="ar">الحجز</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">Seamless reservations with premium partners.</span><span class="ar">حجوزات سلسة مع أفضل الشركاء.</span></div></div>
+      <div class="rv"><div class="step-num">04</div><div class="step-line"></div><div class="step-title"><span class="en">24/7 Support</span><span class="ar">دعم ٢٤/٧</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">Our concierge is with you every step.</span><span class="ar">فريقنا معك في كل خطوة.</span></div></div>
     </div>
   </div>
 </section>
@@ -648,8 +691,8 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
   <div class="sec-inner">
     <div class="contact-grid">
       <div class="rv">
-        <span class="sec-tag">Inquiries</span>
-        <h2 class="sec-h2" style="margin-bottom:36px;">Begin Your Next<br/><em style="color:var(--gold);font-style:italic;">Great Adventure</em></h2>
+        <span class="sec-tag"><span class="en">Inquiries</span><span class="ar">تواصل معنا</span></span>
+        <h2 class="sec-h2" style="margin-bottom:36px;"><span class="en">Begin Your Next<br/><em style="color:var(--gold);font-style:italic;">Great Adventure</em></span><span class="ar">ابدأ مغامرتك<br/><em style="color:var(--gold);">القادمة معنا</em></span></h2>
         <div class="contact-info-item">
           <i class="fa-solid fa-phone" style="color:var(--gold);width:20px;"></i>
           <p>+966 50 174 9914</p>
@@ -671,13 +714,13 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
       </div>
       <div class="glass form-wrap rv">
         <div class="f-row">
-          <div class="f-group"><label class="f-label">First Name</label><input class="f-input" id="f1" type="text" placeholder="John"/></div>
-          <div class="f-group"><label class="f-label">Last Name</label><input class="f-input" id="f2" type="text" placeholder="Doe"/></div>
+          <div class="f-group"><label class="f-label"><span class="en">First Name</span><span class="ar">الاسم الأول</span></label><input class="f-input" id="f1" type="text" placeholder="John"/></div>
+          <div class="f-group"><label class="f-label"><span class="en">Last Name</span><span class="ar">اسم العائلة</span></label><input class="f-input" id="f2" type="text" placeholder="Doe"/></div>
         </div>
-        <div class="f-group"><label class="f-label">Email Address</label><input class="f-input" id="f3" type="email" placeholder="john@example.com"/></div>
-        <div class="f-group"><label class="f-label">Phone Number</label><input class="f-input" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
+        <div class="f-group"><label class="f-label"><span class="en">Email Address</span><span class="ar">البريد الإلكتروني</span></label><input class="f-input" id="f3" type="email" placeholder="john@example.com"/></div>
+        <div class="f-group"><label class="f-label"><span class="en">Phone Number</span><span class="ar">رقم الجوال</span></label><input class="f-input" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
         <div class="f-group">
-          <label class="f-label">Service</label>
+          <label class="f-label"><span class="en">Service</span><span class="ar">الخدمة</span></label>
           <select class="f-input" id="f5">
             <option>Tourist Visa</option>
             <option>Hotel Booking</option>
@@ -687,8 +730,8 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
             <option>Travel Insurance</option>
           </select>
         </div>
-        <div class="f-group"><label class="f-label">Message</label><textarea class="f-input" id="f6" rows="3" placeholder="Tell us about your journey..." style="resize:none;"></textarea></div>
-        <button class="btn-submit" onclick="sendWA()">Send Inquiry ✈</button>
+        <div class="f-group"><label class="f-label"><span class="en">Message</span><span class="ar">رسالتك</span></label><textarea class="f-input" id="f6" rows="3" placeholder="Tell us about your journey... / أخبرنا عن رحلتك..." style="resize:none;"></textarea></div>
+        <button class="btn-submit" onclick="sendWA()"><span class="en">Send Inquiry ✈</span><span class="ar">أرسل استفساراً ✈</span></button>
       </div>
     </div>
   </div>
@@ -709,7 +752,7 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
         </div>
       </div>
       <div>
-        <div class="footer-h">Explore</div>
+        <div class="footer-h"><span class="en">Explore</span><span class="ar">استكشف</span></div>
         <ul class="footer-links">
           <li><a href="#packages">Packages</a></li>
           <li><a href="#services">Services</a></li>
@@ -718,7 +761,7 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
         </ul>
       </div>
       <div>
-        <div class="footer-h">Company</div>
+        <div class="footer-h"><span class="en">Company</span><span class="ar">الشركة</span></div>
         <ul class="footer-links">
           <li><a href="#">About Us</a></li>
           <li><a href="#">Careers</a></li>
@@ -727,16 +770,16 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
         </ul>
       </div>
       <div>
-        <div class="footer-h">Newsletter</div>
-        <p style="font-size:.8rem;color:rgba(255,255,255,.35);line-height:1.7;">Get exclusive deals and travel inspiration.</p>
+        <div class="footer-h"><span class="en">Newsletter</span><span class="ar">النشرة البريدية</span></div>
+        <p style="font-size:.8rem;color:var(--text3);line-height:1.7;"><span class="en">Get exclusive deals and travel inspiration.</span><span class="ar">احصل على عروض حصرية وإلهام للسفر.</span></p>
         <div class="nl-row">
-          <input class="nl-input" id="nl" type="email" placeholder="Your email address"/>
+          <input class="nl-input" id="nl" type="email" placeholder="your@email.com"/>
           <button class="nl-btn" onclick="alert('Subscribed! ✈')">JOIN</button>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Global Eagle Travel. The Majesty of Flight.</span>
+      <span class="footer-copy"><span class="en">© 2025 Global Eagle Travel. The Majesty of Flight.</span><span class="ar">© 2025 جلوبال إيجل للسفر. جلال الطيران.</span></span>
       <a href="https://wa.me/966501749914" target="_blank" style="font-size:.72rem;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:6px;transition:color .25s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.28)'"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
     </div>
   </div>
@@ -845,8 +888,34 @@ document.addEventListener('mousemove',e=>{
   if(bg) bg.style.transform=`scale(1.1) translate(${mx*.15}px,${my*.1}px)`;
 });
 
-// ── MOBILE MENU ──
-function closeMob(){ document.getElementById('mob-nav').classList.remove('open'); }
+// ── LANG & THEME ──
+function setLang(lang){
+  const html = document.documentElement;
+  html.setAttribute('data-lang', lang);
+  html.setAttribute('dir', lang==='ar'?'rtl':'ltr');
+  html.setAttribute('lang', lang);
+  document.getElementById('lang-en').classList.toggle('active', lang==='en');
+  document.getElementById('lang-ar').classList.toggle('active', lang==='ar');
+  localStorage.setItem('ge-lang', lang);
+}
+
+function toggleTheme(){
+  const html = document.documentElement;
+  const cur = html.getAttribute('data-theme')||'dark';
+  const next = cur==='dark'?'light':'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('theme-icon').textContent = next==='dark'?'🌙':'☀️';
+  localStorage.setItem('ge-theme', next);
+}
+
+// Init saved prefs
+(function(){
+  const lang  = localStorage.getItem('ge-lang')  || 'en';
+  const theme = localStorage.getItem('ge-theme') || 'dark';
+  setLang(lang);
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('theme-icon').textContent = theme==='dark'?'🌙':'☀️';
+})();
 
 // ── WHATSAPP FORM ──
 function sendWA(){
