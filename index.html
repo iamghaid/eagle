@@ -1,196 +1,1441 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النسر العالمي للسفر والسياحة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        :root {
-            /* ألوان داكنة مريحة جداً للعين ومناسبة لشعارك الذهبي */
-            --bg-dark-main: #12161f; 
-            --bg-dark-cards: #1a202c;
-            --gold-color: #D4AF37; 
-            --text-light: #e2e8f0;
-            --text-muted: #94a3b8;
-        }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Global Eagle — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,700&family=DM+Sans:wght@300;400;500;600&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --gold:#D4AF37;--gold2:#FFE47A;--gold3:#A07820;
+  --bg:#0D0D0D;--bg2:#161616;--bg3:#1E1E1E;--bg4:#252525;
+  --text:#F5F0E8;--text2:rgba(245,240,232,.65);--text3:rgba(245,240,232,.35);
+  --border:rgba(212,175,55,.12);--border2:rgba(212,175,55,.25);
+  --danger:#E05252;--success:#52C07A;--warn:#E0A852;
+  --font:'DM Sans',sans-serif;--font-ar:'Cairo',sans-serif;
+  --font-display:'Playfair Display',serif;
+  --rad:8px;--rad2:12px;
+  --sidebar:260px;
+}
+[data-theme="light"]{
+  --bg:#F0EBE0;--bg2:#E8E0D0;--bg3:#DDD5C2;--bg4:#FFFFFF;
+  --text:#1A1208;--text2:rgba(26,18,8,.65);--text3:rgba(26,18,8,.38);
+  --border:rgba(160,120,32,.18);--border2:rgba(160,120,32,.35);
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:var(--font);}
+input,select,textarea{font-family:var(--font);}
+img{display:block;max-width:100%;}
 
-        body {
-            background-color: var(--bg-dark-main);
-            color: var(--text-light);
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:2px;}
 
-        /* الهيدر الأساسي للموقع */
-        header {
-            background-color: var(--bg-dark-cards);
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-        }
+/* ═══════════ LOGIN PAGE ═══════════ */
+#login-page{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:0;
+}
+.login-bg-lines{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.login-bg-lines::before{
+  content:'';position:absolute;
+  width:600px;height:600px;border-radius:50%;
+  border:1px solid rgba(212,175,55,.06);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.login-bg-lines::after{
+  content:'';position:absolute;
+  width:900px;height:900px;border-radius:50%;
+  border:1px solid rgba(212,175,55,.04);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.login-card{
+  position:relative;z-index:2;
+  width:min(420px,92vw);
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--rad2);
+  padding:48px 40px 40px;
+}
+.login-logo{
+  font-family:var(--font-display);font-size:1.6rem;
+  color:var(--gold);letter-spacing:.12em;text-align:center;margin-bottom:6px;
+}
+.login-sub{font-size:.68rem;letter-spacing:.22em;color:var(--text3);text-align:center;text-transform:uppercase;margin-bottom:36px;}
+.login-label{font-size:.65rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;display:block;}
+.login-input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--rad);padding:13px 16px;color:var(--text);
+  font-size:.9rem;outline:none;transition:border-color .25s;margin-bottom:20px;
+}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{
+  width:100%;padding:14px;background:var(--gold);color:#000;
+  border:none;border-radius:var(--rad);font-size:.72rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;transition:all .25s;
+}
+.login-btn:hover{background:var(--gold2);}
+.login-err{
+  font-size:.78rem;color:var(--danger);text-align:center;
+  margin-top:14px;min-height:20px;
+}
+.login-corner{
+  position:absolute;top:16px;right:16px;width:40px;height:40px;
+  border-top:1px solid var(--gold);border-right:1px solid var(--gold);opacity:.4;
+}
+.login-corner2{
+  position:absolute;bottom:16px;left:16px;width:40px;height:40px;
+  border-bottom:1px solid var(--gold);border-left:1px solid var(--gold);opacity:.4;
+}
 
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+/* ═══════════ APP LAYOUT ═══════════ */
+#app{display:none;min-height:100vh;}
+#app.visible{display:flex;}
 
-        /* دمج صورة اللوقو الخاصة بك */
-        .brand-logo {
-            height: 55px;
-            width: auto;
-        }
+/* ── SIDEBAR ── */
+#sidebar{
+  width:var(--sidebar);min-height:100vh;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.sidebar-logo{
+  padding:28px 24px 20px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-logo-text{font-family:var(--font-display);font-size:1.1rem;color:var(--gold);letter-spacing:.1em;}
+.sidebar-logo-tag{font-size:.58rem;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-top:3px;}
+.sidebar-nav{padding:16px 0;flex:1;}
+.nav-section{padding:8px 20px 6px;font-size:.58rem;letter-spacing:.22em;color:var(--text3);text-transform:uppercase;}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 20px;font-size:.85rem;color:var(--text2);
+  cursor:pointer;transition:all .2s;position:relative;
+  border-left:2px solid transparent;
+}
+.nav-item i{width:18px;text-align:center;font-size:.9rem;color:var(--text3);transition:color .2s;}
+.nav-item:hover{color:var(--text);background:rgba(212,175,55,.04);}
+.nav-item:hover i{color:var(--gold);}
+.nav-item.active{color:var(--gold);background:rgba(212,175,55,.07);border-left-color:var(--gold);}
+.nav-item.active i{color:var(--gold);}
+.nav-badge{
+  margin-left:auto;background:rgba(212,175,55,.18);color:var(--gold);
+  font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;
+}
+.sidebar-footer{
+  padding:20px 24px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.sidebar-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(212,175,55,.15);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;color:var(--gold);font-weight:700;flex-shrink:0;
+}
+.sidebar-user{font-size:.8rem;color:var(--text2);}
+.sidebar-user span{display:block;font-size:.65rem;color:var(--text3);}
+.sidebar-logout{
+  margin-left:auto;background:none;border:none;
+  color:var(--text3);font-size:.9rem;transition:color .2s;
+}
+.sidebar-logout:hover{color:var(--danger);}
 
-        .brand-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--gold-color);
-        }
+/* ── MAIN CONTENT ── */
+#main{
+  margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;
+  min-height:100vh;
+}
 
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            margin-right: 20px;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
+/* ── TOPBAR ── */
+#topbar{
+  height:64px;background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 32px;gap:16px;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-size:1rem;font-weight:500;color:var(--text);}
+.topbar-title span{font-size:.75rem;color:var(--text3);margin-left:8px;font-weight:400;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.btn-icon{
+  width:36px;height:36px;border:1px solid var(--border);border-radius:var(--rad);
+  background:none;color:var(--text2);font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.btn-icon:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,.07);}
+.btn-primary{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 18px;background:var(--gold);color:#000;border:none;
+  border-radius:var(--rad);font-size:.72rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;transition:all .25s;
+}
+.btn-primary:hover{background:var(--gold2);}
+.btn-secondary{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 18px;background:none;color:var(--text2);
+  border:1px solid var(--border);border-radius:var(--rad);
+  font-size:.72rem;font-weight:600;letter-spacing:.06em;transition:all .2s;
+}
+.btn-secondary:hover{border-color:var(--border2);color:var(--text);}
 
-        nav a:hover {
-            color: var(--gold-color);
-        }
+/* ── PAGE CONTENT ── */
+.page{display:none;padding:32px;animation:fadeUp .35s ease both;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 
-        /* قسم العرض الرئيسي */
-        .hero-banner {
-            text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(180deg, var(--bg-dark-cards) 0%, var(--bg-dark-main) 100%);
-        }
+/* ── STAT CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);
+  padding:20px 22px;position:relative;overflow:hidden;transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--border2);}
+.stat-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(212,175,55,.04),transparent);
+}
+.stat-card-label{font-size:.65rem;letter-spacing:.16em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;}
+.stat-card-val{font-family:var(--font-display);font-size:2rem;color:var(--gold);line-height:1;}
+.stat-card-sub{font-size:.72rem;color:var(--text3);margin-top:6px;}
+.stat-card-icon{
+  position:absolute;right:18px;top:18px;font-size:1.6rem;
+  color:rgba(212,175,55,.12);
+}
 
-        .hero-banner h1 {
-            color: var(--gold-color);
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
+/* ── SECTION TITLE ── */
+.sec-title{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:12px;
+}
+.sec-title h2{font-size:1rem;font-weight:500;color:var(--text);}
+.sec-title p{font-size:.78rem;color:var(--text3);margin-top:3px;}
 
-        /* شبكة عرض الباكجات */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+/* ── PACKAGES TABLE ── */
+.pkg-table-wrap{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rad2);overflow:hidden;
+}
+.pkg-table-filters{
+  display:flex;align-items:center;gap:12px;padding:16px 20px;
+  border-bottom:1px solid var(--border);flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:200px;}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.8rem;}
+.search-input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--rad);padding:9px 12px 9px 36px;color:var(--text);
+  font-size:.82rem;outline:none;transition:border-color .2s;
+}
+.search-input:focus{border-color:var(--gold);}
+.filter-select{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--rad);
+  padding:9px 12px;color:var(--text2);font-size:.82rem;outline:none;cursor:pointer;
+}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  padding:11px 16px;font-size:.63rem;letter-spacing:.14em;
+  color:var(--text3);text-transform:uppercase;font-weight:600;
+  background:var(--bg3);text-align:left;border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(212,175,55,.03);}
+td{padding:13px 16px;font-size:.84rem;color:var(--text2);vertical-align:middle;}
+.pkg-thumb{
+  width:52px;height:38px;border-radius:6px;object-fit:cover;
+  border:1px solid var(--border);
+}
+.pkg-thumb-placeholder{
+  width:52px;height:38px;border-radius:6px;background:var(--bg3);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+  color:var(--text3);font-size:.7rem;
+}
+.pkg-name{color:var(--text);font-weight:500;}
+.pkg-cat-badge{
+  display:inline-block;padding:3px 10px;border-radius:99px;
+  font-size:.65rem;font-weight:600;letter-spacing:.08em;
+}
+.badge-alpine{background:rgba(82,192,122,.12);color:#52C07A;}
+.badge-ocean{background:rgba(82,148,224,.12);color:#5294E0;}
+.badge-desert{background:rgba(224,168,82,.12);color:#E0A852;}
+.badge-city{background:rgba(168,82,224,.12);color:#A852E0;}
+.badge-other{background:rgba(212,175,55,.1);color:var(--gold);}
+.price-cell{color:var(--gold);font-weight:600;font-size:.9rem;}
+.old-price{text-decoration:line-through;color:var(--text3);font-size:.78rem;margin-right:6px;}
+.discount-badge{
+  background:rgba(224,82,82,.12);color:var(--danger);
+  font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:99px;
+}
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:99px;
+}
+.status-active{background:rgba(82,192,122,.1);color:var(--success);}
+.status-draft{background:rgba(212,175,55,.1);color:var(--gold);}
+.status-archived{background:rgba(245,240,232,.06);color:var(--text3);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.actions-cell{display:flex;gap:6px;}
+.act-btn{
+  width:30px;height:30px;border-radius:var(--rad);border:1px solid var(--border);
+  background:none;color:var(--text3);font-size:.78rem;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;
+}
+.act-btn:hover.edit{border-color:rgba(82,148,224,.4);color:#5294E0;background:rgba(82,148,224,.08);}
+.act-btn:hover.del{border-color:rgba(224,82,82,.4);color:var(--danger);background:rgba(224,82,82,.08);}
+.act-btn:hover.view{border-color:var(--border2);color:var(--gold);background:rgba(212,175,55,.07);}
 
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
+/* Empty state */
+.empty-state{
+  padding:60px 20px;text-align:center;
+}
+.empty-state i{font-size:2.5rem;color:var(--text3);margin-bottom:16px;display:block;}
+.empty-state p{color:var(--text3);font-size:.85rem;}
 
-        .pkg-card {
-            background-color: var(--bg-dark-cards);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #2d3748;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
+/* Pagination */
+.table-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-top:1px solid var(--border);flex-wrap:wrap;gap:10px;
+}
+.table-count{font-size:.75rem;color:var(--text3);}
+.pagination{display:flex;gap:4px;}
+.page-btn{
+  width:32px;height:32px;border:1px solid var(--border);border-radius:6px;
+  background:none;color:var(--text2);font-size:.8rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.page-btn.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.page-btn:hover:not(.active){border-color:var(--border2);color:var(--text);}
 
-        .pkg-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
+/* ═══════════ MODAL ═══════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);
+  display:none;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);
+  width:min(700px,100%);max-height:90vh;overflow-y:auto;
+  animation:modalIn .3s cubic-bezier(.34,1.4,.64,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 28px;border-bottom:1px solid var(--border);position:sticky;top:0;
+  background:var(--bg2);z-index:2;
+}
+.modal-header h3{font-size:1rem;font-weight:500;color:var(--text);}
+.modal-close{
+  width:32px;height:32px;border-radius:var(--rad);border:1px solid var(--border);
+  background:none;color:var(--text3);font-size:.8rem;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;
+}
+.modal-close:hover{border-color:rgba(224,82,82,.4);color:var(--danger);}
+.modal-body{padding:28px;}
+.modal-footer{
+  padding:18px 28px;border-top:1px solid var(--border);
+  display:flex;justify-content:flex-end;gap:10px;
+}
 
-        .pkg-details {
-            padding: 20px;
-        }
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-full{grid-column:span 2;}
+.form-group{display:flex;flex-direction:column;gap:7px;}
+.form-label{font-size:.63rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;font-weight:600;}
+.form-input,.form-select,.form-textarea{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--rad);
+  padding:11px 14px;color:var(--text);font-size:.88rem;outline:none;
+  transition:border-color .2s;width:100%;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text3);}
+.form-select option{background:var(--bg3);}
+.form-textarea{resize:vertical;min-height:90px;line-height:1.6;}
+.form-hint{font-size:.72rem;color:var(--text3);}
 
-        .pkg-name {
-            color: var(--gold-color);
-            font-size: 1.3rem;
-            margin: 0 0 10px 0;
-        }
+/* Image upload area */
+.img-upload-area{
+  border:1.5px dashed var(--border2);border-radius:var(--rad);
+  padding:28px;text-align:center;cursor:pointer;transition:all .2s;
+  background:var(--bg3);position:relative;
+}
+.img-upload-area:hover{border-color:var(--gold);background:rgba(212,175,55,.04);}
+.img-upload-area.dragging{border-color:var(--gold);background:rgba(212,175,55,.08);}
+.img-upload-area input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.img-upload-icon{font-size:2rem;color:var(--text3);margin-bottom:10px;}
+.img-upload-text{font-size:.82rem;color:var(--text2);}
+.img-upload-hint{font-size:.72rem;color:var(--text3);margin-top:5px;}
+.img-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+.img-preview-item{
+  position:relative;aspect-ratio:4/3;border-radius:var(--rad);overflow:hidden;
+  border:1px solid var(--border);
+}
+.img-preview-item img{width:100%;height:100%;object-fit:cover;}
+.img-preview-item .img-remove{
+  position:absolute;top:5px;right:5px;width:22px;height:22px;
+  border-radius:50%;background:rgba(0,0,0,.7);color:#fff;border:none;
+  font-size:.65rem;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;transition:opacity .18s;
+}
+.img-preview-item:hover .img-remove{opacity:1;}
 
-        .pkg-text {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
+/* URL input alt */
+.or-divider{
+  display:flex;align-items:center;gap:12px;margin:14px 0;
+}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.or-divider span{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;}
 
-        .pkg-price {
-            color: #4fd1c5;
-            font-weight: bold;
-            margin-top: 15px;
-            font-size: 1.1rem;
-        }
+/* Toggle */
+.toggle-wrap{display:flex;align-items:center;gap:12px;}
+.toggle{
+  width:44px;height:24px;border-radius:99px;background:var(--bg4);
+  border:1px solid var(--border);position:relative;cursor:pointer;
+  transition:background .2s;flex-shrink:0;
+}
+.toggle.on{background:var(--gold);border-color:var(--gold);}
+.toggle::after{
+  content:'';position:absolute;width:18px;height:18px;border-radius:50%;
+  background:#fff;top:2px;left:2px;transition:transform .2s;
+}
+.toggle.on::after{transform:translateX(20px);}
+.toggle-label{font-size:.84rem;color:var(--text2);}
 
-        .btn-action {
-            background-color: var(--gold-color);
-            color: #12161f;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 5px;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-    </style>
+/* Offers page */
+.offer-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);
+  padding:22px;margin-bottom:14px;display:flex;align-items:center;gap:20px;
+  transition:border-color .2s;
+}
+.offer-card:hover{border-color:var(--border2);}
+.offer-icon{
+  width:50px;height:50px;border-radius:50%;
+  background:rgba(212,175,55,.1);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;color:var(--gold);flex-shrink:0;
+}
+.offer-info{flex:1;}
+.offer-name{font-size:.9rem;font-weight:500;color:var(--text);margin-bottom:4px;}
+.offer-code{
+  display:inline-block;background:var(--bg3);border:1px solid var(--border);
+  padding:2px 10px;border-radius:4px;font-size:.72rem;color:var(--gold);
+  font-family:monospace;letter-spacing:.1em;margin-right:8px;
+}
+.offer-desc{font-size:.78rem;color:var(--text3);margin-top:5px;}
+.offer-actions{display:flex;gap:8px;flex-shrink:0;}
+
+/* Settings page */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.settings-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);
+  padding:24px;
+}
+.settings-card h3{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px;}
+.settings-card p{font-size:.78rem;color:var(--text3);margin-bottom:18px;line-height:1.6;}
+.settings-full{grid-column:span 2;}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:28px;right:28px;z-index:9999;
+  display:flex;flex-direction:column;gap:10px;
+}
+.toast-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rad);padding:13px 18px;
+  display:flex;align-items:center;gap:12px;
+  min-width:260px;font-size:.84rem;color:var(--text);
+  animation:toastIn .3s ease;box-shadow:0 8px 32px rgba(0,0,0,.3);
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:none;}}
+.toast-item.success .toast-icon{color:var(--success);}
+.toast-item.error .toast-icon{color:var(--danger);}
+.toast-item.info .toast-icon{color:var(--gold);}
+
+/* ── HAM ── */
+#ham-btn{display:none;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--border);border-radius:var(--rad);background:none;color:var(--text2);}
+
+/* ── DARK MODE DASH CHART ── */
+.chart-bar-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);padding:22px;margin-bottom:20px;}
+.chart-bar-title{font-size:.78rem;color:var(--text2);margin-bottom:16px;font-weight:500;}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.bar-label{font-size:.72rem;color:var(--text3);width:80px;text-align:right;flex-shrink:0;}
+.bar-track{flex:1;height:8px;background:var(--bg3);border-radius:99px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold3),var(--gold));transition:width .8s cubic-bezier(.34,1,.64,1);}
+.bar-val{font-size:.72rem;color:var(--gold);width:40px;flex-shrink:0;}
+
+/* Recent activity */
+.activity-list{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);overflow:hidden;}
+.activity-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 20px;border-bottom:1px solid var(--border);
+  transition:background .15s;
+}
+.activity-item:last-child{border-bottom:none;}
+.activity-item:hover{background:rgba(212,175,55,.03);}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.act-text{flex:1;font-size:.82rem;color:var(--text2);}
+.act-time{font-size:.7rem;color:var(--text3);}
+
+/* Responsive */
+@media(max-width:900px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.mob-open{transform:translateX(0);}
+  #main{margin-left:0;}
+  #ham-btn{display:flex!important;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .settings-grid{grid-template-columns:1fr;}
+  .settings-full{grid-column:span 1;}
+  .form-grid{grid-template-columns:1fr;}
+  .form-full{grid-column:span 1;}
+}
+@media(max-width:580px){
+  .stats-grid{grid-template-columns:1fr;}
+  .page{padding:20px;}
+  table{display:block;overflow-x:auto;}
+}
+</style>
 </head>
 <body>
 
-    <header>
-        <div class="brand-container">
-            <img src="logo.png" alt="شعار النسر العالمي" class="brand-logo">
-            <div class="brand-title">النسر العالمي للسفر والسياحة</div>
-        </div>
-        <nav>
-            <a href="#">الرئيسية</a>
-            <a href="#packages-section">الباكجات الحالية</a>
-        </nav>
-    </header>
+<!-- ══ LOGIN ══ -->
+<div id="login-page">
+  <div class="login-bg-lines"></div>
+  <div class="login-card">
+    <div class="login-corner"></div>
+    <div class="login-corner2"></div>
+    <div class="login-logo">Global Eagle</div>
+    <div class="login-sub">Admin Control Panel</div>
+    <label class="login-label">Username</label>
+    <input class="login-input" id="l-user" type="text" placeholder="admin" autocomplete="username"/>
+    <label class="login-label">Password</label>
+    <input class="login-input" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Enter Panel</button>
+    <div class="login-err" id="l-err"></div>
+  </div>
+</div>
 
-    <section class="hero-banner">
-        <h1>مرحباً بكم في النسر العالمي</h1>
-        <p style="color: var(--text-muted);">نصمم لكم أجمل الرحلات والباكجات السياحية المتميزة.</p>
-    </section>
+<!-- ══ APP ══ -->
+<div id="app">
 
-    <div class="main-container" id="packages-section">
-        <div class="packages-grid" id="mainGrid">
-            </div>
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">Global Eagle</div>
+      <div class="sidebar-logo-tag">Admin Panel</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active" onclick="goPage('dashboard',this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</div>
+      <div class="nav-item" onclick="goPage('packages',this)"><i class="fa-solid fa-suitcase-rolling"></i> Packages <span class="nav-badge" id="pkg-count-badge">0</span></div>
+      <div class="nav-section">Marketing</div>
+      <div class="nav-item" onclick="goPage('offers',this)"><i class="fa-solid fa-tag"></i> Offers & Promos</div>
+      <div class="nav-section">System</div>
+      <div class="nav-item" onclick="goPage('settings',this)"><i class="fa-solid fa-gear"></i> Settings</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-avatar">GE</div>
+      <div class="sidebar-user">Admin <span>globaleagletrv.com</span></div>
+      <button class="sidebar-logout" onclick="doLogout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div id="main">
+    <!-- TOPBAR -->
+    <div id="topbar">
+      <button id="ham-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title" id="page-title">Dashboard <span>Overview</span></div>
+      <div class="topbar-right">
+        <button class="btn-icon" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-moon" id="theme-icon-app"></i></button>
+        <button class="btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Package</button>
+      </div>
     </div>
 
-    <script>
-        function displayPackages() {
-            const stored = JSON.parse(localStorage.getItem('company_packages')) || [];
-            const grid = document.getElementById('mainGrid');
-            grid.innerHTML = '';
+    <!-- ── DASHBOARD PAGE ── -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Total Packages</div>
+          <div class="stat-card-val" id="stat-total">0</div>
+          <div class="stat-card-sub">Active & Drafts</div>
+          <i class="fa-solid fa-suitcase-rolling stat-card-icon"></i>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Active Listings</div>
+          <div class="stat-card-val" id="stat-active">0</div>
+          <div class="stat-card-sub">Visible on site</div>
+          <i class="fa-solid fa-eye stat-card-icon"></i>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Offers Running</div>
+          <div class="stat-card-val" id="stat-offers">0</div>
+          <div class="stat-card-sub">Promo codes live</div>
+          <i class="fa-solid fa-tag stat-card-icon"></i>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Lowest Price</div>
+          <div class="stat-card-val" id="stat-low">—</div>
+          <div class="stat-card-sub">SAR</div>
+          <i class="fa-solid fa-circle-dollar-to-slot stat-card-icon"></i>
+        </div>
+      </div>
 
-            if(stored.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">لا توجد باكجات معروضة حالياً.</p>`;
-                return;
-            }
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start;">
+        <div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar-title">Packages by Category</div>
+            <div id="cat-bars"></div>
+          </div>
+          <div>
+            <div class="sec-title"><div><h2>Recent Activity</h2></div></div>
+            <div class="activity-list" id="activity-list">
+              <div class="activity-item"><span class="act-dot" style="background:var(--gold)"></span><span class="act-text">No activity yet</span><span class="act-time">—</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-bar-wrap">
+            <div class="chart-bar-title">Price Distribution (SAR)</div>
+            <div id="price-bars"></div>
+          </div>
+          <div class="settings-card" style="margin-top:20px;">
+            <h3>Quick Export</h3>
+            <p>Download all packages as JSON to integrate with your website.</p>
+            <button class="btn-primary" onclick="exportData()" style="width:100%;justify-content:center;">
+              <i class="fa-solid fa-download"></i> Export packages.json
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            stored.forEach(item => {
-                grid.innerHTML += `
-                    <div class="pkg-card">
-                        <img src="${item.img || 'https://via.placeholder.com/400x200'}" class="pkg-image" alt="${item.name}">
-                        <div class="pkg-details">
-                            <h3 class="pkg-name">${item.name}</h3>
-                            <p class="pkg-text">${item.description}</p>
-                            <div class="pkg-price">السعر: ${item.price}</div>
-                            <button class="btn-action">حجز الآن</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        window.onload = displayPackages;
-    </script>
+    <!-- ── PACKAGES PAGE ── -->
+    <div class="page" id="page-packages">
+      <div class="sec-title">
+        <div><h2>All Packages</h2><p>Manage your travel packages, prices and visibility</p></div>
+        <button class="btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Add Package</button>
+      </div>
+      <div class="pkg-table-wrap">
+        <div class="pkg-table-filters">
+          <div class="search-wrap">
+            <i class="fa-solid fa-search"></i>
+            <input class="search-input" id="pkg-search" type="text" placeholder="Search packages..." oninput="renderTable()"/>
+          </div>
+          <select class="filter-select" id="pkg-filter-cat" onchange="renderTable()">
+            <option value="">All Categories</option>
+            <option value="alpine">Alpine Elite</option>
+            <option value="ocean">Oceanic Escape</option>
+            <option value="desert">Desert Majesty</option>
+            <option value="city">City Explorer</option>
+            <option value="other">Other</option>
+          </select>
+          <select class="filter-select" id="pkg-filter-status" onchange="renderTable()">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Package</th>
+                <th>Category</th>
+                <th>Price (SAR)</th>
+                <th>Status</th>
+                <th>Featured</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="pkg-tbody"></tbody>
+          </table>
+          <div id="pkg-empty" class="empty-state" style="display:none;">
+            <i class="fa-solid fa-suitcase-rolling"></i>
+            <p>No packages found. Add your first package!</p>
+          </div>
+        </div>
+        <div class="table-footer">
+          <span class="table-count" id="pkg-count-label">0 packages</span>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OFFERS PAGE ── -->
+    <div class="page" id="page-offers">
+      <div class="sec-title">
+        <div><h2>Offers & Promotions</h2><p>Create discount codes and special deals</p></div>
+        <button class="btn-primary" onclick="openOfferModal()"><i class="fa-solid fa-plus"></i> New Offer</button>
+      </div>
+      <div id="offers-list"></div>
+      <div id="offers-empty" class="empty-state" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad2);">
+        <i class="fa-solid fa-tag"></i>
+        <p>No offers yet. Create your first promo!</p>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS PAGE ── -->
+    <div class="page" id="page-settings">
+      <div class="sec-title"><div><h2>Settings</h2><p>Manage your admin panel preferences</p></div></div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h3>Change Password</h3>
+          <p>Update your admin panel login password.</p>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">Current Password</label>
+            <input class="form-input" id="s-old-pass" type="password" placeholder="Current password"/>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">New Password</label>
+            <input class="form-input" id="s-new-pass" type="password" placeholder="New password (min 6 chars)"/>
+          </div>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Confirm Password</label>
+            <input class="form-input" id="s-conf-pass" type="password" placeholder="Confirm new password"/>
+          </div>
+          <button class="btn-primary" onclick="changePassword()"><i class="fa-solid fa-key"></i> Update Password</button>
+        </div>
+        <div class="settings-card">
+          <h3>Data Management</h3>
+          <p>Export or reset all panel data. Be careful — reset cannot be undone.</p>
+          <button class="btn-primary" onclick="exportData()" style="width:100%;justify-content:center;margin-bottom:10px;">
+            <i class="fa-solid fa-download"></i> Export All Data (JSON)
+          </button>
+          <button class="btn-secondary" onclick="importData()" style="width:100%;justify-content:center;margin-bottom:10px;">
+            <i class="fa-solid fa-upload"></i> Import Data (JSON)
+          </button>
+          <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)"/>
+          <button class="btn-secondary" onclick="if(confirm('Reset ALL data? This cannot be undone!'))resetData()" style="width:100%;justify-content:center;color:var(--danger);border-color:rgba(224,82,82,.3);">
+            <i class="fa-solid fa-trash"></i> Reset All Data
+          </button>
+        </div>
+        <div class="settings-card settings-full">
+          <h3>How to Connect with Your Main Website</h3>
+          <p style="line-height:1.8;">
+            After adding packages here, click <strong style="color:var(--gold);">Export packages.json</strong>. 
+            Place the file in the same folder as your <code style="background:var(--bg3);padding:2px 8px;border-radius:4px;color:var(--gold);">index.html</code>. 
+            Then add this script to your main site just before <code style="background:var(--bg3);padding:2px 8px;border-radius:4px;color:var(--gold);">&lt;/body&gt;</code>:
+          </p>
+          <pre style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--rad);padding:18px;margin-top:14px;overflow-x:auto;font-size:.8rem;color:var(--gold);line-height:1.8;"><code>fetch('packages.json')
+  .then(r => r.json())
+  .then(data => {
+    // data.packages = your packages array
+    renderPackages(data.packages);
+  });</code></pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══ ADD/EDIT PACKAGE MODAL ══ -->
+<div class="modal-overlay" id="pkg-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add New Package</h3>
+      <button class="modal-close" onclick="closeModal('pkg-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label class="form-label">Package Name *</label>
+          <input class="form-input" id="m-name" type="text" placeholder="e.g. Swiss Peak Sanctuary"/>
+          <div class="form-label" style="margin-top:4px;color:var(--text3);">Arabic Name</div>
+          <input class="form-input" id="m-name-ar" type="text" placeholder="الاسم بالعربي" dir="rtl" style="margin-top:6px;"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select class="form-select" id="m-cat">
+            <option value="alpine">Alpine Elite</option>
+            <option value="ocean">Oceanic Escape</option>
+            <option value="desert">Desert Majesty</option>
+            <option value="city">City Explorer</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="m-status">
+            <option value="active">Active (Visible)</option>
+            <option value="draft">Draft (Hidden)</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price (SAR) *</label>
+          <input class="form-input" id="m-price" type="number" placeholder="5000" min="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Original Price (SAR) <span style="color:var(--text3);font-size:.65rem;">for discount</span></label>
+          <input class="form-input" id="m-old-price" type="number" placeholder="6500 (optional)" min="0"/>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Description (English)</label>
+          <textarea class="form-textarea" id="m-desc" placeholder="Brief description of this package..."></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Description (Arabic)</label>
+          <textarea class="form-textarea" id="m-desc-ar" placeholder="وصف الباقة بالعربي..." dir="rtl"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Duration</label>
+          <input class="form-input" id="m-duration" type="text" placeholder="e.g. 7 Days / 6 Nights"/>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Package Image</label>
+          <div class="img-upload-area" id="drop-zone">
+            <input type="file" id="m-img-file" accept="image/*" onchange="handleImgSelect(event)"/>
+            <div class="img-upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="img-upload-text">Drop image here or click to browse</div>
+            <div class="img-upload-hint">JPG, PNG, WEBP — Max 5MB</div>
+          </div>
+          <div id="img-preview-wrap" style="display:none;margin-top:12px;">
+            <img id="img-preview" src="" alt="preview" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--rad);border:1px solid var(--border);"/>
+            <button onclick="clearImg()" style="margin-top:8px;background:none;border:none;color:var(--danger);font-size:.78rem;cursor:pointer;"><i class="fa-solid fa-trash"></i> Remove Image</button>
+          </div>
+          <div class="or-divider"><span>or use image URL</span></div>
+          <input class="form-input" id="m-img-url" type="url" placeholder="https://..." oninput="previewURL(this.value)"/>
+          <div class="form-hint">Paste a direct image URL if you have one hosted online</div>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Featured on Homepage</label>
+          <div class="toggle-wrap">
+            <div class="toggle" id="m-featured" onclick="this.classList.toggle('on')"></div>
+            <span class="toggle-label">Show this package in the main packages section</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('pkg-modal')">Cancel</button>
+      <button class="btn-primary" onclick="savePackage()"><i class="fa-solid fa-save"></i> Save Package</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD OFFER MODAL ══ -->
+<div class="modal-overlay" id="offer-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="offer-modal-title">New Offer</h3>
+      <button class="modal-close" onclick="closeModal('offer-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label class="form-label">Offer Title *</label>
+          <input class="form-input" id="o-title" type="text" placeholder="e.g. Summer Flash Sale"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Promo Code</label>
+          <input class="form-input" id="o-code" type="text" placeholder="EAGLE20" style="text-transform:uppercase;letter-spacing:.1em;"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discount %</label>
+          <input class="form-input" id="o-discount" type="number" placeholder="20" min="1" max="99"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valid From</label>
+          <input class="form-input" id="o-start" type="date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valid Until</label>
+          <input class="form-input" id="o-end" type="date"/>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="o-desc" placeholder="What does this offer include?"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">Status</label>
+          <div class="toggle-wrap">
+            <div class="toggle on" id="o-active" onclick="this.classList.toggle('on')"></div>
+            <span class="toggle-label">Offer is active and visible</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('offer-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveOffer()"><i class="fa-solid fa-save"></i> Save Offer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   STATE & STORAGE
+═══════════════════════════════════════ */
+const KEYS = {pkgs:'ge_packages', offers:'ge_offers', pass:'ge_pass', activity:'ge_activity', theme:'ge-theme'};
+const DEFAULT_PASS = 'eagle2025';
+
+let packages = [];
+let offers = [];
+let activity = [];
+let editId = null;
+let offerEditId = null;
+let currentImgBase64 = '';
+let currentPage = 1;
+const PER_PAGE = 8;
+
+function load(){
+  try{ packages = JSON.parse(localStorage.getItem(KEYS.pkgs)||'[]'); }catch(e){packages=[];}
+  try{ offers = JSON.parse(localStorage.getItem(KEYS.offers)||'[]'); }catch(e){offers=[];}
+  try{ activity = JSON.parse(localStorage.getItem(KEYS.activity)||'[]'); }catch(e){activity=[];}
+}
+function save(){
+  localStorage.setItem(KEYS.pkgs, JSON.stringify(packages));
+  localStorage.setItem(KEYS.offers, JSON.stringify(offers));
+  localStorage.setItem(KEYS.activity, JSON.stringify(activity.slice(0,30)));
+}
+function getPass(){ return localStorage.getItem(KEYS.pass)||DEFAULT_PASS; }
+
+/* ═══════════════════════════════════════
+   AUTH
+═══════════════════════════════════════ */
+function doLogin(){
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value;
+  if((u==='admin'||u==='globaleagle') && p===getPass()){
+    document.getElementById('login-page').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    load();
+    initApp();
+  } else {
+    document.getElementById('l-err').textContent='Incorrect username or password.';
+    document.getElementById('l-pass').value='';
+  }
+}
+function doLogout(){
+  if(!confirm('Logout?')) return;
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('app').classList.remove('visible');
+}
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function goPage(name, navEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(navEl) navEl.classList.add('active');
+  const titles = {dashboard:'Dashboard', packages:'Packages', offers:'Offers & Promos', settings:'Settings'};
+  const subs = {dashboard:'Overview', packages:'Manage all travel packages', offers:'Discounts & promotions', settings:'Admin preferences'};
+  document.getElementById('page-title').innerHTML = `${titles[name]} <span>${subs[name]}</span>`;
+  if(name==='packages') renderTable();
+  if(name==='offers') renderOffers();
+  if(name==='dashboard') renderDashboard();
+  if(window.innerWidth<900) document.getElementById('sidebar').classList.remove('mob-open');
+}
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('mob-open'); }
+
+/* ═══════════════════════════════════════
+   THEME
+═══════════════════════════════════════ */
+function toggleTheme(){
+  const html=document.documentElement;
+  const cur=html.getAttribute('data-theme')||'dark';
+  const next=cur==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  localStorage.setItem(KEYS.theme,next);
+  document.getElementById('theme-icon-app').className=next==='dark'?'fa-solid fa-moon':'fa-solid fa-sun';
+}
+(function(){
+  const t=localStorage.getItem(KEYS.theme)||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  // Set icon after DOM ready
+  setTimeout(()=>{
+    const el=document.getElementById('theme-icon-app');
+    if(el) el.className=t==='dark'?'fa-solid fa-moon':'fa-solid fa-sun';
+  },100);
+})();
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+function initApp(){
+  renderDashboard();
+  renderTable();
+  renderOffers();
+  updateBadges();
+}
+
+/* ═══════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════ */
+function renderDashboard(){
+  document.getElementById('stat-total').textContent = packages.length;
+  document.getElementById('stat-active').textContent = packages.filter(p=>p.status==='active').length;
+  document.getElementById('stat-offers').textContent = offers.filter(o=>o.active).length;
+  const prices = packages.map(p=>+p.price).filter(Boolean);
+  document.getElementById('stat-low').textContent = prices.length ? Math.min(...prices).toLocaleString() : '—';
+
+  // Category bars
+  const cats = {alpine:'Alpine',ocean:'Ocean',desert:'Desert',city:'City',other:'Other'};
+  const catCounts = {};
+  packages.forEach(p=>{ catCounts[p.cat]=(catCounts[p.cat]||0)+1; });
+  const maxCat = Math.max(...Object.values(catCounts),1);
+  let catHTML='';
+  Object.entries(cats).forEach(([k,v])=>{
+    const cnt=catCounts[k]||0;
+    const pct=Math.round((cnt/maxCat)*100);
+    catHTML+=`<div class="bar-row"><div class="bar-label">${v}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-val">${cnt}</div></div>`;
+  });
+  document.getElementById('cat-bars').innerHTML = catHTML||'<p style="font-size:.78rem;color:var(--text3);">No packages yet.</p>';
+
+  // Price bars
+  const ranges=['0–1K','1K–3K','3K–6K','6K–10K','10K+'];
+  const rangeFn = p=>{
+    const v=+p.price||0;
+    if(v<=1000)return 0; if(v<=3000)return 1; if(v<=6000)return 2; if(v<=10000)return 3; return 4;
+  };
+  const priceCounts=[0,0,0,0,0];
+  packages.forEach(p=>priceCounts[rangeFn(p)]++);
+  const maxPr=Math.max(...priceCounts,1);
+  let prHTML='';
+  ranges.forEach((r,i)=>{
+    const pct=Math.round((priceCounts[i]/maxPr)*100);
+    prHTML+=`<div class="bar-row"><div class="bar-label" style="font-size:.68rem;">${r}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="bar-val">${priceCounts[i]}</div></div>`;
+  });
+  document.getElementById('price-bars').innerHTML=prHTML;
+
+  // Activity
+  const actEl=document.getElementById('activity-list');
+  if(!activity.length){
+    actEl.innerHTML='<div class="activity-item"><span class="act-dot" style="background:var(--text3)"></span><span class="act-text">No activity yet</span><span class="act-time">—</span></div>';
+  } else {
+    actEl.innerHTML=activity.slice(0,8).map(a=>`
+      <div class="activity-item">
+        <span class="act-dot" style="background:${a.color||'var(--gold)'}"></span>
+        <span class="act-text">${a.text}</span>
+        <span class="act-time">${a.time}</span>
+      </div>`).join('');
+  }
+
+  // Badge
+  document.getElementById('pkg-count-badge').textContent=packages.length;
+}
+
+function updateBadges(){
+  document.getElementById('pkg-count-badge').textContent=packages.length;
+}
+
+function logActivity(text, color='var(--gold)'){
+  const now=new Date();
+  const time=now.toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'});
+  activity.unshift({text,color,time});
+  save();
+}
+
+/* ═══════════════════════════════════════
+   PACKAGES TABLE
+═══════════════════════════════════════ */
+const catLabels={alpine:'Alpine Elite',ocean:'Oceanic Escape',desert:'Desert Majesty',city:'City Explorer',other:'Other'};
+const catClass={alpine:'badge-alpine',ocean:'badge-ocean',desert:'badge-desert',city:'badge-city',other:'badge-other'};
+
+function getFiltered(){
+  const q=document.getElementById('pkg-search').value.toLowerCase();
+  const cat=document.getElementById('pkg-filter-cat').value;
+  const status=document.getElementById('pkg-filter-status').value;
+  return packages.filter(p=>{
+    const matchQ=!q||p.name.toLowerCase().includes(q)||(p.nameAr||'').includes(q);
+    const matchCat=!cat||p.cat===cat;
+    const matchSt=!status||p.status===status;
+    return matchQ&&matchCat&&matchSt;
+  });
+}
+
+function renderTable(){
+  const filtered=getFiltered();
+  const tbody=document.getElementById('pkg-tbody');
+  const empty=document.getElementById('pkg-empty');
+  const countLabel=document.getElementById('pkg-count-label');
+  const totalPages=Math.ceil(filtered.length/PER_PAGE)||1;
+  if(currentPage>totalPages) currentPage=1;
+  const paged=filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+  countLabel.textContent=`${filtered.length} package${filtered.length!==1?'s':''}`;
+
+  if(!filtered.length){
+    tbody.innerHTML=''; empty.style.display='block'; renderPagination(0,0);
+    return;
+  }
+  empty.style.display='none';
+
+  tbody.innerHTML=paged.map(p=>{
+    const imgHtml=p.img
+      ?`<img class="pkg-thumb" src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="pkg-thumb-placeholder" style="display:none"><i class='fa-solid fa-image'></i></div>`
+      :`<div class="pkg-thumb-placeholder"><i class='fa-solid fa-image'></i></div>`;
+    const discount=p.oldPrice&&+p.oldPrice>+p.price
+      ?`<span class="old-price">${(+p.oldPrice).toLocaleString()}</span><span class="discount-badge">-${Math.round((1-p.price/p.oldPrice)*100)}%</span><br/>`:'';
+    return `<tr>
+      <td style="display:flex;align-items:center;gap:12px;min-height:54px;">
+        <div style="display:flex;gap:0;">${imgHtml}</div>
+        <div>
+          <div class="pkg-name">${p.name}</div>
+          ${p.nameAr?`<div style="font-size:.72rem;color:var(--text3);direction:rtl;">${p.nameAr}</div>`:''}
+          ${p.duration?`<div style="font-size:.7rem;color:var(--text3);">${p.duration}</div>`:''}
+        </div>
+      </td>
+      <td><span class="pkg-cat-badge ${catClass[p.cat]||'badge-other'}">${catLabels[p.cat]||p.cat}</span></td>
+      <td class="price-cell">${discount}${(+p.price||0).toLocaleString()} <span style="font-size:.7rem;color:var(--text3);">SAR</span></td>
+      <td><span class="status-badge status-${p.status||'draft'}"><span class="status-dot"></span>${p.status||'draft'}</span></td>
+      <td style="text-align:center;">${p.featured?'<i class="fa-solid fa-star" style="color:var(--gold);font-size:.9rem;"></i>':'<i class="fa-regular fa-star" style="color:var(--text3);font-size:.9rem;"></i>'}</td>
+      <td><div class="actions-cell" style="justify-content:flex-end;">
+        <button class="act-btn view" onclick="previewPkg('${p.id}')" title="Preview"><i class="fa-solid fa-eye"></i></button>
+        <button class="act-btn edit" onclick="openEditModal('${p.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="act-btn del" onclick="deletePkg('${p.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+
+  renderPagination(totalPages, filtered.length);
+}
+
+function renderPagination(total, count){
+  const pag=document.getElementById('pagination');
+  if(total<=1){pag.innerHTML='';return;}
+  let html='';
+  if(currentPage>1) html+=`<button class="page-btn" onclick="changePage(${currentPage-1})"><i class="fa-solid fa-chevron-left"></i></button>`;
+  for(let i=1;i<=total;i++) html+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
+  if(currentPage<total) html+=`<button class="page-btn" onclick="changePage(${currentPage+1})"><i class="fa-solid fa-chevron-right"></i></button>`;
+  pag.innerHTML=html;
+}
+
+function changePage(p){ currentPage=p; renderTable(); }
+
+function deletePkg(id){
+  if(!confirm('Delete this package permanently?')) return;
+  const pkg=packages.find(p=>p.id===id);
+  packages=packages.filter(p=>p.id!==id);
+  logActivity(`Deleted: ${pkg?pkg.name:'Package'}`,'var(--danger)');
+  save(); renderTable(); renderDashboard(); updateBadges();
+  toast('Package deleted','success');
+}
+
+function previewPkg(id){
+  const p=packages.find(x=>x.id===id);
+  if(!p) return;
+  const info=`Package: ${p.name}\nCategory: ${catLabels[p.cat]}\nPrice: ${(+p.price||0).toLocaleString()} SAR\nStatus: ${p.status}\nDuration: ${p.duration||'—'}\nDescription: ${p.desc||'—'}`;
+  alert(info);
+}
+
+/* ═══════════════════════════════════════
+   MODAL - PACKAGE
+═══════════════════════════════════════ */
+function openAddModal(){
+  editId=null;
+  clearModalForm();
+  document.getElementById('modal-title').textContent='Add New Package';
+  openModal('pkg-modal');
+}
+
+function openEditModal(id){
+  editId=id;
+  const p=packages.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('modal-title').textContent='Edit Package';
+  document.getElementById('m-name').value=p.name||'';
+  document.getElementById('m-name-ar').value=p.nameAr||'';
+  document.getElementById('m-cat').value=p.cat||'alpine';
+  document.getElementById('m-status').value=p.status||'active';
+  document.getElementById('m-price').value=p.price||'';
+  document.getElementById('m-old-price').value=p.oldPrice||'';
+  document.getElementById('m-desc').value=p.desc||'';
+  document.getElementById('m-desc-ar').value=p.descAr||'';
+  document.getElementById('m-duration').value=p.duration||'';
+  document.getElementById('m-img-url').value=p.img&&!p.img.startsWith('data:')?p.img:'';
+  currentImgBase64=p.img&&p.img.startsWith('data:')?p.img:'';
+  if(p.img){
+    document.getElementById('img-preview').src=p.img;
+    document.getElementById('img-preview-wrap').style.display='block';
+  }
+  const feat=document.getElementById('m-featured');
+  if(p.featured) feat.classList.add('on'); else feat.classList.remove('on');
+  openModal('pkg-modal');
+}
+
+function clearModalForm(){
+  ['m-name','m-name-ar','m-price','m-old-price','m-desc','m-desc-ar','m-duration','m-img-url'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-cat').value='alpine';
+  document.getElementById('m-status').value='active';
+  document.getElementById('m-featured').classList.remove('on');
+  document.getElementById('img-preview-wrap').style.display='none';
+  document.getElementById('img-preview').src='';
+  currentImgBase64='';
+}
+
+function savePackage(){
+  const name=document.getElementById('m-name').value.trim();
+  const price=document.getElementById('m-price').value.trim();
+  if(!name){toast('Package name is required','error');return;}
+  if(!price){toast('Price is required','error');return;}
+  const imgUrl=document.getElementById('m-img-url').value.trim();
+  const finalImg=currentImgBase64||imgUrl||'';
+  const pkg={
+    id: editId||(Date.now().toString(36)+Math.random().toString(36).slice(2)),
+    name,
+    nameAr: document.getElementById('m-name-ar').value.trim(),
+    cat: document.getElementById('m-cat').value,
+    status: document.getElementById('m-status').value,
+    price: +price,
+    oldPrice: +document.getElementById('m-old-price').value||'',
+    desc: document.getElementById('m-desc').value.trim(),
+    descAr: document.getElementById('m-desc-ar').value.trim(),
+    duration: document.getElementById('m-duration').value.trim(),
+    img: finalImg,
+    featured: document.getElementById('m-featured').classList.contains('on'),
+    updatedAt: new Date().toISOString()
+  };
+  if(editId){
+    packages=packages.map(p=>p.id===editId?pkg:p);
+    logActivity(`Updated: ${name}`,'var(--gold)');
+    toast('Package updated!','success');
+  } else {
+    packages.unshift(pkg);
+    logActivity(`Added: ${name}`,'var(--success)');
+    toast('Package added!','success');
+  }
+  save(); renderTable(); renderDashboard(); updateBadges();
+  closeModal('pkg-modal');
+}
+
+/* ═══════════════════════════════════════
+   IMAGE HANDLING
+═══════════════════════════════════════ */
+function handleImgSelect(event){
+  const file=event.target.files[0];
+  if(!file) return;
+  if(file.size>5*1024*1024){toast('Image too large (max 5MB)','error');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    currentImgBase64=e.target.result;
+    document.getElementById('img-preview').src=currentImgBase64;
+    document.getElementById('img-preview-wrap').style.display='block';
+    document.getElementById('m-img-url').value='';
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewURL(url){
+  if(!url) return;
+  currentImgBase64='';
+  document.getElementById('img-preview').src=url;
+  document.getElementById('img-preview-wrap').style.display='block';
+}
+
+function clearImg(){
+  currentImgBase64='';
+  document.getElementById('img-preview').src='';
+  document.getElementById('img-preview-wrap').style.display='none';
+  document.getElementById('m-img-url').value='';
+  document.getElementById('m-img-file').value='';
+}
+
+// Drag & drop
+const dz=document.getElementById('drop-zone');
+if(dz){
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragging');});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('dragging'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault();dz.classList.remove('dragging');
+    const file=e.dataTransfer.files[0];
+    if(file&&file.type.startsWith('image/')){
+      const fake=document.getElementById('m-img-file');
+      const dt=new DataTransfer();dt.items.add(file);fake.files=dt.files;
+      handleImgSelect({target:{files:[file]}});
+    }
+  });
+}
+
+/* ═══════════════════════════════════════
+   OFFERS
+═══════════════════════════════════════ */
+function renderOffers(){
+  const list=document.getElementById('offers-list');
+  const empty=document.getElementById('offers-empty');
+  if(!offers.length){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  list.innerHTML=offers.map(o=>{
+    const pct=`${o.discount||0}% off`;
+    return `<div class="offer-card">
+      <div class="offer-icon"><i class="fa-solid fa-tag"></i></div>
+      <div class="offer-info">
+        <div class="offer-name">${o.title}</div>
+        <div style="margin-top:5px;">
+          ${o.code?`<span class="offer-code">${o.code}</span>`:''}
+          <span class="pkg-cat-badge badge-alpine">${pct}</span>
+          <span class="status-badge ${o.active?'status-active':'status-draft'}" style="margin-left:4px;">
+            <span class="status-dot"></span>${o.active?'Active':'Inactive'}
+          </span>
+        </div>
+        <div class="offer-desc">${o.desc||''} ${o.start&&o.end?`· Valid: ${o.start} → ${o.end}`:''}</div>
+      </div>
+      <div class="offer-actions">
+        <button class="act-btn edit" onclick="openEditOffer('${o.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="act-btn del" onclick="deleteOffer('${o.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openOfferModal(){
+  offerEditId=null;
+  ['o-title','o-code','o-discount','o-start','o-end','o-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('o-active').classList.add('on');
+  document.getElementById('offer-modal-title').textContent='New Offer';
+  openModal('offer-modal');
+}
+
+function openEditOffer(id){
+  offerEditId=id;
+  const o=offers.find(x=>x.id===id);
+  if(!o) return;
+  document.getElementById('offer-modal-title').textContent='Edit Offer';
+  document.getElementById('o-title').value=o.title||'';
+  document.getElementById('o-code').value=o.code||'';
+  document.getElementById('o-discount').value=o.discount||'';
+  document.getElementById('o-start').value=o.start||'';
+  document.getElementById('o-end').value=o.end||'';
+  document.getElementById('o-desc').value=o.desc||'';
+  const tog=document.getElementById('o-active');
+  if(o.active) tog.classList.add('on'); else tog.classList.remove('on');
+  openModal('offer-modal');
+}
+
+function saveOffer(){
+  const title=document.getElementById('o-title').value.trim();
+  if(!title){toast('Offer title is required','error');return;}
+  const offer={
+    id: offerEditId||(Date.now().toString(36)+Math.random().toString(36).slice(2)),
+    title,
+    code: document.getElementById('o-code').value.trim().toUpperCase(),
+    discount: +document.getElementById('o-discount').value||0,
+    start: document.getElementById('o-start').value,
+    end: document.getElementById('o-end').value,
+    desc: document.getElementById('o-desc').value.trim(),
+    active: document.getElementById('o-active').classList.contains('on'),
+    updatedAt: new Date().toISOString()
+  };
+  if(offerEditId){
+    offers=offers.map(o=>o.id===offerEditId?offer:o);
+    toast('Offer updated!','success');
+  } else {
+    offers.unshift(offer);
+    logActivity(`Offer added: ${title}`,'var(--success)');
+    toast('Offer created!','success');
+  }
+  save(); renderOffers(); renderDashboard(); closeModal('offer-modal');
+}
+
+function deleteOffer(id){
+  if(!confirm('Delete this offer?')) return;
+  offers=offers.filter(o=>o.id!==id);
+  save(); renderOffers(); renderDashboard(); toast('Offer deleted','success');
+}
+
+/* ═══════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════ */
+function changePassword(){
+  const old=document.getElementById('s-old-pass').value;
+  const nw=document.getElementById('s-new-pass').value;
+  const cf=document.getElementById('s-conf-pass').value;
+  if(old!==getPass()){toast('Current password is incorrect','error');return;}
+  if(nw.length<6){toast('New password must be at least 6 characters','error');return;}
+  if(nw!==cf){toast('Passwords do not match','error');return;}
+  localStorage.setItem(KEYS.pass,nw);
+  ['s-old-pass','s-new-pass','s-conf-pass'].forEach(id=>document.getElementById(id).value='');
+  toast('Password updated successfully!','success');
+}
+
+function exportData(){
+  const data={
+    exportedAt:new Date().toISOString(),
+    packages:packages.map(p=>({
+      id:p.id, name:p.name, nameAr:p.nameAr,
+      category:p.cat, categoryLabel:catLabels[p.cat]||p.cat,
+      price:p.price, oldPrice:p.oldPrice||null,
+      description:p.desc, descriptionAr:p.descAr,
+      duration:p.duration, image:p.img,
+      featured:p.featured, status:p.status
+    })).filter(p=>p.status==='active'),
+    offers:offers.filter(o=>o.active)
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='packages.json';
+  a.click();
+  toast('Exported packages.json!','info');
+  logActivity('Data exported','var(--gold)');
+}
+
+function importData(){ document.getElementById('import-file').click(); }
+
+function handleImport(event){
+  const file=event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.packages){packages=data.packages;}
+      if(data.offers){offers=data.offers;}
+      save(); initApp(); toast('Data imported!','success');
+    }catch(err){toast('Invalid JSON file','error');}
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
+function resetData(){
+  packages=[];offers=[];activity=[];save();initApp();
+  toast('All data reset','info');
+}
+
+/* ═══════════════════════════════════════
+   MODAL UTILS
+═══════════════════════════════════════ */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function toast(msg, type='info'){
+  const icons={success:'fa-circle-check',error:'fa-circle-xmark',info:'fa-circle-info'};
+  const el=document.createElement('div');
+  el.className=`toast-item ${type}`;
+  el.innerHTML=`<i class="fa-solid ${icons[type]} toast-icon"></i><span>${msg}</span>`;
+  document.getElementById('toast').appendChild(el);
+  setTimeout(()=>el.remove(),3500);
+}
+
+// Login on Enter
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
+  }
+});
+</script>
 </body>
 </html>
