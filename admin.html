@@ -1,743 +1,188 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>النسر العالمي للسفر والسياحة | Global Eagle Travel</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<style>
-/* ─── RESET & BASE ─── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  background:#0b0c10; /* أسود عميق مطفأ ومريح جداً للعين */
-  color:#e2e8f0;
-  font-family: 'Cairo', 'Manrope', sans-serif; /* الأولوية لخط Cairo الفخم */
-  overflow-x:hidden;
-  line-height:1.6;
-}
-img{display:block;max-width:100%;height:auto;}
-a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'Cairo', sans-serif;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Global Eagle</title>
+    <style>
+        :root {
+            --main-gold: #b38f00; /* لون ذهبي متناسق مع الشعار */
+            --dark-bg: #1e1e1e;
+            --light-bg: #f4f6f9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        header {
+            background-color: var(--dark-bg);
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--main-gold);
+        }
+        header h1 { margin: 0; font-size: 24px; }
+        
+        /* شبكة الإحصائيات السريعة */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-right: 5px solid var(--main-gold);
+        }
+        .stat-box h3 { margin: 0 0 10px 0; color: #666; font-size: 16px; }
+        .stat-box p { margin: 0; font-size: 28px; font-weight: bold; color: var(--dark-bg); }
 
-/* ─── VARS ─── */
-:root{
-  --gold:#D4AF37;
-  --gold2:#FFE47A;
-  --gold3:#A07820;
-  --ink:#0b0c10;
-  --ink2:#1f2833;
-  --white:#FFFFFF;
-  --pad-x:clamp(20px,5vw,80px);
-  --pad-y:clamp(60px,10vw,120px);
-}
+        /* قسّمي الشاشة إلى قطاعين (الفورم والجدول) */
+        .admin-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        @media (max-width: 900px) {
+            .admin-content { grid-template-columns: 1fr; }
+        }
 
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-track{background:#0b0c10;}
-::-webkit-scrollbar-thumb{background:var(--gold);}
+        /* تصميم النموذج (Form) */
+        .form-section, .table-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        h2 { margin-top: 0; color: var(--dark-bg); border-bottom: 2px solid #eee; padding-bottom: 10px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        .btn-submit {
+            background-color: var(--main-gold); color: white; border: none; padding: 12px 20px;
+            border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px;
+        }
+        .btn-submit:hover { background-color: #947600; }
 
-/* ─── INTRO ─── */
-#intro{
-  position:fixed;inset:0;background:#050508;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
-}
-#intro-canvas{position:absolute;inset:0;width:100%;height:100%;}
-#intro-img-wrap{
-  position:relative;width:min(260px,70vw);height:min(260px,70vw);
-  border-radius:50%;overflow:hidden;
-  border:1px solid rgba(212,175,55,.4);
-  box-shadow:0 0 50px rgba(212,175,55,0.2);
-  opacity:0;transform:scale(.85);
-  transition:opacity 1.2s ease,transform 1.2s ease;
-}
-#intro-img-wrap.show{opacity:1;transform:scale(1);}
-#intro-img-wrap img{width:100%;height:100%;object-fit:contain;background:#0b0c10;}
-#intro-glow{
-  position:absolute;inset:-2px;border-radius:50%;
-  box-shadow:0 0 0 1px rgba(212,175,55,.4),0 0 40px rgba(212,175,55,.3);
-  animation:glowPulse 2s ease-in-out infinite;
-}
-@keyframes glowPulse{0%,100%{opacity:.5;}50%{opacity:1;}}
-#intro-text{
-  margin-top:32px;text-align:center;
-  opacity:0;transform:translateY(16px);
-  transition:opacity .8s ease .4s,transform .8s ease .4s;
-}
-#intro-text.show{opacity:1;transform:translateY(0);}
-#intro-text h1{
-  font-family:'Playfair Display', serif;
-  font-size:clamp(1.4rem,4vw,2.2rem);
-  color:var(--gold);letter-spacing:.15em;font-weight:700;
-}
-#intro-text p{
-  font-size:.75rem;letter-spacing:.2em;
-  color:rgba(255,255,255,0.6);margin-top:8px;text-transform:uppercase;
-}
-#intro-bar{width:180px;height:2px;background:rgba(255,255,255,.07);margin-top:32px;border-radius:2px;overflow:hidden;}
-#intro-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .05s linear;}
-
-/* ─── NAV ─── */
-#nav{
-  position:fixed;top:0;left:0;width:100%;z-index:500;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:15px var(--pad-x);
-  background:rgba(11, 12, 16, 0.8);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(212,175,55,.15);
-}
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.logo-img-nav {
-  height: 50px;
-  width: auto;
-}
-.nav-logo{
-  font-family:'Playfair Display',serif;font-size:1.25rem;
-  color:var(--gold);letter-spacing:.05em;font-weight:700;white-space:nowrap;
-}
-.nav-links{display:flex;gap:clamp(16px,2.5vw,35px);margin-right:auto;margin-left:40px;}
-.nav-links a{
-  font-size:.85rem;font-weight:600;
-  color:rgba(255,255,255,.75);
-  transition:color .25s;position:relative;
-}
-.nav-links a::after{
-  content:'';position:absolute;bottom:-4px;left:0;
-  width:0;height:2px;background:var(--gold);transition:width .3s;
-}
-.nav-links a:hover,.nav-links a.active{color:var(--gold);}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-.nav-right{display:flex;align-items:center;gap:16px;}
-.nav-socials{display:flex;gap:14px;color:rgba(212,175,55,.7);}
-.nav-socials a{transition:color .25s;font-size:.95rem;}
-.nav-socials a:hover{color:var(--gold);}
-.btn-nav{
-  border:1px solid var(--gold);color:var(--gold);background:transparent;
-  padding:8px 20px;font-size:.8rem;font-weight:700;
-  transition:all .3s;white-space:nowrap;border-radius:4px;
-}
-.btn-nav:hover{background:var(--gold);color:#000;}
-#ham{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;}
-#ham span{display:block;width:22px;height:1.5px;background:var(--gold);}
-
-/* ─── MOBILE NAV ─── */
-#mob-nav{
-  position:fixed;inset:0;background:#0b0c10;z-index:600;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
-  transform:translateX(100%);transition:transform .4s ease;
-}
-#mob-nav.open{transform:translateX(0);}
-#mob-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--gold);font-size:1.8rem;}
-#mob-nav a{font-size:1.5rem;color:rgba(255,255,255,.8);transition:color .2s;font-weight:600;}
-#mob-nav a:hover{color:var(--gold);}
-
-/* ─── HERO ─── */
-#hero{
-  position:relative;width:100%;min-height:100vh;
-  display:flex;align-items:center;overflow:hidden;
-}
-#hero-bg{position:absolute;inset:0;z-index:0;}
-#hero-bg img{width:100%;height:100%;object-fit:cover;}
-#hero-bg::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to left, rgba(11, 12, 16, 0.9) 0%, rgba(11, 12, 16, 0.5) 60%, rgba(11, 12, 16, 0.2) 100%);
-}
-#hero-bg::before{
-  content:'';position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to top,rgba(11,12,16,1) 0%,rgba(11,12,16,.4) 40%,transparent 100%);
-}
-.hero-inner{
-  position:relative;z-index:2;
-  width:100%;max-width:1200px;margin:0 auto;
-  padding:140px var(--pad-x) 160px;
-}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:12px;
-  color:var(--gold);font-size:.8rem;letter-spacing:.15em;
-  font-weight:700;margin-bottom:24px;
-}
-.hero-tag::before{content:'';width:28px;height:2px;background:var(--gold);}
-.hero-h1{
-  font-size:clamp(2.2rem,5vw,4.5rem);
-  line-height:1.2;font-weight:700;
-  margin-bottom:24px;color:#fff;
-}
-.hero-h1 em{color:var(--gold);font-style:italic;font-family:'Playfair Display', serif;}
-.hero-p{
-  color:rgba(255,255,255,.75);font-size:clamp(.95rem,1.5vw,1.1rem);
-  line-height:1.8;max-width:550px;margin-bottom:44px;
-}
-.btn-gold{
-  background:var(--gold);color:#000;border:none;
-  padding:14px 32px;font-size:.85rem;font-weight:700;transition:all .3s;border-radius:4px;
-}
-.btn-gold:hover{background:var(--gold2);}
-.btn-ghost{
-  background:transparent;border:1px solid rgba(212,175,55,.5);color:var(--gold);
-  padding:14px 32px;font-size:.85rem;font-weight:700;transition:all .3s;
-  backdrop-filter:blur(8px);border-radius:4px;
-}
-.btn-ghost:hover{background:rgba(212,175,55,.1);border-color:var(--gold);}
-
-/* Stats */
-.hero-stats{
-  position:absolute;bottom:0;left:0;right:0;z-index:2;
-  padding:28px var(--pad-x);
-  background:linear-gradient(to top, rgba(11,12,16,1), transparent);
-  display:flex;flex-wrap:wrap;gap:32px;align-items:center;
-}
-.stat-item{display:flex;flex-direction:column;}
-.stat-val{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.6rem,3vw,2.4rem);color:var(--gold);line-height:1;font-weight:600;
-}
-.stat-lbl{font-size:.7rem;color:rgba(255,255,255,.55);margin-top:4px;}
-.stat-sep{width:1px;height:40px;background:rgba(212,175,55,.25);flex-shrink:0;}
-
-/* scroll cue */
-.scroll-cue{
-  position:absolute;bottom:140px;left:var(--pad-x);z-index:2;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-}
-.scroll-cue span{font-size:.65rem;color:rgba(255,255,255,.45);text-transform:uppercase;}
-.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(212,175,55,.6),transparent);animation:scLine 2s ease-in-out infinite;}
-@keyframes scLine{0%,100%{opacity:.4}50%{opacity:1}}
-
-/* ─── MARQUEE ─── */
-.marquee-wrap{
-  overflow:hidden;padding:16px 0;background:rgba(5,5,8,0.6);
-  border-top:1px solid rgba(212,175,55,.15);border-bottom:1px solid rgba(212,175,55,.15);
-}
-.marquee-track{display:flex;width:max-content;animation:marquee 28s linear infinite;gap:48px;align-items:center;}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(50%)}} /* تعديل الاتجاه ليناسب الـ RTL */
-.m-item{font-size:.8rem;color:rgba(212,175,55,.8);font-weight:600;display:flex;align-items:center;gap:16px;white-space:nowrap;}
-.m-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;opacity:.7;}
-
-/* ─── SECTION COMMONS ─── */
-.sec{padding:var(--pad-y) var(--pad-x);}
-.sec-inner{max-width:1200px;margin:0 auto;}
-.sec-tag{font-size:.8rem;color:var(--gold);font-weight:700;display:block;margin-bottom:14px;letter-spacing: 1px;}
-.sec-h2{font-size:clamp(1.8rem,4vw,2.6rem);color:#fff;font-weight:700;line-height:1.3;margin-bottom:0;}
-
-/* ─── GLASS ─── */
-.glass{
-  background:rgba(31, 40, 51, 0.4);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(212,175,55,.15);
-  transition:border-color .3s;
-  border-radius:6px;
-}
-.glass:hover{border-color:rgba(212,175,55,.4);}
-
-/* ─── PACKAGES ─── */
-#packages{background:#141923;} /* لون أعمق ومريح للعين */
-.pkg-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
-.pkg-link{font-size:.8rem;color:var(--gold);font-weight:700;border-bottom:1px solid rgba(212,175,55,.4);padding-bottom:4px;transition:border-color .3s;}
-.pkg-link:hover{border-color:var(--gold2);}
-.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;align-items:start;}
-.pkg-card{position:relative;overflow:hidden;border-radius:6px;border:1px solid rgba(255,255,255,0.05);background:#0b0c10;}
-.pkg-card img{
-  width:100%;aspect-ratio:3/4;object-fit:cover;
-  transition:transform .7s cubic-bezier(.165,.84,.44,1);
-  display:block;opacity:.8;
-}
-.pkg-card:hover img{transform:scale(1.05);opacity:1;}
-.pkg-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(11,12,16,1) 0%,rgba(11,12,16,0.4) 60%,transparent 100%);
-  padding:24px;display:flex;flex-direction:column;justify-content:flex-end;
-}
-.pkg-cat{font-size:.75rem;color:var(--gold);margin-bottom:6px;font-weight:600;}
-.pkg-title{font-size:1.3rem;color:#fff;margin-bottom:0;font-weight:700;}
-.pkg-desc-text {font-size: 0.85rem; color: #a0aec0; margin-top: 5px; height: 45px; overflow: hidden;}
-.pkg-price-tag {color: #4fd1c5; font-weight: bold; margin-top: 8px; font-size: 1rem;}
-.pkg-line{height:1px;width:0;background:var(--gold);margin:12px 0;transition:width .5s;}
-.pkg-card:hover .pkg-line{width:100%;}
-.pkg-btn{
-  opacity:0;transition:opacity .35s;background:none;border:none;color:#fff;
-  font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:8px;padding:0;
-}
-.pkg-card:hover .pkg-btn{opacity:1;}
-.pkg-card:nth-child(2){margin-top:40px;}
-
-/* ─── SERVICES ─── */
-#services{background:#0b0c10;}
-.svc-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:16px;}
-.b-big{grid-column:span 2;grid-row:span 2;padding:44px;display:flex;flex-direction:column;justify-content:space-between;min-height:360px;position:relative;overflow:hidden;}
-.b-big-icon{position:absolute;left:-24px;top:-24px;opacity:.04;pointer-events:none;font-size:200px;color:var(--gold);}
-.b-cell{padding:32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;min-height:160px;justify-content:center;}
-.b-wide{grid-column:span 2;padding:28px 32px;display:flex;align-items:center;gap:24px;min-height:140px;}
-.b-icon{font-size:2.2rem;color:var(--gold);transition:transform .3s;}
-.glass:hover .b-icon{transform:scale(1.1);}
-.b-title{font-size:1.15rem;color:#fff;font-weight:700;}
-.b-desc{font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.6;}
-.b-wide-icon-wrap{width:64px;height:64px;border-radius:50%;border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-
-/* ─── HOW IT WORKS ─── */
-#how{background:#141923;}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:64px;}
-.step-num{font-family:'Playfair Display',serif;font-size:4rem;color:rgba(212,175,55,.12);line-height:1;font-weight:700;margin-bottom:-12px;}
-.step-line{width:36px;height:2px;background:var(--gold);margin:16px 0;}
-.step-title{font-size:1.2rem;color:#fff;margin-bottom:10px;font-weight:700;}
-.step-desc{font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.75;}
-
-/* ─── CONTACT ─── */
-#contact{background:#0b0c10;border-top:1px solid rgba(212,175,55,.15);}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
-.contact-info-item{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
-.contact-info-item i{color:var(--gold);width:20px;}
-.contact-info-item p{font-size:.95rem;color:rgba(255,255,255,.8);}
-.socials-row{display:flex;gap:12px;margin-top:36px;}
-.soc-btn{
-  width:44px;height:44px;border:1px solid rgba(212,175,55,.3);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--gold);transition:all .3s;font-size:.95rem;
-}
-.soc-btn:hover{background:var(--gold);color:#000;border-color:var(--gold);}
-.form-wrap{padding:44px;}
-.f-group{border-bottom:1px solid rgba(255,255,255,.2);padding:12px 0;margin-bottom:15px;transition:border-color .3s;}
-.f-group:focus-within{border-color:var(--gold);}
-.f-label{display:block;font-size:.7rem;color:var(--gold);font-weight:600;margin-bottom:7px;}
-.f-input{
-  background:transparent;border:none;width:100%;
-  color:#fff;font-family:'Cairo',sans-serif;font-size:.95rem;outline:none;
-}
-.f-input::placeholder{color:rgba(255,255,255,.25);}
-.f-input option{background:#141923; color: white;}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.btn-submit{
-  width:100%;padding:15px;margin-top:24px;
-  background:var(--gold);color:#000;border:none;
-  font-size:.9rem;font-weight:700;transition:all .3s;border-radius:4px;
-}
-.btn-submit:hover{background:var(--gold2);}
-
-/* ─── WA FLOAT ─── */
-#wa{
-  position:fixed;bottom:28px;left:28px;z-index:400; /* تم نقله لليسار ليتناسق مع الـ RTL */
-  width:54px;height:54px;background:#25D366;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(37,211,102,.35);
-  animation:waPulse 2.5s ease-in-out infinite;
-}
-#wa svg{width:26px;height:26px;fill:#fff;}
-@keyframes waPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
-
-/* ─── REVEAL ─── */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
-.rv.on{opacity:1;transform:none;}
-
-/* ─── RESPONSIVE ─── */
-@media(max-width:900px){
-  .nav-links{display:none;}
-  .nav-socials{display:none;}
-  #ham{display:flex!important;}
-  .pkg-grid{grid-template-columns:1fr 1fr;}
-  .pkg-card:nth-child(2){margin-top:0;}
-  .pkg-card:nth-child(3){grid-column:span 2;}
-  .bento{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
-  .b-big{grid-column:span 2;grid-row:span 1;min-height:280px;}
-  .b-wide{grid-column:span 2;}
-  .steps{grid-template-columns:1fr 1fr;}
-  .contact-grid{grid-template-columns:1fr;gap:48px;}
-}
-@media(max-width:580px){
-  .pkg-grid{grid-template-columns:1fr;}
-  .pkg-card:nth-child(3){grid-column:span 1;}
-  .bento{grid-template-columns:1fr;}
-  .b-big{grid-column:span 1;}
-  .b-wide{grid-column:span 1;}
-  .steps{grid-template-columns:1fr;}
-  .f-row{grid-template-columns:1fr;}
-  .hero-stats{gap:20px;}
-  .stat-sep{display:none;}
-}
-</style>
+        /* تصميم الجدول (Table) */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: #555; }
+        .status { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .status.confirmed { background-color: #d4edda; color: #155724; }
+        .status.pending { background-color: #fff3cd; color: #856404; }
+        .btn-action { padding: 4px 8px; background: #dc3545; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; }
+    </style>
 </head>
 <body>
 
-<div id="intro">
-  <canvas id="intro-canvas"></canvas>
-  <div id="intro-img-wrap">
-    <img src="image_0b6aeb.png" alt="Global Eagle Logo"/>
-    <div id="intro-glow"></div>
-  </div>
-  <div id="intro-text">
-    <h1>Global Eagle Travel</h1>
-    <p>التميز في فضاء السياحة والسفر</p>
-  </div>
-  <div id="intro-bar"><div id="intro-fill"></div></div>
-</div>
+    <header>
+        <h1>لوحة تحكم المدير | Global Eagle</h1>
+        <span>مرحباً، المسؤول الأدمن 👋</span>
+    </header>
 
-<div id="mob-nav">
-  <button id="mob-close" onclick="closeMob()">✕</button>
-  <a href="#hero" onclick="closeMob()">الرئيسية</a>
-  <a href="#packages" onclick="closeMob()">الباكجات العروض</a>
-  <a href="#services" onclick="closeMob()">خدماتنا</a>
-  <a href="#how" onclick="closeMob()">كيف نعمل</a>
-  <a href="#contact" onclick="closeMob()">اتصل بنا</a>
-</div>
-
-<nav id="nav">
-  <div class="logo-area">
-    <img src="image_0b6aeb.png" alt="Global Eagle" class="logo-img-nav">
-    <div class="nav-logo">النسر العالمي</div>
-  </div>
-  
-  <div class="nav-links">
-    <a href="#hero" class="active">الرئيسية</a>
-    <a href="#packages">الباكجات</a>
-    <a href="#services">خدماتنا</a>
-    <a href="#how">كيف نعمل</a>
-    <a href="#contact">اتصل بنا</a>
-  </div>
-  
-  <div class="nav-right">
-    <div class="nav-socials">
-      <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://snapchat.com" target="_blank"><i class="fa-brands fa-snapchat"></i></a>
-      <a href="https://tiktok.com" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-    </div>
-    <button class="btn-nav" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">احجز الآن</button>
-    <button id="ham" onclick="document.getElementById('mob-nav').classList.add('open')">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<section id="hero">
-  <div id="hero-bg">
-    <img id="hero-img" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1920" alt="Global Eagle Flight"/>
-  </div>
-
-  <div class="hero-inner">
-    <div class="hero-tag rv">نصنع لك آفاقاً جديدة للسفر</div>
-    <h1 class="hero-h1 rv">القوة. الرؤية.<br/><em>والحرية المطلقة.</em></h1>
-    <p class="hero-p rv">اكتشف العالم من منظور الفخامة والرفاهية. رحلات منسقة بعناية، ومعاملات سريعة تعيد تعريف مفهوم السفر السياحي الفاخر.</p>
-    <div class="hero-btns rv">
-      <button class="btn-gold" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})">استكشف الباكجات</button>
-      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">▶ خدماتنا المتميزة</button>
-    </div>
-  </div>
-
-  <div class="scroll-cue">
-    <span>اسحب للأسفل</span>
-    <div class="scroll-line"></div>
-  </div>
-
-  <div class="hero-stats rv">
-    <div class="stat-item">
-      <div class="stat-val" id="s1">0</div>
-      <div class="stat-lbl">وجهة عالمية</div>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <div class="stat-val" id="s2">0</div>
-      <div class="stat-lbl">شريك طيران وفنادق</div>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <div class="stat-val" id="s3">0</div>
-      <div class="stat-lbl">عميل متميز</div>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <div class="stat-val" id="s4">0</div>
-      <div class="stat-lbl">سنوات من التميز</div>
-    </div>
-  </div>
-</section>
-
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="m-item">تأشيرات سياحية <span class="m-dot"></span></div>
-    <div class="m-item">حجوزات فنادق <span class="m-dot"></span></div>
-    <div class="m-item">تذاكر طيران <span class="m-dot"></span></div>
-    <div class="m-item">تأشيرات طلابية <span class="m-dot"></span></div>
-    <div class="m-item">رخص دولية <span class="m-dot"></span></div>
-    <div class="m-item">تأمين سفر متكامل <span class="m-dot"></span></div>
-    <div class="m-item">تأشيرات سياحية <span class="m-dot"></span></div>
-    <div class="m-item">حجوزات فنادق <span class="m-dot"></span></div>
-    <div class="m-item">تذاكر طيران <span class="m-dot"></span></div>
-    <div class="m-item">تأشيرات طلابية <span class="m-dot"></span></div>
-    <div class="m-item">رخص دولية <span class="m-dot"></span></div>
-    <div class="m-item">تأمين سفر متكامل <span class="m-dot"></span></div>
-  </div>
-</div>
-
-<section id="packages" class="sec">
-  <div class="sec-inner">
-    <div class="pkg-head rv">
-      <div>
-        <span class="sec-tag">باقات مختارة لك</span>
-        <h2 class="sec-h2">تجارب سفر استثنائية</h2>
-      </div>
-      <a href="#contact" class="pkg-link">اطلب رحلة خاصة ←</a>
-    </div>
-    <div class="pkg-grid" id="dynamicPackagesGrid">
-       </div>
-  </div>
-</section>
-
-<section id="services" class="sec">
-  <div class="sec-inner">
-    <div class="svc-head rv">
-      <div>
-        <span class="sec-tag">ماذا نقدم في الشركة</span>
-        <h2 class="sec-h2">خدمات النسر العالمي</h2>
-      </div>
-    </div>
-    <div class="bento">
-      <div class="glass b-big rv">
-        <div class="b-big-icon">✈</div>
-        <div>
-          <span class="sec-tag">VIP</span>
-          <h3 style="font-size:1.8rem;color:#fff;margin-bottom:14px;line-height:1.2;">راحة متكاملة<br/>طوال رحلتك</h3>
-          <p class="b-desc" style="max-width:300px;">بدءاً من استخراج الفيزا وحتى تأمين السيارات الفاخرة والاستشارات التعليمية والمهنية.</p>
+    <section class="admin-stats">
+        <div class="stat-box">
+            <h3>إجمالي الحجوزات</h3>
+            <p>1,240</p>
         </div>
-        <button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.8rem;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">استكشف الخدمات</button>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🌍</div>
-        <div class="b-title">تأشيرات سياحية</div>
-        <div class="b-desc">استخراج الفيزا لجميع الوجهات العالمية بخبرة وسرعة فائقة.</div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🏨</div>
-        <div class="b-title">حجوزات نخبوية</div>
-        <div class="b-desc">فنادق ومنتجعات فاخرة تم التحقق منها حول العالم بأفضل الأسعار.</div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">✈️</div>
-        <div class="b-title">تذاكر الطيران</div>
-        <div class="b-desc">إصدار وحجز التذاكر على كافة الخطوط الجوية العالمية والمحلية.</div>
-      </div>
-      <div class="glass b-wide rv">
-        <div class="b-wide-icon-wrap">
-          <div class="b-icon" style="font-size:1.6rem;">🎓</div>
+        <div class="stat-box">
+            <h3>الرحلات النشطة</h3>
+            <p>45</p>
         </div>
-        <div>
-          <div class="b-title" style="text-align:right;margin-bottom:8px;">التأشيرات الطلابية</div>
-          <div class="b-desc" style="text-align:right;">دعم متكامل لرحلتك التعليمية بالخارج وتسهيل قبولك الجامعي واستخراج فيزا الدراسة.</div>
+        <div class="stat-box">
+            <h3>الطلبات المعلقة</h3>
+            <p>12</p>
         </div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🚗</div>
-        <div class="b-title">رخص دولية</div>
-        <div class="b-desc">إصدار رخص القيادة الدولية لتتمكن من القيادة قانونياً في أي بلد.</div>
-      </div>
-      <div class="glass b-cell rv">
-        <div class="b-icon">🛡️</div>
-        <div class="b-title">تأمين السفر</div>
-        <div class="b-desc">تغطية طبية وأمنية شاملة تضمن لك ولعائلتك رحلة آمنة تماماً.</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section id="how" class="sec">
-  <div class="sec-inner">
-    <div style="text-align:center;" class="rv">
-      <span class="sec-tag">خطواتنا السلسة</span>
-      <h2 class="sec-h2">كيف تسير المعاملة؟</h2>
-    </div>
-    <div class="steps">
-      <div class="rv">
-        <div class="step-num">01</div>
-        <div class="step-line"></div>
-        <div class="step-title">الاستشارة المبكرة</div>
-        <div class="step-desc">تواصل معنا لمشاركة متطلباتك ووجهتك المفضلة مع فريق خدمة العملاء المختص.</div>
-      </div>
-      <div class="rv">
-        <div class="step-num">02</div>
-        <div class="step-line"></div>
-        <div class="step-title">التخطيط والتجهيز</div>
-        <div class="step-desc">نقوم بإعداد وتجهيز خطة مخصصة لمعاملتك تضمن أعلى نسب القبول والنجاح وبأفضل تكلفة.</div>
-      </div>
-      <div class="rv">
-        <div class="step-num">03</div>
-        <div class="step-line"></div>
-        <div class="step-title">الحجز المباشر</div>
-        <div class="step-desc">تأكيد فوري لجميع طلبات الحجز والإصدار عبر شبكة شركائنا الموثوقين عالمياً.</div>
-      </div>
-      <div class="rv">
-        <div class="step-num">04</div>
-        <div class="step-line"></div>
-        <div class="step-title">متابعة على مدار الساعة</div>
-        <div class="step-desc">يبقى فريق كونسيرج الشركة معك خطوة بخطوة لضمان راحتك التامة حتى انتهاء الرحلة.</div>
-      </div>
-    </div>
-  </div>
-</section>
+    <main class="admin-content">
+       
 
-<section id="contact" class="sec">
-  <div class="sec-inner">
-    <div class="contact-grid">
-      <div class="rv">
-        <span class="sec-tag">تواصل معنا الآن</span>
-        <h2 class="sec-h2" style="margin-bottom:36px;">ابدأ مغامرتك القادمة<br/><em style="color:var(--gold);font-style:italic;">مع النسر العالمي</em></h2>
-        <div class="contact-info-item">
-          <i class="fa-solid fa-phone"></i>
-          <p dir="ltr">+966 50 174 9914</p>
-        </div>
-        <div class="contact-info-item">
-          <i class="fa-solid fa-envelope"></i>
-          <p>info@globaleagletrv.com</p>
-        </div>
-        <div class="contact-info-item">
-          <i class="fa-solid fa-location-dot"></i>
-          <p>المملكة العربية السعودية</p>
-        </div>
-        <div class="socials-row">
-          <a href="https://instagram.com" target="_blank" class="soc-btn"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://snapchat.com" target="_blank" class="soc-btn"><i class="fa-brands fa-snapchat"></i></a>
-          <a href="https://tiktok.com" target="_blank" class="soc-btn"><i class="fa-brands fa-tiktok"></i></a>
-          <a href="https://wa.me/966501749914" target="_blank" class="soc-btn"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-      </div>
-      <div class="glass form-wrap rv">
-        <div class="f-row">
-          <div class="f-group"><label class="f-label">الاسم الأول</label><input class="f-input" id="f1" type="text" placeholder="عبدالله"/></div>
-          <div class="f-group"><label class="f-label">العائلة</label><input class="f-input" id="f2" type="text" placeholder="المالكي"/></div>
-        </div>
-        <div class="f-group"><label class="f-label">البريد الإلكتروني</label><input class="f-input" id="f3" type="email" placeholder="example@domain.com"/></div>
-        <div class="f-group"><label class="f-label">رقم الجوال</label><input class="f-input" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
-        <div class="f-group">
-          <label class="f-label">الخدمة المطلوبة</label>
-          <select class="f-input" id="f5">
-            <option>تأشيرة سياحية</option>
-            <option>حجز فندق</option>
-            <option>تذاكر طيران</option>
-            <option>تأشيرة دراسية</option>
-            <option>رخصة دولية</option>
-            <option>تأمين سفر</option>
-          </select>
-        </div>
-        <div class="f-group"><label class="f-label">تفاصيل طلبك</label><textarea class="f-input" id="f6" rows="3" placeholder="أخبرنا بالمزيد عن وجهتك المفضل..." style="resize:none;"></textarea></div>
-        <button class="btn-submit" onclick="sendWA()">إرسال الطلب عبر الواتساب ✈</button>
-      </div>
-    </div>
-  </div>
-</section>
+        <section class="table-section">
+            <h2>أحدث طلبات الحجز من العامة</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم العميل</th>
+                        <th>الوجهة</th>
+                        <th>التاريخ</th>
+                        <th>الحالة</th>
+                        <th>إجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>أحمد محمد</td>
+                        <td>دبي</td>
+                        <td>2026-06-01</td>
+                        <td><span class="status confirmed">مؤكد</span></td>
+                        <td><button class="btn-action">إلغاء</button></td>
+                    </tr>
+                    <tr>
+                        <td>سارة عبد الله</td>
+                        <td>باريس</td>
+                        <td>2026-06-15</td>
+                        <td><span class="status pending">قيد الانتظار</span></td>
+                        <td><button class="btn-action">إلغاء</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-<a id="wa" href="https://wa.me/966501749914" target="_blank">
-  <svg viewBox="0 0 32 32"><path d="M16 2a13 13 0 0 0-11.3 19.4L3 29l7.8-2A13 13 0 1 0 16 2zm6.6 18.6c-.3.8-1.5 1.5-2.1 1.6-.6.1-1.3.2-3.8-.8a14.7 14.7 0 0 1-6.1-5.4c-.8-1.1-1.3-2.4-1.3-3.7A4 4 0 0 1 10.6 11c.3-.2.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.2c.1.2.1.4 0 .6l-.5.7c-.1.2-.3.4-.1.7a10 10 0 0 0 3.7 3.7c.3.2.5.1.7-.1l.8-1c.2-.2.4-.2.7-.1l2.2 1c.3.2.4.3.4.5a2.5 2.5 0 0 1-.3 1.3z"/></svg>
-</a>
+    </main>
 
-<script>
-function closeMob(){ document.getElementById('mob-nav').classList.remove('open'); }
-
-// منطق الـ Canvas والحركات الأساسية لكودك
-window.addEventListener('DOMContentLoaded',()=>{
-  const fill = document.getElementById('intro-fill');
-  const imgWrap = document.getElementById('intro-img-wrap');
-  const text = document.getElementById('intro-text');
-  const intro = document.getElementById('intro');
-  
-  let w = 0;
-  const iv = setInterval(()=>{
-    w += 3;
-    if(w>=100){
-      w=100; clearInterval(iv);
-      setTimeout(()=>{
-        intro.style.opacity = '0';
-        intro.style.transition = 'opacity .6s ease';
-        setTimeout(()=>intro.remove(),600);
-      },800);
-    }
-    fill.style.width = w+'%';
-  },40);
-
-  setTimeout(()=>imgWrap.classList.add('show'),200);
-  setTimeout(()=>text.classList.add('show'),500);
-
-  // تشغيل أرقام الـ Stats التلقائية
-  setTimeout(()=>{
-    animateStat('s1', 120, 2000);
-    animateStat('s2', 45, 2000);
-    animateStat('s3', 15, 2000);
-    animateStat('s4', 10, 2000);
-  }, 1500);
-  
-  loadDynamicPackages();
-});
-
-// دالة العدادات الرقمية
-function animateStat(id, endVal, duration) {
-  let startTimestamp = null;
-  const step = (timestamp) => {
-    if (!startTimestamp) startTimestamp = timestamp;
-    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-    document.getElementById(id).innerText = Math.floor(progress * endVal) + (id === 's3' ? 'K+' : '+');
-    if (progress < 1) window.requestAnimationFrame(step);
-  };
-  window.requestAnimationFrame(step);
-}
-
-// دالة جلب وعرض البيانات من لوحة التحكم المخفية
-function loadDynamicPackages() {
-  const currentPackages = JSON.parse(localStorage.getItem('eagle_travel_packages')) || [];
-  const grid = document.getElementById('dynamicPackagesGrid');
-  grid.innerHTML = '';
-
-  // إذا لم يقم الأدمن بإضافة أي باكج بعد، نعرض باكجات افتراضية ممتازة لتعبئة المساحة بصرياً
-  if (currentPackages.length === 0) {
-    const defaults = [
-      {cat: "جبال الألب فئة النخبة", title: "ملاذ سويسرا الثلجي", price: "1200$", img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600", desc: "استمتع بإقامة فاخرة وسط الثلوج السويسرية البيضاء مع تذاكر الطيران للدرجة الأولى."},
-      {cat: "الهروب الاستوائي", title: "فيلا جزر المالديف المائية", price: "1500$", img: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=600", desc: "شواطئ زرقاء خاصة ممتدة وخدمات كونسيرج متكاملة على مدار الساعة."},
-      {cat: "سحر الصحراء الأصيل", title: "رحلات الرمال الذهبية", price: "700$", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=600", desc: "سفاري وتخييم ملكي فاخر في قلب الكثبان الرملية الساحرة مع كامل الخدمات."}
-    ];
-    localStorage.setItem('eagle_travel_packages', JSON.stringify(defaults));
-    loadDynamicPackages();
-    return;
-  }
-
-  currentPackages.forEach(pkg => {
-    grid.innerHTML += `
-      <div class="pkg-card rv on">
-        <img src="${pkg.img}" alt="${pkg.title}"/>
-        <div class="pkg-overlay">
-          <div class="pkg-cat">${pkg.cat || 'عرض سياحي'}</div>
-          <div class="pkg-title">${pkg.title}</div>
-          <p class="pkg-desc-text">${pkg.desc}</p>
-          <div class="pkg-price-tag">السعر: ${pkg.price}</div>
-          <div class="pkg-line"></div>
-          <button class="pkg-btn" onclick="orderPackage('${pkg.title}')">احجز الآن ومتابعة المعاملة ←</button>
-        </div>
-      </div>
-    `;
-  });
-}
-
-// إرسال البيانات المكتوبة عبر الواتساب لتأكيد طلب العميل
-function sendWA(){
-  const f1 = document.getElementById('f1').value;
-  const f2 = document.getElementById('f2').value;
-  const f3 = document.getElementById('f3').value;
-  const f4 = document.getElementById('f4').value;
-  const f5 = document.getElementById('f5').value;
-  const f6 = document.getElementById('f6').value;
-  
-  const msg = `مرحباً النسر العالمي، أرغب في تقديم طلب استفسار:\nالاسم: ${f1} ${f2}\nالبريد: ${f3}\nالجوال: ${f4}\nالخدمة: ${f5}\nالتفاصيل: ${f6}`;
-  window.open(`https://wa.me/966501749914?text=${encodeURIComponent(msg)}`);
-}
-
-function orderPackage(title) {
-  document.getElementById('contact').scrollIntoView({behavior:'smooth'});
-  document.getElementById('f6').value = `أرغب في الاستفسار وحجز باكج: (${title})`;
-}
-
-// تأثير الأنيميشن التلقائي عند النزول بالفأرة
-window.addEventListener('scroll', ()=>{
-  document.querySelectorAll('.rv').forEach(el=>{
-    if(el.getBoundingClientRect().top < window.innerHeight * 0.9) el.classList.add('on');
-  });
-});
-</script>
 </body>
 </html>
+<section class="form-section">
+    <h2>إضافة بكج / رحلة جديدة</h2>
+    <form onsubmit="event.preventDefault(); alert('تم نشر البكج بنجاح وجاري تجهيز العرض للعملاء!');">
+        
+        <div class="form-group">
+            <label>عنوان الرحلة الرئيسى:</label>
+            <input type="text" placeholder="مثال: سحر الطبيعة في ماليزيا" required>
+        </div>
+
+        <div class="form-group">
+            <label>وصف وتفاصيل الرحلة (النص):</label>
+            <textarea placeholder="اكتبي هنا تفاصيل البرنامج السياحي، الفنادق، والأنشطة..." rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;"></textarea>
+        </div>
+
+        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+                <label>مدة الرحلة:</label>
+                <input type="text" placeholder="مثال: 7 أيام / 6 ليالي" required>
+            </div>
+            <div>
+                <label>السعر ($):</label>
+                <input type="number" placeholder="السعر الإجمالي" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>صورة البكج (Package Image):</label>
+            <input type="file" accept="image/*" required>
+        </div>
+
+        <div class="form-group" style="background: #f8f9fa; padding: 10px; border-radius: 4px; border: 1px dashed var(--main-gold);">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" style="width: auto; cursor: pointer;">
+                <span>تصنيف هذا البكج كـ <strong>"عرض خاص / لفترة محدودة" 🔥</strong></span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-submit" style="margin-top: 15px;">نشر وتثبيت البكج في الموقع</button>
+    </form>
+</section>
