@@ -1,930 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Global Eagle Travel | Rise Above. Aim High.</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<style>
-/* ─── RESET & BASE ─── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--font-body);
-  overflow-x:hidden;
-  line-height:1.6;
-  transition:background .4s,color .4s;
-}
-img{display:block;max-width:100%;height:auto;}
-a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:var(--font-body);}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النسر العالمي للسفر والسياحة | Global Eagle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700&family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0b0f19;       /* أسود نيلي عميق مريح جداً للعين */
+            --bg-card: #161f30;       /* رمادي أزرق داكن للبطاقات */
+            --gold-primary: #D4AF37;  /* الذهبي الملكي المطابق للشعار */
+            --gold-glow: rgba(212, 175, 55, 0.2);
+            --text-white: #ffffff;
+            --text-muted: #a0aec0;
+        }
 
-/* ─── THEME VARS ─── */
-:root{
-  --gold:#D4AF37;
-  --gold2:#FFE47A;
-  --gold3:#A07820;
-  --pad-x:clamp(20px,5vw,80px);
-  --pad-y:clamp(60px,10vw,120px);
-  /* dark (default) */
-  --bg:#111111;
-  --bg2:#1C1C1C;
-  --bg3:#0a0a0a;
-  --text:#ffffff;
-  --text2:rgba(255,255,255,.65);
-  --text3:rgba(255,255,255,.38);
-  --border:rgba(212,175,55,.1);
-  --glass:rgba(255,255,255,.03);
-  --nav-bg:rgba(10,10,10,.25);
-  --nav-scroll:rgba(10,10,10,.96);
-  --card-bg:rgba(255,255,255,.03);
-  --font-body:'Manrope',sans-serif;
-  --font-ar:'Cairo',sans-serif;
-}
-[data-theme="light"]{
-  --bg:#F5F0E8;
-  --bg2:#EDE8DC;
-  --bg3:#E8E0D0;
-  --text:#1a1208;
-  --text2:rgba(26,18,8,.65);
-  --text3:rgba(26,18,8,.4);
-  --border:rgba(160,120,32,.2);
-  --glass:rgba(255,255,255,.6);
-  --nav-bg:rgba(245,240,232,.7);
-  --nav-scroll:rgba(245,240,232,.97);
-  --card-bg:rgba(255,255,255,.7);
-}
-[data-theme="light"] body{background:var(--bg);}
-[data-theme="light"] .sec{background:var(--bg)!important;}
-[data-theme="light"] #services{background:var(--bg2)!important;}
-[data-theme="light"] #how{background:var(--bg)!important;}
-[data-theme="light"] #contact{background:var(--bg2)!important;}
-[data-theme="light"] footer{background:var(--bg3)!important;}
-[data-theme="light"] .glass{background:var(--card-bg);border-color:var(--border);}
-[data-theme="light"] .sec-h2{color:var(--text);}
-[data-theme="light"] .step-title{color:var(--text);}
-[data-theme="light"] .b-title{color:var(--text);}
-[data-theme="light"] .footer-logo{color:var(--gold3);}
-[data-theme="light"] .pkg-title{color:#fff;}
-[data-theme="light"] ::-webkit-scrollbar-track{background:var(--bg2);}
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Arabic font override */
-[data-lang="ar"]{font-family:var(--font-ar)!important;}
-[data-lang="ar"] *{font-family:var(--font-ar)!important;}
-[data-lang="ar"] .hero-h1,[data-lang="ar"] .sec-h2,[data-lang="ar"] .b-title,[data-lang="ar"] .step-title{font-family:var(--font-ar)!important;}
+        /* الهيدر الاحترافي */
+        header {
+            background-color: rgba(11, 15, 25, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* hide/show lang */
-.ar{display:none;}
-[data-lang="ar"] .en{display:none!important;}
-[data-lang="ar"] .ar{display:inline!important;}
-[data-lang="ar"] .ar-block{display:block!important;}
-[data-lang="ar"] .en-block{display:none!important;}
-.ar-block{display:none;}
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:#0a0a0a;}
-::-webkit-scrollbar-thumb{background:var(--gold3);}
+        /* حاوية الشعار المرفوع */
+        .logo-img {
+            height: 60px; /* حجم مثالي ومناسب للهيدر */
+            width: auto;
+            filter: drop-shadow(0 0 8px var(--gold-glow));
+        }
 
-/* ─── INTRO ─── */
-#intro{
-  position:fixed;inset:0;background:#000;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
-}
-#intro-canvas{position:absolute;inset:0;width:100%;height:100%;}
-#intro-img-wrap{
-  position:relative;width:min(320px,80vw);height:min(320px,80vw);
-  border-radius:50%;overflow:hidden;
-  border:1px solid rgba(212,175,55,.3);
-  box-shadow:0 0 60px rgba(212,175,55,.15),inset 0 0 40px rgba(0,0,0,.5);
-  opacity:0;transform:scale(.85);
-  transition:opacity 1.2s ease,transform 1.2s ease;
-}
-#intro-img-wrap.show{opacity:1;transform:scale(1);}
-#intro-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;}
-#intro-glow{
-  position:absolute;inset:-2px;border-radius:50%;
-  box-shadow:0 0 0 1px rgba(212,175,55,.4),0 0 40px rgba(212,175,55,.3);
-  animation:glowPulse 2s ease-in-out infinite;
-}
-@keyframes glowPulse{0%,100%{opacity:.5;}50%{opacity:1;}}
-#intro-text{
-  margin-top:32px;text-align:center;
-  opacity:0;transform:translateY(16px);
-  transition:opacity .8s ease .4s,transform .8s ease .4s;
-}
-#intro-text.show{opacity:1;transform:translateY(0);}
-#intro-text h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.4rem,4vw,2.2rem);
-  color:var(--gold);letter-spacing:.2em;font-weight:700;
-}
-#intro-text p{
-  font-size:.65rem;letter-spacing:.35em;
-  color:rgba(212,175,55,.5);margin-top:8px;text-transform:uppercase;
-}
-#intro-bar{width:180px;height:1.5px;background:rgba(255,255,255,.07);margin-top:32px;border-radius:2px;overflow:hidden;}
-#intro-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .05s linear;}
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
 
-/* ─── NAV ─── */
-#nav{
-  position:fixed;top:0;left:0;width:100%;z-index:500;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px var(--pad-x);
-  background:var(--nav-bg);backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--border);
-  transition:padding .4s,background .4s;
-}
-#nav.scrolled{padding:12px var(--pad-x);background:var(--nav-scroll);}
-.nav-logo{
-  font-family:'Playfair Display',serif;font-size:1.2rem;
-  color:var(--gold);letter-spacing:.18em;font-weight:700;white-space:nowrap;
-}
-.nav-links{display:flex;gap:clamp(16px,3vw,40px);}
-.nav-links a{
-  font-size:.72rem;letter-spacing:.1em;font-weight:600;
-  color:var(--text2);text-transform:uppercase;
-  transition:color .25s;position:relative;
-}
-[data-lang="ar"] .nav-links a{letter-spacing:.02em;font-size:.82rem;}
-.nav-links a::after{
-  content:'';position:absolute;bottom:-4px;left:0;
-  width:0;height:1px;background:var(--gold);transition:width .3s;
-}
-.nav-links a:hover,.nav-links a.active{color:var(--gold);}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-.nav-right{display:flex;align-items:center;gap:10px;}
-.nav-socials{display:flex;gap:14px;color:rgba(212,175,55,.6);}
-.nav-socials a{transition:color .25s;font-size:.9rem;}
-.nav-socials a:hover{color:var(--gold);}
+        .logo-text .brand-ar {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--gold-primary);
+        }
 
-/* Theme toggle */
-.btn-theme{
-  width:42px;height:42px;border-radius:50%;
-  border:1px solid var(--border);background:var(--glass);
-  color:var(--gold);font-size:1.1rem;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .3s;backdrop-filter:blur(8px);
-}
-.btn-theme:hover{border-color:var(--gold);background:rgba(212,175,55,.1);}
+        .logo-text .brand-en {
+            font-family: 'Marcellus', serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--text-white);
+        }
 
-/* Lang toggle */
-.btn-lang{
-  display:flex;border:1px solid var(--border);border-radius:99px;
-  background:var(--glass);overflow:hidden;backdrop-filter:blur(8px);
-}
-.btn-lang span{
-  padding:7px 13px;font-size:.65rem;font-weight:700;letter-spacing:.1em;
-  color:var(--text2);transition:all .25s;cursor:pointer;
-}
-.btn-lang span.active{background:var(--gold);color:#000;}
+        nav a {
+            color: var(--text-white);
+            text-decoration: none;
+            margin-right: 25px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
 
-/* Inquire button - clearer */
-.btn-nav{
-  border:2px solid var(--gold);color:var(--gold);background:transparent;
-  padding:9px 20px;font-size:.72rem;font-weight:800;letter-spacing:.1em;
-  text-transform:uppercase;transition:all .3s;white-space:nowrap;
-  border-radius:2px;
-}
-.btn-nav:hover{background:var(--gold);color:#000;box-shadow:0 0 20px rgba(212,175,55,.35);}
-/* hamburger */
-#ham{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;}
-#ham span{display:block;width:22px;height:1.5px;background:var(--gold);}
-[data-theme="light"] #ham span{background:var(--gold3);}
+        nav a:hover, nav a.active {
+            color: var(--gold-primary);
+        }
 
-/* ─── MOBILE NAV ─── */
-#mob-nav{
-  position:fixed;inset:0;background:#000;z-index:600;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
-  transform:translateX(100%);transition:transform .4s ease;
-}
-#mob-nav.open{transform:translateX(0);}
-#mob-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--gold);font-size:1.8rem;}
-#mob-nav a{font-family:'Playfair Display',serif;font-size:2rem;color:rgba(255,255,255,.8);transition:color .2s;}
-#mob-nav a:hover{color:var(--gold);}
+        .btn-admin-nav {
+            border: 1px solid var(--gold-primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: rgba(212, 175, 55, 0.05);
+            transition: all 0.3s;
+        }
 
-/* ─── HERO ─── */
-#hero{
-  position:relative;width:100%;min-height:100vh;
-  display:flex;align-items:center;overflow:hidden;
-}
-#hero-bg{position:absolute;inset:0;z-index:0;}
-#hero-bg img{
-  width:100%;height:100%;object-fit:cover;
-  transform-origin:center;
-}
-#hero-bg::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to right,rgba(0,0,0,.85) 0%,rgba(0,0,0,.5) 60%,rgba(0,0,0,.1) 100%);
-}
-#hero-bg::before{
-  content:'';position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to top,rgba(17,17,17,1) 0%,rgba(17,17,17,.2) 40%,transparent 100%);
-}
-.hero-inner{
-  position:relative;z-index:2;
-  width:100%;max-width:1200px;margin:0 auto;
-  padding:140px var(--pad-x) 160px;
-}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:12px;
-  color:var(--gold);font-size:.7rem;letter-spacing:.3em;
-  font-weight:700;text-transform:uppercase;margin-bottom:24px;
-}
-.hero-tag::before{content:'';width:28px;height:1px;background:var(--gold);}
-.hero-h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.4rem,6vw,5rem);
-  line-height:1.08;font-weight:700;letter-spacing:-.01em;
-  margin-bottom:24px;
-}
-.hero-h1 em{color:var(--gold);font-style:italic;}
-.hero-p{
-  color:rgba(255,255,255,.68);font-size:clamp(.9rem,1.5vw,1.05rem);
-  line-height:1.8;max-width:480px;margin-bottom:44px;
-}
-.hero-btns{display:flex;flex-wrap:wrap;gap:16px;}
-.btn-gold{
-  background:var(--gold);color:#000;border:none;
-  padding:15px 36px;font-size:.75rem;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;transition:all .3s;
-}
-.btn-gold:hover{background:var(--gold2);}
-.btn-ghost{
-  background:transparent;border:1px solid rgba(212,175,55,.4);color:var(--gold);
-  padding:15px 36px;font-size:.75rem;font-weight:700;
-  letter-spacing:.15em;text-transform:uppercase;transition:all .3s;
-  backdrop-filter:blur(8px);
-}
-.btn-ghost:hover{background:rgba(212,175,55,.1);border-color:var(--gold);}
+        .btn-admin-nav:hover {
+            background: var(--gold-primary);
+            color: var(--bg-dark) !important;
+        }
 
-/* Stats */
-.hero-stats{
-  position:absolute;bottom:0;left:0;right:0;z-index:2;
-  padding:28px var(--pad-x);
-  background:linear-gradient(to top,rgba(10,10,10,.95),transparent);
-  display:flex;flex-wrap:wrap;gap:32px;align-items:center;
-}
-.stat-item{display:flex;flex-direction:column;}
-.stat-val{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1.6rem,3vw,2.4rem);color:var(--gold);line-height:1;font-weight:600;
-}
-.stat-lbl{font-size:.6rem;letter-spacing:.18em;color:rgba(255,255,255,.45);text-transform:uppercase;margin-top:4px;}
-.stat-sep{width:1px;height:40px;background:rgba(212,175,55,.18);flex-shrink:0;}
+        /* قسم الترحيب البصري الكبير */
+        .hero {
+            position: relative;
+            padding: 160px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(11,15,25,0.6) 0%, rgba(11,15,25,1) 100%), 
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920') center/cover;
+        }
 
-/* scroll cue */
-.scroll-cue{
-  position:absolute;bottom:140px;right:var(--pad-x);z-index:2;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-}
-.scroll-cue span{font-size:.58rem;letter-spacing:.28em;color:rgba(255,255,255,.35);text-transform:uppercase;}
-.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(212,175,55,.6),transparent);animation:scLine 2s ease-in-out infinite;}
-@keyframes scLine{0%,100%{opacity:.4}50%{opacity:1}}
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--text-white);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
 
-/* ─── MARQUEE ─── */
-.marquee-wrap{
-  overflow:hidden;padding:16px 0;
-  background:rgba(0,0,0,.6);
-  border-top:1px solid rgba(212,175,55,.1);
-  border-bottom:1px solid rgba(212,175,55,.1);
-}
-.marquee-track{display:flex;width:max-content;animation:marquee 28s linear infinite;gap:48px;align-items:center;}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.m-item{font-size:.68rem;letter-spacing:.22em;color:rgba(212,175,55,.6);text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:16px;white-space:nowrap;}
-.m-dot{width:4px;height:4px;background:var(--gold);border-radius:50%;opacity:.5;}
+        .hero h1 span {
+            color: var(--gold-primary);
+        }
 
-/* ─── SECTION COMMONS ─── */
-.sec{padding:var(--pad-y) var(--pad-x);}
-.sec-inner{max-width:1200px;margin:0 auto;}
-.sec-tag{font-size:.68rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:700;display:block;margin-bottom:14px;}
-.sec-h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:600;line-height:1.2;margin-bottom:0;}
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
 
-/* ─── GLASS ─── */
-.glass{
-  background:rgba(255,255,255,.03);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(212,175,55,.1);
-  transition:border-color .3s;
-}
-.glass:hover{border-color:rgba(212,175,55,.28);}
+        /* شبكة عرض عروض السفر والباكجات */
+        .packages-section {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-/* ─── PACKAGES ─── */
-#packages{background:#1C1C1C;}
-.pkg-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
-.pkg-link{font-size:.68rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;font-weight:700;border-bottom:1px solid rgba(212,175,55,.3);padding-bottom:4px;transition:border-color .3s;}
-.pkg-link:hover{border-color:var(--gold);}
-.pkg-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;align-items:start;
-}
-.pkg-card{position:relative;overflow:hidden;border-radius:2px;}
-.pkg-card img{
-  width:100%;aspect-ratio:3/4;object-fit:cover;
-  transition:transform .7s cubic-bezier(.165,.84,.44,1);
-  display:block;opacity:.75;
-}
-.pkg-card:hover img{transform:scale(1.06);opacity:1;}
-.pkg-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.25) 55%,transparent 100%);
-  padding:24px;display:flex;flex-direction:column;justify-content:flex-end;
-}
-.pkg-cat{font-size:.6rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
-.pkg-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;margin-bottom:0;}
-.pkg-line{height:1px;width:0;background:var(--gold);margin:14px 0;transition:width .5s;}
-.pkg-card:hover .pkg-line{width:100%;}
-.pkg-btn{
-  opacity:0;transition:opacity .35s;
-  background:none;border:none;color:#fff;
-  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
-  display:flex;align-items:center;gap:8px;padding:0;
-}
-.pkg-card:hover .pkg-btn{opacity:1;}
-/* offset middle card */
-.pkg-card:nth-child(2){margin-top:40px;}
+        .section-title {
+            text-align: center;
+            color: var(--gold-primary);
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            position: relative;
+        }
 
-/* ─── SERVICES ─── */
-#services{background:#111;}
-.svc-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:14px;}
-.b-big{grid-column:span 2;grid-row:span 2;padding:44px;display:flex;flex-direction:column;justify-content:space-between;min-height:360px;position:relative;overflow:hidden;}
-.b-big-icon{position:absolute;right:-24px;top:-24px;opacity:.04;pointer-events:none;font-size:200px;color:var(--gold);}
-.b-cell{padding:32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;min-height:160px;justify-content:center;}
-.b-wide{grid-column:span 2;padding:28px 32px;display:flex;align-items:center;gap:24px;min-height:140px;}
-.b-icon{font-size:2.2rem;color:var(--gold);transition:transform .3s;}
-.glass:hover .b-icon{transform:scale(1.1);}
-.b-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;}
-.b-desc{font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.6;}
-.b-wide-icon-wrap{width:64px;height:64px;border-radius:50%;border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: var(--gold-primary);
+            margin: 10px auto 0 auto;
+        }
 
-/* ─── HOW IT WORKS ─── */
-#how{background:#1C1C1C;}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:64px;}
-.step-num{font-family:'Playfair Display',serif;font-size:4rem;color:rgba(212,175,55,.07);line-height:1;font-weight:700;margin-bottom:-12px;}
-.step-line{width:36px;height:1px;background:var(--gold);margin:16px 0;}
-.step-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:10px;}
-.step-desc{font-size:.83rem;color:rgba(255,255,255,.45);line-height:1.75;}
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+        }
 
-/* ─── CONTACT ─── */
-#contact{background:#111;border-top:1px solid rgba(212,175,55,.07);}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
-.contact-info-item{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
-.contact-info-item i,.contact-info-item span.ico{color:var(--gold);width:20px;}
-.contact-info-item p{font-size:.9rem;color:rgba(255,255,255,.72);}
-.socials-row{display:flex;gap:12px;margin-top:36px;}
-.soc-btn{
-  width:44px;height:44px;border:1px solid rgba(212,175,55,.2);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--gold);transition:all .3s;font-size:.9rem;
-}
-.soc-btn:hover{background:var(--gold);color:#000;border-color:var(--gold);}
-.form-wrap{padding:44px;}
-.f-group{border-bottom:1px solid rgba(255,255,255,.13);padding:12px 0;margin-bottom:4px;transition:border-color .3s;}
-.f-group:focus-within{border-color:var(--gold);}
-.f-label{display:block;font-size:.6rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:7px;}
-.f-input{
-  background:transparent;border:none;width:100%;
-  color:#fff;font-family:'Manrope',sans-serif;font-size:.9rem;outline:none;
-}
-.f-input::placeholder{color:rgba(255,255,255,.2);}
-.f-input option{background:#1C1C1C;}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.btn-submit{
-  width:100%;padding:17px;margin-top:24px;
-  background:var(--gold);color:#000;border:none;
-  font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
-  transition:all .3s;position:relative;overflow:hidden;
-}
-.btn-submit:hover{background:var(--gold2);}
+        /* بطاقات السفر الفاخرة */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
 
-/* ─── FOOTER ─── */
-footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rgba(212,175,55,.07);}
-.footer-inner{max-width:1200px;margin:0 auto;}
-.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.4fr;gap:48px;margin-bottom:48px;}
-.footer-logo{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);letter-spacing:.18em;font-weight:700;margin-bottom:16px;}
-.footer-desc{font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.8;margin-bottom:20px;}
-.footer-socials{display:flex;gap:12px;}
-.footer-soc{color:rgba(212,175,55,.5);transition:color .25s;font-size:.9rem;}
-.footer-soc:hover{color:var(--gold);}
-.footer-h{font-size:.68rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:20px;}
-.footer-links{display:flex;flex-direction:column;gap:12px;list-style:none;}
-.footer-links a{font-size:.84rem;color:rgba(255,255,255,.38);transition:color .25s;}
-.footer-links a:hover{color:var(--gold);}
-.nl-row{display:flex;border-bottom:1px solid rgba(212,175,55,.18);padding-bottom:10px;margin-top:16px;}
-.nl-input{background:transparent;border:none;color:#fff;font-family:'Manrope',sans-serif;font-size:.85rem;outline:none;flex:1;}
-.nl-input::placeholder{color:rgba(255,255,255,.22);}
-.nl-btn{background:none;border:none;color:var(--gold);font-size:.68rem;font-weight:700;letter-spacing:.15em;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.footer-copy{font-size:.68rem;letter-spacing:.1em;color:rgba(255,255,255,.22);}
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+        }
 
-/* ─── WA FLOAT ─── */
-#wa{
-  position:fixed;bottom:28px;right:28px;z-index:400;
-  width:54px;height:54px;background:#25D366;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(37,211,102,.35);
-  animation:waPulse 2.5s ease-in-out infinite;
-}
-#wa svg{width:26px;height:26px;fill:#fff;}
-@keyframes waPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+        .card-img-wrapper {
+            position: relative;
+            height: 230px;
+            overflow: hidden;
+        }
 
-/* ─── REVEAL ─── */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
-.rv.on{opacity:1;transform:none;}
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
 
-/* ─── RESPONSIVE ─── */
-@media(max-width:900px){
-  .nav-links{display:none;}
-  .nav-socials{display:none;}
-  #ham{display:flex!important;}
-  .pkg-grid{grid-template-columns:1fr 1fr;}
-  .pkg-card:nth-child(2){margin-top:0;}
-  .pkg-card:nth-child(3){grid-column:span 2;}
-  .bento{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
-  .b-big{grid-column:span 2;grid-row:span 1;min-height:280px;}
-  .b-wide{grid-column:span 2;}
-  .steps{grid-template-columns:1fr 1fr;}
-  .contact-grid{grid-template-columns:1fr;gap:48px;}
-  .footer-grid{grid-template-columns:1fr 1fr;}
-}
-@media(max-width:580px){
-  .pkg-grid{grid-template-columns:1fr;}
-  .pkg-card:nth-child(3){grid-column:span 1;}
-  .bento{grid-template-columns:1fr;}
-  .b-big{grid-column:span 1;}
-  .b-wide{grid-column:span 1;}
-  .steps{grid-template-columns:1fr;}
-  .f-row{grid-template-columns:1fr;}
-  .footer-grid{grid-template-columns:1fr;}
-  .hero-stats{gap:20px;}
-  .stat-sep{display:none;}
-}
-</style>
+        .card:hover .card-img {
+            transform: scale(1.08);
+        }
+
+        .price-badge {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background-color: var(--gold-primary);
+            color: var(--bg-dark);
+            padding: 5px 15px;
+            font-weight: 700;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .card-title {
+            color: var(--text-white);
+            font-size: 1.4rem;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            height: 75px;
+            overflow: hidden;
+        }
+
+        .btn-book {
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            width: 100%;
+            padding: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-book:hover {
+            background: var(--gold-primary);
+            color: var(--bg-dark);
+        }
+    </style>
 </head>
 <body>
 
-<!-- ════ INTRO ════ -->
-<div id="intro">
-  <canvas id="intro-canvas"></canvas>
-  <div id="intro-img-wrap">
-    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPn7M078qCN6BJDrOjxLr2RHA2Xk39HpPWbrjCveXXtLEoEel9V-H1UQ0WuX4ywzUDutleFM8fE5l2UNd3WVQ4dvRijQIUcZ_Ufa_FBK5h2ZD75AAedPbjVQzz3ZQEQhS6iVtNZ86SnpP3V1lgoM_TW43I7cq-Ni5PdnmHMzIQdwoFzD5KtxyUf5NY9cCzdw6h96GDeTOcoEjUnN4yJEHjH0tSf8etwd5Ptg7wTnykFvMiG2yj4OmSjooZhiLDFZlECkUONpG8wo4" alt="Eagle"/>
-    <div id="intro-glow"></div>
-  </div>
-  <div id="intro-text">
-    <h1>Global Eagle Travel</h1>
-    <p>Rise Above · Aim High</p>
-  </div>
-  <div id="intro-bar"><div id="intro-fill"></div></div>
-</div>
-
-<!-- ════ MOBILE MENU ════ -->
-<div id="mob-nav">
-  <button id="mob-close" onclick="closeMob()">✕</button>
-  <a href="#hero" onclick="closeMob()"><span class="en">Home</span><span class="ar">الرئيسية</span></a>
-  <a href="#packages" onclick="closeMob()"><span class="en">Packages</span><span class="ar">الباقات</span></a>
-  <a href="#services" onclick="closeMob()"><span class="en">Services</span><span class="ar">الخدمات</span></a>
-  <a href="#how" onclick="closeMob()"><span class="en">How It Works</span><span class="ar">كيف نعمل</span></a>
-  <a href="#contact" onclick="closeMob()"><span class="en">Contact</span><span class="ar">تواصل معنا</span></a>
-</div>
-
-<!-- ════ NAV ════ -->
-<nav id="nav">
-  <div class="nav-logo">Global Eagle</div>
-  <div class="nav-links">
-    <a href="#hero" class="active"><span class="en">Home</span><span class="ar">الرئيسية</span></a>
-    <a href="#packages"><span class="en">Packages</span><span class="ar">الباقات</span></a>
-    <a href="#services"><span class="en">Services</span><span class="ar">الخدمات</span></a>
-    <a href="#how"><span class="en">How It Works</span><span class="ar">كيف نعمل</span></a>
-    <a href="#contact"><span class="en">Contact</span><span class="ar">تواصل</span></a>
-  </div>
-  <div class="nav-right">
-    <div class="nav-socials">
-      <a href="https://instagram.com" target="_blank" class="footer-soc"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://snapchat.com" target="_blank" class="footer-soc"><i class="fa-brands fa-snapchat"></i></a>
-      <a href="https://tiktok.com" target="_blank" class="footer-soc"><i class="fa-brands fa-tiktok"></i></a>
-    </div>
-
-    <!-- Lang toggle -->
-    <div class="btn-lang" id="lang-toggle">
-      <span id="lang-en" class="active" onclick="setLang('en')">EN</span>
-      <span id="lang-ar" onclick="setLang('ar')">AR</span>
-    </div>
-
-    <!-- Theme toggle -->
-    <button class="btn-theme" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">
-      <span id="theme-icon">🌙</span>
-    </button>
-
-    <button class="btn-nav" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-      <span class="en">Inquire Now</span><span class="ar">تواصل الآن</span>
-    </button>
-    <button id="ham" onclick="document.getElementById('mob-nav').classList.add('open')">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<!-- ════ HERO ════ -->
-<section id="hero">
-  <div id="hero-bg">
-    <img id="hero-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs" alt="Eagle over mountains"/>
-  </div>
-
-  <div class="hero-inner">
-    <div class="hero-tag rv"><span class="en">ELEVATING EVERY JOURNEY</span><span class="ar">نرتقي بكل رحلة</span></div>
-    <h1 class="hero-h1 rv"><span class="en">Power. Vision.<br/><em>Freedom.</em></span><span class="ar">القوة. الرؤية.<br/><em>الحرية.</em></span></h1>
-    <p class="hero-p rv"><span class="en">Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.</span><span class="ar">اكتشف العالم من خلال منظور الرفاهية الحقيقية. رحلاتنا الخاصة ووجهاتنا المختارة تعيد تعريف السفر الراقي.</span></p>
-    <div class="hero-btns rv">
-      <button class="btn-gold" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})"><span class="en">Explore More</span><span class="ar">استكشف أكثر</span></button>
-      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">▶ <span class="en">Our Services</span><span class="ar">خدماتنا</span></button>
-    </div>
-  </div>
-
-  <div class="scroll-cue">
-    <span class="en">Scroll</span><span class="ar">انزل</span>
-    <div class="scroll-line"></div>
-  </div>
-
-  <div class="hero-stats rv">
-    <div class="stat-item">
-      <div class="stat-val" id="s1">0</div>
-      <div class="stat-lbl"><span class="en">Global Destinations</span><span class="ar">وجهة عالمية</span></div>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <div class="stat-val" id="s2">0</div>
-      <div class="stat-lbl"><span class="en">Private Fleet</span><span class="ar">أسطول خاص</span></div>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <div class="stat-val" id="s3">0</div>
-      <div class="stat-lbl"><span class="en">K+ Elite Members</span><span class="ar">ألف+ عضو مميز</span></div>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <div class="stat-val" id="s4">0</div>
-      <div class="stat-lbl"><span class="en">Years Excellence</span><span class="ar">سنة تميّز</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ MARQUEE ════ -->
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="m-item"><span class="en">Tourist Visas</span><span class="ar">تأشيرات سياحية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Hotel Bookings</span><span class="ar">حجوزات فندقية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Flight Tickets</span><span class="ar">تذاكر طيران</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Student Visas</span><span class="ar">تأشيرات طلابية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">International Licenses</span><span class="ar">رخص دولية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Travel Insurance</span><span class="ar">تأمين سفر</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">VIP Concierge</span><span class="ar">خدمة VIP</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Tourist Visas</span><span class="ar">تأشيرات سياحية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Hotel Bookings</span><span class="ar">حجوزات فندقية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Flight Tickets</span><span class="ar">تذاكر طيران</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Student Visas</span><span class="ar">تأشيرات طلابية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">International Licenses</span><span class="ar">رخص دولية</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">Travel Insurance</span><span class="ar">تأمين سفر</span> <span class="m-dot"></span></div>
-    <div class="m-item"><span class="en">VIP Concierge</span><span class="ar">خدمة VIP</span> <span class="m-dot"></span></div>
-  </div>
-</div>
-
-<!-- ════ PACKAGES ════ -->
-<section id="packages" class="sec" style="background:#1C1C1C;">
-  <div class="sec-inner">
-    <div class="pkg-head rv">
-      <div>
-        <span class="sec-tag"><span class="en">Curated Collections</span><span class="ar">مجموعات مختارة</span></span>
-        <h2 class="sec-h2"><span class="en">Signature Experiences</span><span class="ar">تجارب استثنائية</span></h2>
-      </div>
-      <a href="#" class="pkg-link"><span class="en">View All Voyages →</span><span class="ar">← عرض كل الرحلات</span></a>
-    </div>
-    <div class="pkg-grid">
-      <!-- Card 1 -->
-      <div class="pkg-card rv">
-        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY" alt="Swiss Alps"/>
-        <div class="pkg-overlay">
-          <div class="pkg-cat"><span class="en">Alpine Elite</span><span class="ar">النخبة الجبلية</span></div>
-          <div class="pkg-title"><span class="en">Swiss Peak Sanctuary</span><span class="ar">ملاذ قمم سويسرا</span></div>
-          <div class="pkg-line"></div>
-          <button class="pkg-btn"><span class="en">Discover More →</span><span class="ar">← اكتشف أكثر</span></button>
+    <header>
+        <div class="logo-area">
+            <img src="logo.png" alt="Global Eagle Logo" class="logo-img">
+            <div class="logo-text">
+                <span class="brand-ar">النسر العالمي</span>
+                <span class="brand-en">GLOBAL EAGLE</span>
+            </div>
         </div>
-      </div>
-      <!-- Card 2 -->
-      <div class="pkg-card rv">
-        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY" alt="Maldives"/>
-        <div class="pkg-overlay">
-          <div class="pkg-cat"><span class="en">Oceanic Escape</span><span class="ar">هروب المحيط</span></div>
-          <div class="pkg-title"><span class="en">Azure Maldives Villa</span><span class="ar">فيلا المالديف الزرقاء</span></div>
-          <div class="pkg-line"></div>
-          <button class="pkg-btn"><span class="en">Discover More →</span><span class="ar">← اكتشف أكثر</span></button>
-        </div>
-      </div>
-      <!-- Card 3 -->
-      <div class="pkg-card rv">
-        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k" alt="Desert"/>
-        <div class="pkg-overlay">
-          <div class="pkg-cat"><span class="en">Desert Majesty</span><span class="ar">جلال الصحراء</span></div>
-          <div class="pkg-title"><span class="en">Golden Sands Safari</span><span class="ar">سفاري الرمال الذهبية</span></div>
-          <div class="pkg-line"></div>
-          <button class="pkg-btn"><span class="en">Discover More →</span><span class="ar">← اكتشف أكثر</span></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+        <nav>
+            <a href="#" class="active">الرئيسية</a>
+            <a href="#packages">الوجهات والباكجات</a>
+            <a href="admin.html" class="btn-admin-nav"><i class="fa-solid fa-lock"></i> لوحة الإدارة</a>
+        </nav>
+    </header>
 
-<!-- ════ SERVICES ════ -->
-<section id="services" class="sec" style="background:#111;">
-  <div class="sec-inner">
-    <div class="svc-head rv">
-      <div>
-        <span class="sec-tag"><span class="en">What We Offer</span><span class="ar">ما نقدمه</span></span>
-        <h2 class="sec-h2"><span class="en">Global Eagle Services</span><span class="ar">خدمات جلوبال إيجل</span></h2>
-      </div>
-    </div>
-    <div class="bento">
-      <div class="glass b-big rv">
-        <div class="b-big-icon">✈</div>
-        <div>
-          <span class="sec-tag"><span class="en">Premium</span><span class="ar">مميز</span></span>
-          <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--text);margin-bottom:14px;line-height:1.2;"><span class="en">Global Eagle<br/>Concierge</span><span class="ar">كونسيرج<br/>جلوبال إيجل</span></h3>
-          <p class="b-desc" style="max-width:300px;color:var(--text2);"><span class="en">From visa processing to private transfers — seamless travel from start to finish.</span><span class="ar">من التأشيرات إلى النقل الخاص — رحلة سلسة من البداية للنهاية.</span></p>
-        </div>
-        <button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.68rem;" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"><span class="en">Explore Services</span><span class="ar">استكشف الخدمات</span></button>
-      </div>
-      <div class="glass b-cell rv"><div class="b-icon">🌍</div><div class="b-title"><span class="en">Tourist Visas</span><span class="ar">تأشيرات سياحية</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">All global destinations.</span><span class="ar">جميع الوجهات العالمية.</span></div></div>
-      <div class="glass b-cell rv"><div class="b-icon">🏨</div><div class="b-title"><span class="en">Elite Stays</span><span class="ar">إقامات فاخرة</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Verified luxury hotels.</span><span class="ar">فنادق فاخرة موثوقة.</span></div></div>
-      <div class="glass b-cell rv"><div class="b-icon">✈️</div><div class="b-title"><span class="en">Flight Tickets</span><span class="ar">تذاكر طيران</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Best airline rates.</span><span class="ar">أفضل أسعار الخطوط.</span></div></div>
-      <div class="glass b-wide rv">
-        <div class="b-wide-icon-wrap"><div class="b-icon" style="font-size:1.6rem;">🎓</div></div>
-        <div><div class="b-title" style="margin-bottom:8px;"><span class="en">Student Visas</span><span class="ar">تأشيرات طلابية</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Full support for your international educational journey.</span><span class="ar">دعم كامل لرحلتك التعليمية الدولية.</span></div></div>
-      </div>
-      <div class="glass b-cell rv"><div class="b-icon">🚗</div><div class="b-title"><span class="en">Int'l Licenses</span><span class="ar">رخص دولية</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Drive legally worldwide.</span><span class="ar">قُد قانونياً حول العالم.</span></div></div>
-      <div class="glass b-cell rv"><div class="b-icon">🛡</div><div class="b-title"><span class="en">Travel Insurance</span><span class="ar">تأمين السفر</span></div><div class="b-desc" style="color:var(--text3);"><span class="en">Full medical & security coverage.</span><span class="ar">تغطية طبية وأمنية كاملة.</span></div></div>
-    </div>
-  </div>
-</section>
+    <section class="hero">
+        <h1>اكتشف العالم مع <span>النسر العالمي</span></h1>
+        <p>نأخذك في رحلات سياحية ساحرة وفاخرة حول العالم، بأعلى معايير الراحة والرفاهية العصرية التي تليق بك.</p>
+    </section>
 
-<!-- ════ HOW IT WORKS ════ -->
-<section id="how" class="sec" style="background:#1C1C1C;">
-  <div class="sec-inner">
-    <div style="text-align:center;" class="rv">
-      <span class="sec-tag"><span class="en">The Process</span><span class="ar">كيف نعمل</span></span>
-      <h2 class="sec-h2"><span class="en">How It Works</span><span class="ar">خطوات رحلتك</span></h2>
-    </div>
-    <div class="steps">
-      <div class="rv"><div class="step-num">01</div><div class="step-line"></div><div class="step-title"><span class="en">Consultation</span><span class="ar">الاستشارة</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">Share your vision with our expert team.</span><span class="ar">شاركنا رؤيتك مع فريق خبرائنا.</span></div></div>
-      <div class="rv"><div class="step-num">02</div><div class="step-line"></div><div class="step-title"><span class="en">Planning</span><span class="ar">التخطيط</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">We craft a bespoke itinerary for you.</span><span class="ar">نصمم خطة سفر مخصصة لك.</span></div></div>
-      <div class="rv"><div class="step-num">03</div><div class="step-line"></div><div class="step-title"><span class="en">Booking</span><span class="ar">الحجز</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">Seamless reservations with premium partners.</span><span class="ar">حجوزات سلسة مع أفضل الشركاء.</span></div></div>
-      <div class="rv"><div class="step-num">04</div><div class="step-line"></div><div class="step-title"><span class="en">24/7 Support</span><span class="ar">دعم ٢٤/٧</span></div><div class="step-desc" style="color:var(--text2);"><span class="en">Our concierge is with you every step.</span><span class="ar">فريقنا معك في كل خطوة.</span></div></div>
-    </div>
-  </div>
-</section>
+    <main class="packages-section" id="packages">
+        <h2 class="section-title">أحدث باكجات وعروض السفر</h2>
+        <div class="grid-container" id="packagesContainer">
+            </div>
+    </main>
 
-<!-- ════ CONTACT ════ -->
-<section id="contact" class="sec" style="background:#111;">
-  <div class="sec-inner">
-    <div class="contact-grid">
-      <div class="rv">
-        <span class="sec-tag"><span class="en">Inquiries</span><span class="ar">تواصل معنا</span></span>
-        <h2 class="sec-h2" style="margin-bottom:36px;"><span class="en">Begin Your Next<br/><em style="color:var(--gold);font-style:italic;">Great Adventure</em></span><span class="ar">ابدأ مغامرتك<br/><em style="color:var(--gold);">القادمة معنا</em></span></h2>
-        <div class="contact-info-item">
-          <i class="fa-solid fa-phone" style="color:var(--gold);width:20px;"></i>
-          <p>+966 50 174 9914</p>
-        </div>
-        <div class="contact-info-item">
-          <i class="fa-solid fa-envelope" style="color:var(--gold);width:20px;"></i>
-          <p>info@globaleagletrv.com</p>
-        </div>
-        <div class="contact-info-item">
-          <i class="fa-solid fa-location-dot" style="color:var(--gold);width:20px;"></i>
-          <p>Saudi Arabia</p>
-        </div>
-        <div class="socials-row">
-          <a href="https://instagram.com" target="_blank" class="soc-btn"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://snapchat.com" target="_blank" class="soc-btn"><i class="fa-brands fa-snapchat"></i></a>
-          <a href="https://tiktok.com" target="_blank" class="soc-btn"><i class="fa-brands fa-tiktok"></i></a>
-          <a href="https://wa.me/966501749914" target="_blank" class="soc-btn"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-      </div>
-      <div class="glass form-wrap rv">
-        <div class="f-row">
-          <div class="f-group"><label class="f-label"><span class="en">First Name</span><span class="ar">الاسم الأول</span></label><input class="f-input" id="f1" type="text" placeholder="John"/></div>
-          <div class="f-group"><label class="f-label"><span class="en">Last Name</span><span class="ar">اسم العائلة</span></label><input class="f-input" id="f2" type="text" placeholder="Doe"/></div>
-        </div>
-        <div class="f-group"><label class="f-label"><span class="en">Email Address</span><span class="ar">البريد الإلكتروني</span></label><input class="f-input" id="f3" type="email" placeholder="john@example.com"/></div>
-        <div class="f-group"><label class="f-label"><span class="en">Phone Number</span><span class="ar">رقم الجوال</span></label><input class="f-input" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
-        <div class="f-group">
-          <label class="f-label"><span class="en">Service</span><span class="ar">الخدمة</span></label>
-          <select class="f-input" id="f5">
-            <option>Tourist Visa</option>
-            <option>Hotel Booking</option>
-            <option>Flight Tickets</option>
-            <option>Student Visa</option>
-            <option>International License</option>
-            <option>Travel Insurance</option>
-          </select>
-        </div>
-        <div class="f-group"><label class="f-label"><span class="en">Message</span><span class="ar">رسالتك</span></label><textarea class="f-input" id="f6" rows="3" placeholder="Tell us about your journey... / أخبرنا عن رحلتك..." style="resize:none;"></textarea></div>
-        <button class="btn-submit" onclick="sendWA()"><span class="en">Send Inquiry ✈</span><span class="ar">أرسل استفساراً ✈</span></button>
-      </div>
-    </div>
-  </div>
-</section>
+    <script>
+        function fetchPackages() {
+            const packages = JSON.parse(localStorage.getItem('travel_packages')) || [];
+            const container = document.getElementById('packagesContainer');
+            container.innerHTML = '';
 
-<!-- ════ FOOTER ════ -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">Global Eagle</div>
-        <p class="footer-desc">Your trusted partner in premium travel & tourism. Redefining high-end journeys since 1994.</p>
-        <div class="footer-socials">
-          <a href="https://instagram.com" target="_blank" class="footer-soc"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://snapchat.com" target="_blank" class="footer-soc"><i class="fa-brands fa-snapchat"></i></a>
-          <a href="https://tiktok.com" target="_blank" class="footer-soc"><i class="fa-brands fa-tiktok"></i></a>
-          <a href="https://wa.me/966501749914" target="_blank" class="footer-soc"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-h"><span class="en">Explore</span><span class="ar">استكشف</span></div>
-        <ul class="footer-links">
-          <li><a href="#packages">Packages</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-h"><span class="en">Company</span><span class="ar">الشركة</span></div>
-        <ul class="footer-links">
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-h"><span class="en">Newsletter</span><span class="ar">النشرة البريدية</span></div>
-        <p style="font-size:.8rem;color:var(--text3);line-height:1.7;"><span class="en">Get exclusive deals and travel inspiration.</span><span class="ar">احصل على عروض حصرية وإلهام للسفر.</span></p>
-        <div class="nl-row">
-          <input class="nl-input" id="nl" type="email" placeholder="your@email.com"/>
-          <button class="nl-btn" onclick="alert('Subscribed! ✈')">JOIN</button>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span class="footer-copy"><span class="en">© 2025 Global Eagle Travel. The Majesty of Flight.</span><span class="ar">© 2025 جلوبال إيجل للسفر. جلال الطيران.</span></span>
-      <a href="https://wa.me/966501749914" target="_blank" style="font-size:.72rem;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:6px;transition:color .25s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.28)'"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>
-    </div>
-  </div>
-</footer>
+            if (packages.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i class="fa-solid fa-plane-slashed" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+                        <p>لا توجد باكجات سفر متاحة حالياً. يرجى تزويدها من لوحة التحكم الخاصة بالمدير.</p>
+                    </div>`;
+                return;
+            }
 
-<!-- WhatsApp float -->
-<a href="https://wa.me/966501749914" target="_blank" id="wa">
-  <svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.46.66 4.77 1.8 6.77L2 30l7.47-1.77A13.94 13.94 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.5a11.44 11.44 0 01-5.84-1.6l-.42-.25-4.33 1.03 1.05-4.2-.28-.44A11.45 11.45 0 014.5 16C4.5 9.6 9.6 4.5 16 4.5S27.5 9.6 27.5 16 22.4 27.5 16 27.5zm6.27-8.57c-.34-.17-2.02-.99-2.33-1.1-.31-.12-.54-.17-.77.17-.23.34-.88 1.1-1.08 1.33-.2.23-.4.26-.74.09-.34-.17-1.44-.53-2.74-1.68-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.12-.23.06-.43-.03-.6-.09-.17-.77-1.85-1.05-2.53-.28-.67-.56-.58-.77-.59h-.65c-.23 0-.6.09-.91.43-.31.34-1.2 1.17-1.2 2.85s1.22 3.3 1.4 3.53c.17.23 2.42 3.69 5.86 5.17.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2.02-.82 2.31-1.62.28-.8.28-1.48.2-1.62-.09-.14-.31-.23-.65-.4z"/></svg>
-</a>
-
-<script>
-// ── INTRO ──
-(function(){
-  const intro  = document.getElementById('intro');
-  const canvas = document.getElementById('intro-canvas');
-  const imgW   = document.getElementById('intro-img-wrap');
-  const txt    = document.getElementById('intro-text');
-  const fill   = document.getElementById('intro-fill');
-  const ctx    = canvas.getContext('2d');
-  let W = canvas.width  = window.innerWidth;
-  let H = canvas.height = window.innerHeight;
-  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;});
-
-  // Stars
-  const stars = Array.from({length:140},()=>({
-    x:Math.random()*W, y:Math.random()*H,
-    r:Math.random()*1.6+.3,
-    op:Math.random()*.6+.1,
-    gold:Math.random()>.65,
-    dx:(Math.random()-.5)*.1,
-    dy:(Math.random()-.5)*.1
-  }));
-
-  let looping = true;
-  (function loop(){
-    ctx.clearRect(0,0,W,H);
-    stars.forEach(s=>{
-      s.x+=s.dx; s.y+=s.dy;
-      if(s.x<0)s.x=W; if(s.x>W)s.x=0;
-      if(s.y<0)s.y=H; if(s.y>H)s.y=0;
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle = s.gold ? `rgba(212,175,55,${s.op})` : `rgba(255,255,255,${s.op*.4})`;
-      ctx.fill();
-    });
-    if(looping) requestAnimationFrame(loop);
-  })();
-
-  // Progress bar
-  let pct=0;
-  const barT = setInterval(()=>{
-    pct = Math.min(pct+1.5,100);
-    fill.style.width = pct+'%';
-    if(pct>=100) clearInterval(barT);
-  },38);
-
-  // Sequence
-  setTimeout(()=>{ imgW.classList.add('show'); },400);
-  setTimeout(()=>{ txt.classList.add('show'); },900);
-  setTimeout(()=>{
-    intro.style.transition = 'opacity .9s ease';
-    intro.style.opacity = '0';
-    setTimeout(()=>{ intro.remove(); looping=false; animIn(); }, 950);
-  },3200);
-})();
-
-// ── ANIMATE IN ──
-function animIn(){
-  // reveal hero elements
-  document.querySelectorAll('.rv').forEach((el,i)=>{
-    setTimeout(()=>{ el.classList.add('on'); },i*60);
-  });
-  // count up stats
-  countUp('s1',150,'+',' Destinations');
-  countUp('s2',42,'+');
-  countUp('s3',12,'K+');
-  countUp('s4',30,'+');
-}
-
-function countUp(id,target,suffix=''){
-  const el=document.getElementById(id);
-  if(!el)return;
-  let cur=0; const step=target/50;
-  const t=setInterval(()=>{
-    cur=Math.min(cur+step,target);
-    el.textContent=Math.floor(cur)+suffix;
-    if(cur>=target)clearInterval(t);
-  },30);
-}
-
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); });
-},{threshold:.12});
-document.querySelectorAll('.rv').forEach(el=>observer.observe(el));
-
-// ── NAV SCROLL ──
-window.addEventListener('scroll',()=>{
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY>80);
-});
-
-// ── PARALLAX ──
-document.addEventListener('mousemove',e=>{
-  const mx=(e.clientX/window.innerWidth-.5)*20;
-  const my=(e.clientY/window.innerHeight-.5)*12;
-  const bg=document.getElementById('hero-img');
-  if(bg) bg.style.transform=`scale(1.1) translate(${mx*.15}px,${my*.1}px)`;
-});
-
-// ── LANG & THEME ──
-function setLang(lang){
-  const html = document.documentElement;
-  html.setAttribute('data-lang', lang);
-  html.setAttribute('dir', lang==='ar'?'rtl':'ltr');
-  html.setAttribute('lang', lang);
-  document.getElementById('lang-en').classList.toggle('active', lang==='en');
-  document.getElementById('lang-ar').classList.toggle('active', lang==='ar');
-  localStorage.setItem('ge-lang', lang);
-}
-
-function toggleTheme(){
-  const html = document.documentElement;
-  const cur = html.getAttribute('data-theme')||'dark';
-  const next = cur==='dark'?'light':'dark';
-  html.setAttribute('data-theme', next);
-  document.getElementById('theme-icon').textContent = next==='dark'?'🌙':'☀️';
-  localStorage.setItem('ge-theme', next);
-}
-
-// Init saved prefs
-(function(){
-  const lang  = localStorage.getItem('ge-lang')  || 'en';
-  const theme = localStorage.getItem('ge-theme') || 'dark';
-  setLang(lang);
-  document.documentElement.setAttribute('data-theme', theme);
-  document.getElementById('theme-icon').textContent = theme==='dark'?'🌙':'☀️';
-})();
-
-// ── WHATSAPP FORM ──
-function sendWA(){
-  const f1=document.getElementById('f1').value;
-  const f4=document.getElementById('f4').value;
-  if(!f1||!f4){alert('Please fill in Name and Phone.');return;}
-  const msg=`✈ New Inquiry — Global Eagle Travel\n\nName: ${f1} ${document.getElementById('f2').value}\nPhone: ${f4}\nEmail: ${document.getElementById('f3').value}\nService: ${document.getElementById('f5').value}\nMessage: ${document.getElementById('f6').value}`;
-  window.open('https://wa.me/966501749914?text='+encodeURIComponent(msg),'_blank');
-}
-</script>
+            packages.forEach(pkg => {
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="card-img-wrapper">
+                            <img src="${pkg.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600'}" class="card-img" alt="${pkg.title}">
+                            <div class="price-badge">${pkg.price}</div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">${pkg.title}</h3>
+                            <p class="card-desc">${pkg.desc}</p>
+                            <button class="btn-book"><i class="fa-regular fa-paper-plane"></i> احجز رحلتك الآن</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        window.onload = fetchPackages;
+    </script>
 </body>
 </html>
