@@ -3,300 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النسر العالمي للسفر والسياحة | Global Eagle</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700&family=Marcellus&display=swap" rel="stylesheet">
+    <title>النسر العالمي للسفر والسياحة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-dark: #0b0f19;       /* أسود نيلي عميق مريح جداً للعين */
-            --bg-card: #161f30;       /* رمادي أزرق داكن للبطاقات */
-            --gold-primary: #D4AF37;  /* الذهبي الملكي المطابق للشعار */
-            --gold-glow: rgba(212, 175, 55, 0.2);
-            --text-white: #ffffff;
-            --text-muted: #a0aec0;
+            /* ألوان داكنة مريحة جداً للعين ومناسبة لشعارك الذهبي */
+            --bg-dark-main: #12161f; 
+            --bg-dark-cards: #1a202c;
+            --gold-color: #D4AF37; 
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-white);
+            background-color: var(--bg-dark-main);
+            color: var(--text-light);
             font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* الهيدر الاحترافي */
+        /* الهيدر الأساسي للموقع */
         header {
-            background-color: rgba(11, 15, 25, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 15px 60px;
+            background-color: var(--bg-dark-cards);
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .logo-area {
+        .brand-container {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        /* حاوية الشعار المرفوع */
-        .logo-img {
-            height: 60px; /* حجم مثالي ومناسب للهيدر */
+        /* دمج صورة اللوقو الخاصة بك */
+        .brand-logo {
+            height: 55px;
             width: auto;
-            filter: drop-shadow(0 0 8px var(--gold-glow));
         }
 
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-text .brand-ar {
-            font-weight: 700;
+        .brand-title {
             font-size: 1.2rem;
-            color: var(--gold-primary);
-        }
-
-        .logo-text .brand-en {
-            font-family: 'Marcellus', serif;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            color: var(--text-white);
+            font-weight: 700;
+            color: var(--gold-color);
         }
 
         nav a {
-            color: var(--text-white);
+            color: var(--text-light);
             text-decoration: none;
-            margin-right: 25px;
-            font-weight: 500;
-            transition: color 0.3s;
+            margin-right: 20px;
+            font-weight: 600;
+            transition: color 0.2s;
         }
 
-        nav a:hover, nav a.active {
-            color: var(--gold-primary);
+        nav a:hover {
+            color: var(--gold-color);
         }
 
-        .btn-admin-nav {
-            border: 1px solid var(--gold-primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            background: rgba(212, 175, 55, 0.05);
-            transition: all 0.3s;
-        }
-
-        .btn-admin-nav:hover {
-            background: var(--gold-primary);
-            color: var(--bg-dark) !important;
-        }
-
-        /* قسم الترحيب البصري الكبير */
-        .hero {
-            position: relative;
-            padding: 160px 20px;
+        /* قسم العرض الرئيسي */
+        .hero-banner {
             text-align: center;
-            background: linear-gradient(180deg, rgba(11,15,25,0.6) 0%, rgba(11,15,25,1) 100%), 
-                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920') center/cover;
+            padding: 80px 20px;
+            background: linear-gradient(180deg, var(--bg-dark-cards) 0%, var(--bg-dark-main) 100%);
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            color: var(--text-white);
+        .hero-banner h1 {
+            color: var(--gold-color);
+            font-size: 2.5rem;
             margin-bottom: 15px;
-            font-weight: 700;
         }
 
-        .hero h1 span {
-            color: var(--gold-primary);
-        }
-
-        .hero p {
-            color: var(--text-muted);
-            font-size: 1.3rem;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-        }
-
-        /* شبكة عرض عروض السفر والباكجات */
-        .packages-section {
-            padding: 60px 40px;
+        /* شبكة عرض الباكجات */
+        .main-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        .section-title {
-            text-align: center;
-            color: var(--gold-primary);
-            font-size: 2.2rem;
-            margin-bottom: 50px;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 2px;
-            background: var(--gold-primary);
-            margin: 10px auto 0 auto;
-        }
-
-        .grid-container {
+        .packages-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        /* بطاقات السفر الفاخرة */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 15px;
+        .pkg-card {
+            background-color: var(--bg-dark-cards);
+            border-radius: 8px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid #2d3748;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--gold-primary);
-            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
-        }
-
-        .card-img-wrapper {
-            position: relative;
-            height: 230px;
-            overflow: hidden;
-        }
-
-        .card-img {
+        .pkg-image {
             width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
-            transition: transform 0.5s;
         }
 
-        .card:hover .card-img {
-            transform: scale(1.08);
+        .pkg-details {
+            padding: 20px;
         }
 
-        .price-badge {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background-color: var(--gold-primary);
-            color: var(--bg-dark);
-            padding: 5px 15px;
-            font-weight: 700;
-            border-radius: 5px;
-            font-size: 0.95rem;
+        .pkg-name {
+            color: var(--gold-color);
+            font-size: 1.3rem;
+            margin: 0 0 10px 0;
         }
 
-        .card-body {
-            padding: 25px;
-        }
-
-        .card-title {
-            color: var(--text-white);
-            font-size: 1.4rem;
-            margin: 0 0 12px 0;
-            font-weight: 700;
-        }
-
-        .card-desc {
+        .pkg-text {
             color: var(--text-muted);
             font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 20px;
-            height: 75px;
-            overflow: hidden;
         }
 
-        .btn-book {
-            background: transparent;
-            color: var(--gold-primary);
-            border: 1px solid var(--gold-primary);
+        .pkg-price {
+            color: #4fd1c5;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        .btn-action {
+            background-color: var(--gold-color);
+            color: #12161f;
+            border: none;
+            padding: 10px;
             width: 100%;
-            padding: 12px;
+            border-radius: 5px;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
-            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-book:hover {
-            background: var(--gold-primary);
-            color: var(--bg-dark);
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-area">
-            <img src="logo.png" alt="Global Eagle Logo" class="logo-img">
-            <div class="logo-text">
-                <span class="brand-ar">النسر العالمي</span>
-                <span class="brand-en">GLOBAL EAGLE</span>
-            </div>
+        <div class="brand-container">
+            <img src="logo.png" alt="شعار النسر العالمي" class="brand-logo">
+            <div class="brand-title">النسر العالمي للسفر والسياحة</div>
         </div>
         <nav>
-            <a href="#" class="active">الرئيسية</a>
-            <a href="#packages">الوجهات والباكجات</a>
-            <a href="admin.html" class="btn-admin-nav"><i class="fa-solid fa-lock"></i> لوحة الإدارة</a>
+            <a href="#">الرئيسية</a>
+            <a href="#packages-section">الباكجات الحالية</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>اكتشف العالم مع <span>النسر العالمي</span></h1>
-        <p>نأخذك في رحلات سياحية ساحرة وفاخرة حول العالم، بأعلى معايير الراحة والرفاهية العصرية التي تليق بك.</p>
+    <section class="hero-banner">
+        <h1>مرحباً بكم في النسر العالمي</h1>
+        <p style="color: var(--text-muted);">نصمم لكم أجمل الرحلات والباكجات السياحية المتميزة.</p>
     </section>
 
-    <main class="packages-section" id="packages">
-        <h2 class="section-title">أحدث باكجات وعروض السفر</h2>
-        <div class="grid-container" id="packagesContainer">
+    <div class="main-container" id="packages-section">
+        <div class="packages-grid" id="mainGrid">
             </div>
-    </main>
+    </div>
 
     <script>
-        function fetchPackages() {
-            const packages = JSON.parse(localStorage.getItem('travel_packages')) || [];
-            const container = document.getElementById('packagesContainer');
-            container.innerHTML = '';
+        function displayPackages() {
+            const stored = JSON.parse(localStorage.getItem('company_packages')) || [];
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = '';
 
-            if (packages.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
-                        <i class="fa-solid fa-plane-slashed" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
-                        <p>لا توجد باكجات سفر متاحة حالياً. يرجى تزويدها من لوحة التحكم الخاصة بالمدير.</p>
-                    </div>`;
+            if(stored.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">لا توجد باكجات معروضة حالياً.</p>`;
                 return;
             }
 
-            packages.forEach(pkg => {
-                container.innerHTML += `
-                    <div class="card">
-                        <div class="card-img-wrapper">
-                            <img src="${pkg.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600'}" class="card-img" alt="${pkg.title}">
-                            <div class="price-badge">${pkg.price}</div>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">${pkg.title}</h3>
-                            <p class="card-desc">${pkg.desc}</p>
-                            <button class="btn-book"><i class="fa-regular fa-paper-plane"></i> احجز رحلتك الآن</button>
+            stored.forEach(item => {
+                grid.innerHTML += `
+                    <div class="pkg-card">
+                        <img src="${item.img || 'https://via.placeholder.com/400x200'}" class="pkg-image" alt="${item.name}">
+                        <div class="pkg-details">
+                            <h3 class="pkg-name">${item.name}</h3>
+                            <p class="pkg-text">${item.description}</p>
+                            <div class="pkg-price">السعر: ${item.price}</div>
+                            <button class="btn-action">حجز الآن</button>
                         </div>
                     </div>
                 `;
             });
         }
-        window.onload = fetchPackages;
+        window.onload = displayPackages;
     </script>
 </body>
 </html>
