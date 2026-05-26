@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title id="site-title">Global Eagle Travel | Rise Above. Aim High.</title>
 <meta name="description" id="site-meta" content="Global Eagle Travel — Your trusted partner for tourist visas, hotel bookings, flight tickets, and luxury travel in Saudi Arabia."/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -15,6 +15,34 @@ img{display:block;max-width:100%;height:auto;}
 a{text-decoration:none;color:inherit;}
 button{cursor:pointer;font-family:'Manrope',sans-serif;}
 :root{--gold:#D4AF37;--gold2:#FFE47A;--gold3:#A07820;--ink:#111111;--ink2:#1C1C1C;--white:#FFFFFF;--pad-x:clamp(20px,5vw,80px);--pad-y:clamp(60px,10vw,120px);}
+html[data-theme="light"]{--bg-light:#f8f7f5;--text-light:#1a1a1a;--text-light-secondary:rgba(26,26,26,.6);--border-light:rgba(212,175,55,.2);}
+html.light-mode{background:#f8f7f5;color:#1a1a1a;}
+html.light-mode body{background:#f8f7f5;color:#1a1a1a;}
+html.light-mode #nav{background:rgba(248,247,245,.95);}
+html.light-mode .nav-links a{color:rgba(26,26,26,.75);}
+html.light-mode .nav-links a.active{color:var(--gold);}
+html.light-mode #hero-bg::after{background:linear-gradient(to right,rgba(248,247,245,.7) 0%,rgba(248,247,245,.4) 60%,rgba(248,247,245,0) 100%);}
+html.light-mode #hero-bg::before{background:linear-gradient(to top,rgba(248,247,245,1) 0%,rgba(248,247,245,.3) 40%,transparent 100%);}
+html.light-mode .hero-p{color:rgba(26,26,26,.75);}
+html.light-mode .sec{background:#f8f7f5;}
+html.light-mode .sec-h2{color:#1a1a1a;}
+html.light-mode .glass{background:rgba(212,175,55,.08);border-color:rgba(212,175,55,.2);}
+html.light-mode .glass:hover{border-color:rgba(212,175,55,.4);}
+html.light-mode table th{background:rgba(212,175,55,.08);color:rgba(26,26,26,.6);}
+html.light-mode table td{color:rgba(26,26,26,.8);border-color:rgba(212,175,55,.1);}
+html.light-mode footer{background:#f0ede9;border-color:rgba(212,175,55,.15);}
+html.light-mode .footer-desc,.light-mode .footer-links a{color:rgba(26,26,26,.6);}
+/* THEME TOGGLE BAR */
+#theme-bar{position:fixed;top:0;left:0;right:0;height:36px;background:linear-gradient(90deg,rgba(212,175,55,.1),rgba(212,175,55,.05));border-bottom:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;z-index:501;gap:40px;}
+html.light-mode #theme-bar{background:linear-gradient(90deg,rgba(212,175,55,.15),rgba(212,175,55,.08));border-color:rgba(212,175,55,.25);}
+.theme-toggle{display:flex;gap:12px;align-items:center;padding:0 16px;}
+.theme-toggle button{background:none;border:1px solid rgba(212,175,55,.3);color:rgba(212,175,55,.7);padding:4px 12px;font-size:.62rem;font-weight:600;letter-spacing:.12em;cursor:pointer;border-radius:2px;transition:all .25s;text-transform:uppercase;font-family:'Manrope',sans-serif;}
+.theme-toggle button.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.theme-toggle button:hover{border-color:var(--gold);color:var(--gold);}
+html.light-mode .theme-toggle button{color:rgba(26,26,26,.6);border-color:rgba(212,175,55,.35);}
+html.light-mode .theme-toggle button.active{background:var(--gold);color:#000;}
+html.light-mode .theme-toggle button:hover{color:var(--gold);border-color:var(--gold);}
+#nav{margin-top:36px;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#0a0a0a;}::-webkit-scrollbar-thumb{background:var(--gold3);}
 
 /* ─── MAINTENANCE ─── */
@@ -264,6 +292,19 @@ footer{background:#0a0a0a;padding:60px var(--pad-x) 28px;border-top:1px solid rg
   <a href="#services" onclick="closeMob()">Services</a>
   <a href="#how" onclick="closeMob()">How It Works</a>
   <a href="#contact" onclick="closeMob()">Contact</a>
+</div>
+
+<!-- THEME & LANGUAGE BAR -->
+<div id="theme-bar">
+  <div class="theme-toggle" id="lang-toggle">
+    <button id="lang-en" class="active" onclick="switchLang('en')">ENGLISH</button>
+    <button id="lang-ar" onclick="switchLang('ar')">العربية</button>
+  </div>
+  <div style="width:1px;height:20px;background:rgba(212,175,55,.2);"></div>
+  <div class="theme-toggle">
+    <button id="theme-dark" class="active" onclick="switchTheme('dark')"><i class="fa-solid fa-moon"></i> Dark</button>
+    <button id="theme-light" onclick="switchTheme('light')"><i class="fa-solid fa-sun"></i> Light</button>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -680,6 +721,14 @@ document.addEventListener('mousemove',e=>{
 
 // ── MOBILE MENU ──
 function closeMob(){document.getElementById('mob-nav').classList.remove('open');}
+
+// ── THEME & LANGUAGE ──
+function switchTheme(theme){const html=document.documentElement;if(theme==='light'){html.classList.add('light-mode');localStorage.setItem('theme','light');document.getElementById('theme-dark').classList.remove('active');document.getElementById('theme-light').classList.add('active');}else{html.classList.remove('light-mode');localStorage.setItem('theme','dark');document.getElementById('theme-dark').classList.add('active');document.getElementById('theme-light').classList.remove('active');}}
+
+function switchLang(lang){localStorage.setItem('language',lang);document.documentElement.dir=lang==='ar'?'rtl':'ltr';document.documentElement.lang=lang;if(lang==='ar'){document.getElementById('lang-en').classList.remove('active');document.getElementById('lang-ar').classList.add('active');}else{document.getElementById('lang-en').classList.add('active');document.getElementById('lang-ar').classList.remove('active');}}
+
+// Initialize theme and language
+window.addEventListener('DOMContentLoaded',()=>{const savedTheme=localStorage.getItem('theme')||'dark';const savedLang=localStorage.getItem('language')||'en';switchTheme(savedTheme);switchLang(savedLang);});
 
 // ── WHATSAPP FORM ──
 function sendWA(){

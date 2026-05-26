@@ -14,8 +14,39 @@
   --text:#fff;--text2:rgba(255,255,255,.65);--text3:rgba(255,255,255,.35);
   --border:rgba(212,175,55,.12);--glass:rgba(255,255,255,.03);
 }
+html.light-mode{--bg:#f8f7f5;--bg2:#faf9f7;--bg3:#f0ede9;--text:#1a1a1a;--text2:rgba(26,26,26,.7);--text3:rgba(26,26,26,.5);--border:rgba(212,175,55,.2);}
 body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;min-height:100vh;}
+html.light-mode body{background:var(--bg);color:var(--text);}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg2);}::-webkit-scrollbar-thumb{background:var(--gold3);}
+
+/* ── THEME TOGGLE BAR ── */
+#theme-bar{position:fixed;top:0;left:0;right:0;height:36px;background:linear-gradient(90deg,rgba(212,175,55,.1),rgba(212,175,55,.05));border-bottom:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;z-index:1001;gap:40px;}
+html.light-mode #theme-bar{background:linear-gradient(90deg,rgba(212,175,55,.15),rgba(212,175,55,.08));border-color:rgba(212,175,55,.25);}
+.theme-toggle{display:flex;gap:12px;align-items:center;padding:0 16px;}
+.theme-toggle button{background:none;border:1px solid rgba(212,175,55,.3);color:rgba(212,175,55,.7);padding:4px 12px;font-size:.62rem;font-weight:600;letter-spacing:.12em;cursor:pointer;border-radius:2px;transition:all .25s;text-transform:uppercase;font-family:'Manrope',sans-serif;}
+.theme-toggle button.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.theme-toggle button:hover{border-color:var(--gold);color:var(--gold);}
+html.light-mode .theme-toggle button{color:rgba(26,26,26,.6);border-color:rgba(212,175,55,.35);}
+html.light-mode .theme-toggle button.active{background:var(--gold);color:#000;}
+html.light-mode .theme-toggle button:hover{color:var(--gold);border-color:var(--gold);}
+#login-screen{padding-top:36px;}
+
+html.light-mode .fs-title{border-color:rgba(212,175,55,.15);}
+html.light-mode .f-group{border-color:rgba(212,175,55,.15);}
+html.light-mode .f-group:focus-within{border-color:var(--gold);}
+html.light-mode .f-input{color:#1a1a1a;}
+html.light-mode .f-input::placeholder{color:rgba(26,26,26,.3);}
+html.light-mode .sb-logo{border-color:rgba(212,175,55,.15);}
+html.light-mode #sidebar{background:var(--bg2);border-color:rgba(212,175,55,.15);}
+html.light-mode #main{background:#f8f7f5;}
+html.light-mode #topbar{background:rgba(250,249,247,.9);}
+html.light-mode .stat-card{background:var(--bg3);border-color:rgba(212,175,55,.2);}
+html.light-mode .stat-card:hover{border-color:rgba(212,175,55,.4);}
+html.light-mode .table-wrap{background:var(--bg3);border-color:rgba(212,175,55,.2);}
+html.light-mode .form-section{background:var(--bg3);border-color:rgba(212,175,55,.2);}
+html.light-mode .login-field{border-color:rgba(212,175,55,.2);}
+html.light-mode .login-field:focus-within{border-color:var(--gold);}
+html.light-mode .login-box{background:rgba(248,247,245,.8);border-color:rgba(212,175,55,.25);}
 
 /* ── LOGIN ── */
 #login-screen{position:fixed;inset:0;background:#000;z-index:999;display:flex;align-items:center;justify-content:center;}
@@ -162,6 +193,19 @@ input:checked+.toggle-slider::before{transform:translateX(20px);background:#000;
 </style>
 </head>
 <body>
+
+<!-- THEME & LANGUAGE BAR -->
+<div id="theme-bar">
+  <div class="theme-toggle" id="lang-toggle">
+    <button id="lang-en" class="active" onclick="switchLang('en')">ENGLISH</button>
+    <button id="lang-ar" onclick="switchLang('ar')">العربية</button>
+  </div>
+  <div style="width:1px;height:20px;background:rgba(212,175,55,.2);"></div>
+  <div class="theme-toggle">
+    <button id="theme-dark" class="active" onclick="switchTheme('dark')"><i class="fa-solid fa-moon"></i> Dark</button>
+    <button id="theme-light" onclick="switchTheme('light')"><i class="fa-solid fa-sun"></i> Light</button>
+  </div>
+</div>
 
 <!-- ════ LOGIN ════ -->
 <div id="login-screen">
@@ -793,6 +837,45 @@ function showToast(msg){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
+
+// ════════════════════════════════
+//  THEME & LANGUAGE
+// ════════════════════════════════
+function switchTheme(theme){
+  const html=document.documentElement;
+  if(theme==='light'){
+    html.classList.add('light-mode');
+    localStorage.setItem('theme','light');
+    document.getElementById('theme-dark').classList.remove('active');
+    document.getElementById('theme-light').classList.add('active');
+  }else{
+    html.classList.remove('light-mode');
+    localStorage.setItem('theme','dark');
+    document.getElementById('theme-dark').classList.add('active');
+    document.getElementById('theme-light').classList.remove('active');
+  }
+}
+
+function switchLang(lang){
+  localStorage.setItem('language',lang);
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.documentElement.lang=lang;
+  if(lang==='ar'){
+    document.getElementById('lang-en').classList.remove('active');
+    document.getElementById('lang-ar').classList.add('active');
+  }else{
+    document.getElementById('lang-en').classList.add('active');
+    document.getElementById('lang-ar').classList.remove('active');
+  }
+}
+
+// Initialize theme and language
+window.addEventListener('DOMContentLoaded',()=>{
+  const savedTheme=localStorage.getItem('theme')||'dark';
+  const savedLang=localStorage.getItem('language')||'en';
+  switchTheme(savedTheme);
+  switchLang(savedLang);
+});
 </script>
 </body>
 </html>
