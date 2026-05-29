@@ -1,881 +1,1024 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="utf-8"/>
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Global Eagle — Admin Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@400;500;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet"/>
+<title>Global Eagle — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <style>
+/* ═══════════════════════════
+   RESET & VARS
+═══════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --gold:#D4AF37;--gold2:#FFE47A;--gold3:#A07820;
-  --bg:#0a0a0a;--bg2:#111;--bg3:#1C1C1C;
-  --text:#fff;--text2:rgba(255,255,255,.65);--text3:rgba(255,255,255,.35);
-  --border:rgba(212,175,55,.12);--glass:rgba(255,255,255,.03);
+  --bg0:#06050300;--bg0s:#060503;--bg1:#0e0c08;--bg2:#161209;--bg3:#1f1a0e;--bg4:#28210f;
+  --gold:#C9A227;--gold2:#E8C252;--gold3:#8B6914;--goldf:rgba(201,162,39,.12);
+  --txt:#EDE0C4;--txt2:rgba(237,224,196,.62);--txt3:rgba(237,224,196,.28);
+  --border:rgba(201,162,39,.13);--border2:rgba(201,162,39,.32);
+  --glass:rgba(255,255,255,.028);--glass2:rgba(255,255,255,.055);
+  --red:#e74c3c;--green:#2ecc71;--blue:#3498db;
+  --ease:cubic-bezier(.25,.46,.45,.94);
+  --ff:'Poppins',sans-serif;--fd:'Cinzel',serif;
+  --sb:240px;
 }
-html.light-mode{--bg:#f8f7f5;--bg2:#faf9f7;--bg3:#f0ede9;--text:#1a1a1a;--text2:rgba(26,26,26,.7);--text3:rgba(26,26,26,.5);--border:rgba(212,175,55,.2);}
-body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;min-height:100vh;}
-html.light-mode body{background:var(--bg);color:var(--text);}
-::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg2);}::-webkit-scrollbar-thumb{background:var(--gold3);}
+body{background:var(--bg0s);color:var(--txt);font-family:var(--ff);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--bg1);}::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:2px;}
+img{display:block;max-width:100%;}button{cursor:pointer;font-family:var(--ff);}
 
-/* ── THEME TOGGLE BAR ── */
-#theme-bar{position:fixed;top:0;left:0;right:0;height:36px;background:linear-gradient(90deg,rgba(212,175,55,.1),rgba(212,175,55,.05));border-bottom:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;z-index:1001;gap:40px;}
-html.light-mode #theme-bar{background:linear-gradient(90deg,rgba(212,175,55,.15),rgba(212,175,55,.08));border-color:rgba(212,175,55,.25);}
-.theme-toggle{display:flex;gap:12px;align-items:center;padding:0 16px;}
-.theme-toggle button{background:none;border:1px solid rgba(212,175,55,.3);color:rgba(212,175,55,.7);padding:4px 12px;font-size:.62rem;font-weight:600;letter-spacing:.12em;cursor:pointer;border-radius:2px;transition:all .25s;text-transform:uppercase;font-family:'Manrope',sans-serif;}
-.theme-toggle button.active{background:var(--gold);color:#000;border-color:var(--gold);}
-.theme-toggle button:hover{border-color:var(--gold);color:var(--gold);}
-html.light-mode .theme-toggle button{color:rgba(26,26,26,.6);border-color:rgba(212,175,55,.35);}
-html.light-mode .theme-toggle button.active{background:var(--gold);color:#000;}
-html.light-mode .theme-toggle button:hover{color:var(--gold);border-color:var(--gold);}
-#login-screen{padding-top:36px;}
+/* ═══════════════════════════
+   LOGIN
+═══════════════════════════ */
+#login{
+  position:fixed;inset:0;z-index:9999;background:#000;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+#login-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.login-box{
+  position:relative;z-index:2;width:min(420px,92vw);
+  background:rgba(20,16,8,.92);border:1px solid var(--border);border-radius:8px;
+  padding:52px 44px;text-align:center;
+  backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  box-shadow:0 40px 120px rgba(0,0,0,.85),0 0 80px rgba(201,162,39,.04);
+}
+.lb-logo{font-family:var(--fd);font-size:1.5rem;color:var(--gold);letter-spacing:.22em;margin-bottom:6px;}
+.lb-sub{font-size:.58rem;letter-spacing:.32em;color:var(--txt3);text-transform:uppercase;margin-bottom:44px;}
+.lb-field{border-bottom:1px solid rgba(255,255,255,.1);padding:12px 0;margin-bottom:20px;text-align:left;transition:border-color .3s;}
+.lb-field:focus-within{border-color:var(--gold);}
+.lb-label{font-size:.55rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:7px;}
+.lb-input{background:transparent;border:none;color:#fff;font-family:var(--ff);font-size:.92rem;outline:none;width:100%;}
+.lb-input::placeholder{color:rgba(255,255,255,.18);}
+.lb-btn{
+  width:100%;padding:15px;margin-top:10px;
+  background:var(--gold);color:#000;border:none;border-radius:2px;
+  font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  cursor:pointer;transition:all .35s;position:relative;overflow:hidden;
+}
+.lb-btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.2);transform:translateX(-110%);transition:.4s;}
+.lb-btn:hover::before{transform:translateX(0);}
+.lb-btn:hover{box-shadow:0 0 40px rgba(201,162,39,.35);}
+.lb-err{color:var(--red);font-size:.74rem;margin-top:12px;display:none;}
+.lb-hint{font-size:.63rem;color:var(--txt3);margin-top:18px;}
 
-html.light-mode .fs-title{border-color:rgba(212,175,55,.15);}
-html.light-mode .f-group{border-color:rgba(212,175,55,.15);}
-html.light-mode .f-group:focus-within{border-color:var(--gold);}
-html.light-mode .f-input{color:#1a1a1a;}
-html.light-mode .f-input::placeholder{color:rgba(26,26,26,.3);}
-html.light-mode .sb-logo{border-color:rgba(212,175,55,.15);}
-html.light-mode #sidebar{background:var(--bg2);border-color:rgba(212,175,55,.15);}
-html.light-mode #main{background:#f8f7f5;}
-html.light-mode #topbar{background:rgba(250,249,247,.9);}
-html.light-mode .stat-card{background:var(--bg3);border-color:rgba(212,175,55,.2);}
-html.light-mode .stat-card:hover{border-color:rgba(212,175,55,.4);}
-html.light-mode .table-wrap{background:var(--bg3);border-color:rgba(212,175,55,.2);}
-html.light-mode .form-section{background:var(--bg3);border-color:rgba(212,175,55,.2);}
-html.light-mode .login-field{border-color:rgba(212,175,55,.2);}
-html.light-mode .login-field:focus-within{border-color:var(--gold);}
-html.light-mode .login-box{background:rgba(248,247,245,.8);border-color:rgba(212,175,55,.25);}
-
-/* ── LOGIN ── */
-#login-screen{position:fixed;inset:0;background:#000;z-index:999;display:flex;align-items:center;justify-content:center;}
-.login-box{width:min(420px,90vw);padding:48px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:4px;text-align:center;}
-.login-logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold);letter-spacing:.2em;margin-bottom:8px;}
-.login-sub{font-size:.68rem;letter-spacing:.25em;color:var(--text3);margin-bottom:40px;text-transform:uppercase;}
-.login-field{border-bottom:1px solid rgba(255,255,255,.15);padding:12px 0;margin-bottom:20px;transition:border-color .3s;text-align:left;}
-.login-field:focus-within{border-color:var(--gold);}
-.login-label{font-size:.6rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:6px;}
-.login-input{background:transparent;border:none;color:#fff;font-family:'Manrope',sans-serif;font-size:.95rem;outline:none;width:100%;}
-.login-input::placeholder{color:rgba(255,255,255,.2);}
-.login-btn{width:100%;padding:15px;margin-top:8px;background:var(--gold);color:#000;border:none;font-size:.75rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
-.login-btn:hover{background:var(--gold2);}
-.login-err{color:#ff6b6b;font-size:.78rem;margin-top:12px;display:none;}
-.login-hint{font-size:.68rem;color:var(--text3);margin-top:16px;}
-
-/* ── LAYOUT ── */
+/* ═══════════════════════════
+   LAYOUT
+═══════════════════════════ */
 #app{display:none;min-height:100vh;}
-#sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .3s;}
-.sb-logo{padding:28px 24px;border-bottom:1px solid var(--border);}
-.sb-logo-text{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);letter-spacing:.15em;}
-.sb-logo-sub{font-size:.58rem;letter-spacing:.2em;color:var(--text3);margin-top:4px;text-transform:uppercase;}
-.sb-nav{flex:1;padding:20px 12px;overflow-y:auto;}
-.sb-section{font-size:.58rem;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;padding:12px 12px 8px;margin-top:8px;}
-.sb-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:4px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--text2);transition:all .25s;margin-bottom:2px;}
-.sb-item:hover{background:rgba(212,175,55,.07);color:var(--gold);}
-.sb-item.active{background:rgba(212,175,55,.12);color:var(--gold);}
-.sb-item i{width:16px;text-align:center;}
-.sb-badge{margin-left:auto;background:var(--gold);color:#000;font-size:.55rem;font-weight:800;padding:2px 7px;border-radius:99px;}
-.sb-bottom{padding:16px 12px;border-top:1px solid var(--border);}
-.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;}
-.sb-avatar{width:32px;height:32px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:800;font-size:.8rem;flex-shrink:0;}
-.sb-username{font-size:.78rem;font-weight:600;color:var(--text);}
-.sb-role{font-size:.62rem;color:var(--text3);}
-.sb-logout{width:100%;padding:9px;margin-top:8px;background:transparent;border:1px solid var(--border);color:var(--text3);font-family:'Manrope',sans-serif;font-size:.7rem;cursor:pointer;transition:all .3s;border-radius:2px;}
-.sb-logout:hover{border-color:#ff6b6b;color:#ff6b6b;}
+#sidebar{
+  position:fixed;top:0;left:0;width:var(--sb);height:100vh;
+  background:var(--bg1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;
+  transition:transform .35s var(--ease);
+}
+#main{margin-left:var(--sb);min-height:100vh;display:flex;flex-direction:column;}
 
-/* ── MAIN ── */
-#main{margin-left:240px;min-height:100vh;}
-#topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(10,10,10,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-.page-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--text);}
-.topbar-right{display:flex;align-items:center;gap:16px;}
-.topbar-btn{border:1px solid var(--gold);color:var(--gold);background:transparent;padding:8px 18px;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:2px;display:flex;align-items:center;gap:8px;}
-.topbar-btn:hover{background:var(--gold);color:#000;}
-.topbar-btn.primary{background:var(--gold);color:#000;}
-.topbar-btn.primary:hover{background:var(--gold2);}
+/* ═══════════════════════════
+   SIDEBAR
+═══════════════════════════ */
+.sb-head{padding:30px 22px 24px;border-bottom:1px solid var(--border);}
+.sb-logo{display:flex;align-items:center;gap:10px;}
+.sb-logo-ring{width:36px;height:36px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+.sb-logo-ring img{width:100%;height:100%;object-fit:cover;}
+.sb-brand{font-family:var(--fd);font-size:.88rem;color:var(--gold);letter-spacing:.16em;}
+.sb-sub{font-size:.5rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.sb-nav{flex:1;padding:18px 12px;overflow-y:auto;}
+.sb-sec{font-size:.52rem;letter-spacing:.22em;color:var(--txt3);text-transform:uppercase;padding:14px 12px 8px;}
+.sb-item{
+  display:flex;align-items:center;gap:11px;
+  padding:11px 14px;border-radius:6px;cursor:pointer;margin-bottom:2px;
+  font-size:.77rem;font-weight:500;color:var(--txt2);
+  transition:all .25s var(--ease);position:relative;
+}
+.sb-item:hover{background:var(--goldf);color:var(--gold);}
+.sb-item.active{background:rgba(201,162,39,.14);color:var(--gold);}
+.sb-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--gold);border-radius:0 2px 2px 0;}
+.sb-item i{width:16px;text-align:center;font-size:.88rem;}
+.sb-badge{margin-left:auto;background:var(--gold);color:#000;font-size:.52rem;font-weight:700;padding:2px 7px;border-radius:99px;}
+.sb-foot{padding:16px 12px;border-top:1px solid var(--border);}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:8px;}
+.sb-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold3));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.8rem;flex-shrink:0;}
+.sb-uname{font-size:.76rem;font-weight:600;}
+.sb-urole{font-size:.58rem;color:var(--txt3);}
+.sb-logout{width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--txt3);font-family:var(--ff);font-size:.68rem;border-radius:4px;transition:all .3s;}
+.sb-logout:hover{border-color:var(--red);color:var(--red);}
 
-/* ── CONTENT ── */
-.content{padding:32px;}
-.page{display:none;}
-.page.active{display:block;}
+/* ═══════════════════════════
+   TOPBAR
+═══════════════════════════ */
+#topbar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 36px;background:rgba(6,5,3,.92);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.tb-title{font-family:var(--fd);font-size:1.15rem;color:var(--txt);}
+.tb-right{display:flex;align-items:center;gap:12px;}
+.tb-sync{display:flex;align-items:center;gap:7px;font-size:.62rem;color:var(--green);background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);padding:5px 12px;border-radius:99px;}
+.tb-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.tb-btn{border:1px solid var(--border);color:var(--txt2);background:var(--glass);padding:8px 18px;font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .3s;display:flex;align-items:center;gap:8px;}
+.tb-btn:hover{border-color:var(--gold);color:var(--gold);}
+.tb-btn.primary{background:var(--gold);color:#000;border-color:var(--gold);}
+.tb-btn.primary:hover{background:var(--gold2);box-shadow:0 0 30px rgba(201,162,39,.3);}
+#mob-toggle{display:none;background:none;border:none;color:var(--gold);font-size:1.2rem;}
 
-/* ── STATS ── */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px;}
-.stat-card{background:var(--bg3);border:1px solid var(--border);padding:24px;border-radius:4px;transition:border-color .3s;}
-.stat-card:hover{border-color:rgba(212,175,55,.3);}
-.sc-label{font-size:.65rem;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:8px;}
-.sc-val{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);line-height:1;}
-.sc-sub{font-size:.72rem;color:var(--text3);margin-top:6px;}
-.sc-icon{float:right;font-size:1.4rem;color:rgba(212,175,55,.3);}
+/* ═══════════════════════════
+   CONTENT
+═══════════════════════════ */
+.content{padding:36px;flex:1;}
+.page{display:none;}.page.active{display:block;}
 
-/* ── TABLE ── */
-.table-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
-.table-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--border);}
-.table-title{font-family:'Playfair Display',serif;font-size:1.1rem;}
-.search-input{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 14px 8px 36px;font-family:'Manrope',sans-serif;font-size:.8rem;outline:none;width:200px;transition:border-color .3s;border-radius:2px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='rgba(212,175,55,.5)' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;}
-.search-input:focus{border-color:var(--gold);}
-table{width:100%;border-collapse:collapse;}
-th{padding:12px 20px;font-size:.65rem;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;text-align:left;background:rgba(0,0,0,.2);}
-td{padding:14px 20px;font-size:.82rem;color:var(--text2);border-top:1px solid rgba(255,255,255,.04);}
-tr:hover td{background:rgba(212,175,55,.03);}
-.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.62rem;font-weight:700;letter-spacing:.08em;}
-.badge-gold{background:rgba(212,175,55,.15);color:var(--gold);}
-.badge-green{background:rgba(39,174,96,.15);color:#2ecc71;}
-.badge-red{background:rgba(231,76,60,.15);color:#e74c3c;}
-.badge-blue{background:rgba(52,152,219,.15);color:#3498db;}
-.tbl-btn{background:none;border:1px solid var(--border);color:var(--text3);padding:5px 12px;font-size:.65rem;cursor:pointer;transition:all .25s;border-radius:2px;}
-.tbl-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* ═══════════════════════════
+   STAT CARDS
+═══════════════════════════ */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px;}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:26px;transition:border-color .35s,transform .35s;cursor:default;position:relative;overflow:hidden;
+}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--goldf),transparent);opacity:0;transition:opacity .35s;}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.stat-card:hover::before{opacity:1;}
+.sc-ico{float:right;font-size:1.5rem;color:rgba(201,162,39,.25);}
+.sc-lbl{font-size:.6rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;margin-bottom:10px;}
+.sc-val{font-family:var(--fd);font-size:2.1rem;color:var(--gold);line-height:1;position:relative;}
+.sc-sub{font-size:.68rem;color:var(--txt3);margin-top:7px;}
 
-/* ── FORM ── */
-.form-section{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:28px;margin-bottom:20px;}
-.fs-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+/* ═══════════════════════════
+   SECTION CARD
+═══════════════════════════ */
+.s-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:30px;margin-bottom:22px;}
+.s-title{font-family:var(--fd);font-size:1.05rem;color:var(--txt);margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.s-title i{color:var(--gold);}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
 .fg-full{grid-column:1/-1;}
-.f-group{margin-bottom:4px;}
-.f-label{display:block;font-size:.62rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
-.f-input{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);font-family:'Manrope',sans-serif;font-size:.88rem;padding:10px 14px;width:100%;outline:none;transition:border-color .3s;border-radius:2px;}
-.f-input:focus{border-color:var(--gold);}
-.f-input::placeholder{color:rgba(255,255,255,.2);}
-.f-textarea{min-height:100px;resize:vertical;}
-.f-select{appearance:none;cursor:pointer;}
-.f-hint{font-size:.7rem;color:var(--text3);margin-top:6px;}
 
-/* ── UPLOAD ── */
-.upload-zone{border:2px dashed rgba(212,175,55,.25);border-radius:4px;padding:40px 24px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(212,175,55,.02);}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--gold);background:rgba(212,175,55,.05);}
-.upload-icon{font-size:2.5rem;color:rgba(212,175,55,.4);margin-bottom:12px;}
-.upload-title{font-size:.88rem;color:var(--text2);margin-bottom:6px;}
-.upload-sub{font-size:.72rem;color:var(--text3);}
-.upload-input{display:none;}
-.img-upload-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:12px;}
-.img-thumb{position:relative;aspect-ratio:1;border-radius:4px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);}
-.img-thumb img{width:100%;height:100%;object-fit:cover;}
-.img-thumb-remove{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center;}
-.img-add-btn{aspect-ratio:1;border:2px dashed rgba(212,175,55,.2);border-radius:4px;background:transparent;color:rgba(212,175,55,.4);font-size:1.8rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
+/* ═══════════════════════════
+   FORM ELEMENTS
+═══════════════════════════ */
+.f-grp{margin-bottom:4px;}
+.f-lbl{display:block;font-size:.57rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:9px;font-weight:600;}
+.f-inp{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--txt);font-family:var(--ff);font-size:.86rem;
+  padding:11px 15px;width:100%;outline:none;border-radius:5px;
+  transition:border-color .3s,box-shadow .3s;
+}
+.f-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.08);}
+.f-inp::placeholder{color:rgba(255,255,255,.18);}
+.f-ta{min-height:90px;resize:vertical;}
+.f-sel{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='rgba(201,162,39,.5)' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;}
+.f-hint{font-size:.66rem;color:var(--txt3);margin-top:7px;}
+
+/* ═══════════════════════════
+   IMAGE UPLOAD
+═══════════════════════════ */
+.img-upload-wrap{display:flex;flex-direction:column;gap:12px;}
+.img-drop{
+  border:2px dashed rgba(201,162,39,.22);border-radius:8px;
+  padding:32px 20px;text-align:center;cursor:pointer;
+  background:rgba(201,162,39,.02);transition:all .3s;
+  position:relative;
+}
+.img-drop:hover,.img-drop.drag{border-color:var(--gold);background:rgba(201,162,39,.06);}
+.img-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.img-drop-ico{font-size:2.2rem;color:rgba(201,162,39,.35);margin-bottom:10px;}
+.img-drop-txt{font-size:.8rem;color:var(--txt2);margin-bottom:5px;}
+.img-drop-sub{font-size:.68rem;color:var(--txt3);}
+.img-preview-box{
+  width:100%;aspect-ratio:16/7;border-radius:6px;overflow:hidden;
+  border:1px solid var(--border);background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--txt3);font-size:.8rem;position:relative;
+}
+.img-preview-box img{width:100%;height:100%;object-fit:cover;display:none;}
+.img-preview-box img.loaded{display:block;}
+.img-preview-box .img-clear{
+  position:absolute;top:8px;right:8px;
+  background:rgba(0,0,0,.75);border:none;color:#fff;
+  width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.75rem;
+  display:none;align-items:center;justify-content:center;
+}
+.img-preview-box:hover .img-clear{display:flex;}
+.img-sq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:8px;}
+.img-sq{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;border:1px solid var(--border);background:var(--bg3);}
+.img-sq img{width:100%;height:100%;object-fit:cover;}
+.img-sq-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.8);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;}
+.img-add-btn{aspect-ratio:1;border:2px dashed rgba(201,162,39,.18);border-radius:6px;background:transparent;color:rgba(201,162,39,.35);font-size:1.8rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;position:relative;}
+.img-add-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;}
 .img-add-btn:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ── PRICING ── */
-.price-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);padding:12px 16px;border-radius:4px;margin-bottom:8px;}
-.pi-name{flex:1;}
-.pi-price{width:160px;}
-.pi-remove{background:none;border:none;color:rgba(255,100,100,.5);cursor:pointer;font-size:.9rem;}
-.add-price-btn{width:100%;padding:10px;background:transparent;border:1px dashed rgba(212,175,55,.2);color:rgba(212,175,55,.5);font-family:'Manrope',sans-serif;font-size:.75rem;cursor:pointer;transition:all .3s;border-radius:2px;margin-top:8px;}
-.add-price-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* ═══════════════════════════
+   TABLE
+═══════════════════════════ */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.tbl-hd{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border);}
+.tbl-title{font-family:var(--fd);font-size:.98rem;}
+.s-input{background:var(--bg1);border:1px solid var(--border);color:var(--txt);padding:8px 14px 8px 34px;font-family:var(--ff);font-size:.78rem;outline:none;width:190px;border-radius:4px;transition:border-color .3s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='rgba(201,162,39,.45)' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;}
+.s-input:focus{border-color:var(--gold);}
+table{width:100%;border-collapse:collapse;}
+th{padding:11px 18px;font-size:.6rem;letter-spacing:.15em;color:var(--txt3);text-transform:uppercase;text-align:left;background:rgba(0,0,0,.25);}
+td{padding:13px 18px;font-size:.8rem;color:var(--txt2);border-top:1px solid rgba(255,255,255,.04);}
+tr:hover td{background:rgba(201,162,39,.03);}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.6rem;font-weight:700;}
+.badge-gold{background:rgba(201,162,39,.14);color:var(--gold);}
+.badge-green{background:rgba(46,204,113,.14);color:var(--green);}
+.badge-red{background:rgba(231,76,60,.14);color:var(--red);}
+.badge-blue{background:rgba(52,152,219,.14);color:var(--blue);}
+.t-btn{background:none;border:1px solid var(--border);color:var(--txt3);padding:5px 11px;font-size:.62rem;border-radius:3px;cursor:pointer;transition:all .25s;}
+.t-btn:hover{border-color:var(--gold);color:var(--gold);}
+.t-btn.danger:hover{border-color:var(--red);color:var(--red);}
 
-/* ── TOGGLE ── */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.toggle-label{font-size:.85rem;color:var(--text2);}
-.toggle{position:relative;width:42px;height:22px;}
+/* ═══════════════════════════
+   PRICE/SERVICE ROWS
+═══════════════════════════ */
+.row-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:11px 14px;border-radius:6px;margin-bottom:8px;}
+.ri-main{flex:1;}
+.ri-sub{width:150px;}
+.ri-rm{background:none;border:none;color:rgba(255,80,80,.45);cursor:pointer;font-size:.88rem;transition:color .25s;padding:4px;}
+.ri-rm:hover{color:var(--red);}
+.add-row-btn{width:100%;padding:10px;background:transparent;border:1px dashed rgba(201,162,39,.18);color:rgba(201,162,39,.45);font-family:var(--ff);font-size:.72rem;border-radius:5px;cursor:pointer;transition:all .3s;margin-top:8px;}
+.add-row-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ═══════════════════════════
+   TOGGLE
+═══════════════════════════ */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.tg-lbl{font-size:.83rem;color:var(--txt2);}
+.tg-hint{font-size:.66rem;color:var(--txt3);margin-top:3px;}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
 .toggle input{opacity:0;width:0;height:0;}
-.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:99px;cursor:pointer;transition:.3s;}
-.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#666;border-radius:50%;transition:.3s;}
-input:checked+.toggle-slider{background:var(--gold);}
-input:checked+.toggle-slider::before{transform:translateX(20px);background:#000;}
+.tg-sl{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:99px;cursor:pointer;transition:.3s;}
+.tg-sl::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#555;border-radius:50%;transition:.3s;}
+input:checked+.tg-sl{background:var(--gold);}
+input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
 
-/* ── SYNC INDICATOR ── */
-.sync-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:.65rem;color:#2ecc71;letter-spacing:.1em;
-  background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);
-  padding:4px 12px;border-radius:99px;
+/* ═══════════════════════════
+   PACKAGE FORM VIEW
+═══════════════════════════ */
+#pkg-form{display:none;}
+
+/* ═══════════════════════════
+   TOAST
+═══════════════════════════ */
+#toast{
+  position:fixed;bottom:26px;right:26px;z-index:9999;
+  background:var(--bg2);border:1px solid var(--gold);
+  color:var(--txt);padding:14px 20px;border-radius:8px;
+  font-size:.8rem;display:flex;align-items:center;gap:10px;
+  transform:translateY(80px);opacity:0;transition:all .35s;
+  max-width:300px;backdrop-filter:blur(20px);
 }
-.sync-dot{width:6px;height:6px;background:#2ecc71;border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* ── TOAST ── */
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:#1C1C1C;border:1px solid var(--gold);color:var(--text);padding:14px 20px;border-radius:4px;font-size:.82rem;transform:translateY(80px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:10px;max-width:320px;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast i{color:var(--gold);}
 
-/* ── RESPONSIVE ── */
-@media(max-width:768px){#sidebar{transform:translateX(-100%);}#sidebar.open{transform:translateX(0);}#main{margin-left:0;}#mob-toggle{display:flex!important;}}
-#mob-toggle{display:none;background:none;border:none;color:var(--gold);font-size:1.3rem;cursor:pointer;margin-right:8px;}
+/* ═══════════════════════════
+   CONFIRM MODAL
+═══════════════════════════ */
+#confirm-modal{
+  position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);
+}
+#confirm-modal.open{display:flex;}
+.cm-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:36px;max-width:360px;width:90%;text-align:center;}
+.cm-ico{font-size:2.4rem;margin-bottom:14px;}
+.cm-title{font-family:var(--fd);font-size:1.1rem;margin-bottom:10px;}
+.cm-msg{font-size:.82rem;color:var(--txt2);margin-bottom:28px;line-height:1.7;}
+.cm-btns{display:flex;gap:10px;justify-content:center;}
+.cm-cancel{padding:10px 26px;border:1px solid var(--border);color:var(--txt2);background:transparent;border-radius:4px;font-family:var(--ff);font-size:.74rem;cursor:pointer;transition:.3s;}
+.cm-cancel:hover{border-color:var(--txt2);}
+.cm-ok{padding:10px 26px;background:var(--red);color:#fff;border:none;border-radius:4px;font-family:var(--ff);font-size:.74rem;cursor:pointer;transition:.3s;}
+.cm-ok:hover{filter:brightness(1.15);}
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media(max-width:768px){
+  :root{--sb:0px;}
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0;}
+  #mob-toggle{display:block;}
+  .content{padding:20px;}
+  #topbar{padding:14px 20px;}
+}
 </style>
 </head>
 <body>
 
-<!-- THEME & LANGUAGE BAR -->
-<div id="theme-bar">
-  <div class="theme-toggle" id="lang-toggle">
-    <button id="lang-en" class="active" onclick="switchLang('en')">ENGLISH</button>
-    <button id="lang-ar" onclick="switchLang('ar')">العربية</button>
-  </div>
-  <div style="width:1px;height:20px;background:rgba(212,175,55,.2);"></div>
-  <div class="theme-toggle">
-    <button id="theme-dark" class="active" onclick="switchTheme('dark')"><i class="fa-solid fa-moon"></i> Dark</button>
-    <button id="theme-light" onclick="switchTheme('light')"><i class="fa-solid fa-sun"></i> Light</button>
-  </div>
-</div>
-
-<!-- ════ LOGIN ════ -->
-<div id="login-screen">
+<!-- ═══ LOGIN ═══ -->
+<div id="login">
+  <canvas id="login-canvas"></canvas>
   <div class="login-box">
-    <div class="login-logo">Global Eagle</div>
-    <div class="login-sub">Admin Panel</div>
-    <div class="login-field">
-      <label class="login-label">Username</label>
-      <input class="login-input" id="l-user" type="text" placeholder="admin" autocomplete="off"/>
+    <div class="lb-logo">Global Eagle</div>
+    <div class="lb-sub">Admin Dashboard</div>
+    <div class="lb-field">
+      <label class="lb-label">Username</label>
+      <input class="lb-input" id="l-user" type="text" placeholder="admin" autocomplete="off"/>
     </div>
-    <div class="login-field">
-      <label class="login-label">Password</label>
-      <input class="login-input" id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div class="lb-field">
+      <label class="lb-label">Password</label>
+      <input class="lb-input" id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="login-btn" onclick="doLogin()">Enter Dashboard</button>
-    <div class="login-err" id="login-err">❌ Invalid credentials</div>
-    <div class="login-hint">Default: admin / eagle2025</div>
+    <button class="lb-btn" onclick="doLogin()">Enter Dashboard</button>
+    <div class="lb-err" id="l-err">❌ Invalid credentials</div>
+    <div class="lb-hint">Default: admin / eagle2025</div>
   </div>
 </div>
 
-<!-- ════ APP ════ -->
+<!-- ═══ APP ═══ -->
 <div id="app">
+  <!-- SIDEBAR -->
   <div id="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-text">Global Eagle</div>
-      <div class="sb-logo-sub">Admin Dashboard</div>
+    <div class="sb-head">
+      <div class="sb-logo">
+        <div class="sb-logo-ring"><img id="sb-logo-img" src="" alt="" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'"/></div>
+        <div><div class="sb-brand">Global Eagle</div><div class="sb-sub">Admin Panel</div></div>
+      </div>
     </div>
     <div class="sb-nav">
-      <div class="sb-section">Main</div>
-      <div class="sb-item active" onclick="showPage('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</div>
-      <div class="sb-item" onclick="showPage('packages')"><i class="fa-solid fa-suitcase"></i> Packages <span class="sb-badge" id="pkg-count">0</span></div>
-      <div class="sb-item" onclick="showPage('offers')"><i class="fa-solid fa-tag"></i> Offers & Pricing</div>
+      <div class="sb-sec">Main</div>
+      <div class="sb-item active" onclick="showPage('dashboard')"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+      <div class="sb-item" onclick="showPage('packages')"><i class="fa-solid fa-suitcase"></i> Packages <span class="sb-badge" id="sb-pkg-cnt">0</span></div>
+      <div class="sb-item" onclick="showPage('offers')"><i class="fa-solid fa-tags"></i> Offers & Pricing</div>
       <div class="sb-item" onclick="showPage('services')"><i class="fa-solid fa-star"></i> Services</div>
-      <div class="sb-section">Content</div>
+      <div class="sb-sec">Content</div>
+      <div class="sb-item" onclick="showPage('hero')"><i class="fa-solid fa-image"></i> Hero Editor</div>
       <div class="sb-item" onclick="showPage('gallery')"><i class="fa-solid fa-images"></i> Gallery</div>
       <div class="sb-item" onclick="showPage('seo')"><i class="fa-solid fa-globe"></i> SEO & Info</div>
-      <div class="sb-section">System</div>
-      <div class="sb-item" onclick="showPage('settings')"><i class="fa-solid fa-gear"></i> Settings</div>
+      <div class="sb-sec">System</div>
+      <div class="sb-item" onclick="showPage('settings')"><i class="fa-solid fa-sliders"></i> Settings</div>
     </div>
-    <div class="sb-bottom">
+    <div class="sb-foot">
       <div class="sb-user">
         <div class="sb-avatar">A</div>
-        <div><div class="sb-username">Admin</div><div class="sb-role">Super Admin</div></div>
+        <div><div class="sb-uname">Admin</div><div class="sb-urole">Super Admin</div></div>
       </div>
       <button class="sb-logout" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
   </div>
 
+  <!-- MAIN -->
   <div id="main">
     <div id="topbar">
-      <div style="display:flex;align-items:center;gap:12px;">
+      <div style="display:flex;align-items:center;gap:14px;">
         <button id="mob-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
-        <div class="page-title" id="page-title">Dashboard</div>
+        <div class="tb-title" id="tb-title">Dashboard</div>
       </div>
-      <div class="topbar-right">
-        <span class="sync-badge"><span class="sync-dot"></span> Live Sync ON</span>
-        <a href="index.html" target="_blank" class="topbar-btn"><i class="fa-solid fa-eye"></i> View Site</a>
-        <button class="topbar-btn primary" onclick="saveAll()"><i class="fa-solid fa-floppy-disk"></i> Save All</button>
+      <div class="tb-right">
+        <div class="tb-sync"><span class="tb-dot"></span> Live Sync</div>
+        <a href="index.html" target="_blank" class="tb-btn"><i class="fa-solid fa-eye"></i> View Site</a>
+        <button class="tb-btn primary" onclick="saveAll()"><i class="fa-solid fa-floppy-disk"></i> Save All</button>
       </div>
     </div>
 
     <div class="content">
 
-      <!-- ── DASHBOARD ── -->
+      <!-- ══ DASHBOARD ══ -->
       <div class="page active" id="page-dashboard">
-        <div class="stats-row">
-          <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-suitcase"></i></div><div class="sc-label">Total Packages</div><div class="sc-val" id="dash-pkg">0</div><div class="sc-sub">Active listings</div></div>
-          <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-tag"></i></div><div class="sc-label">Active Offers</div><div class="sc-val" id="dash-offers">0</div><div class="sc-sub">Current promotions</div></div>
-          <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-images"></i></div><div class="sc-label">Gallery Images</div><div class="sc-val" id="dash-gallery">0</div><div class="sc-sub">Uploaded photos</div></div>
-          <div class="stat-card"><div class="sc-icon"><i class="fa-solid fa-star"></i></div><div class="sc-label">Services</div><div class="sc-val" id="dash-services">0</div><div class="sc-sub">Active services</div></div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-suitcase"></i></div><div class="sc-lbl">Total Packages</div><div class="sc-val" id="d-pkg">0</div><div class="sc-sub">Active listings</div></div>
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-tags"></i></div><div class="sc-lbl">Active Offers</div><div class="sc-val" id="d-off">0</div><div class="sc-sub">Promotions running</div></div>
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-images"></i></div><div class="sc-lbl">Gallery Images</div><div class="sc-val" id="d-gal">0</div><div class="sc-sub">Photos uploaded</div></div>
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-star"></i></div><div class="sc-lbl">Active Services</div><div class="sc-val" id="d-svc">0</div><div class="sc-sub">Visible on site</div></div>
         </div>
-        <div style="background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.15);border-radius:4px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
-          <i class="fa-solid fa-circle-info" style="color:var(--gold);font-size:1.2rem;"></i>
-          <div>
-            <div style="font-size:.82rem;color:var(--text);font-weight:600;margin-bottom:4px;">Live Sync Active</div>
-            <div style="font-size:.75rem;color:var(--text3);">Any changes you save here will appear instantly on the main website (index.html) — both files share the same browser storage.</div>
-          </div>
+        <div style="background:rgba(201,162,39,.06);border:1px solid rgba(201,162,39,.18);border-radius:10px;padding:20px 24px;margin-bottom:26px;display:flex;align-items:center;gap:16px;">
+          <i class="fa-solid fa-bolt" style="color:var(--gold);font-size:1.3rem;"></i>
+          <div><div style="font-size:.84rem;font-weight:600;margin-bottom:4px;">Live Sync Active</div><div style="font-size:.73rem;color:var(--txt3);">All saved changes sync instantly to <strong>index.html</strong> via localStorage. Both files must open in the same browser.</div></div>
         </div>
-        <div class="table-wrap">
-          <div class="table-head">
-            <div class="table-title">Recent Packages</div>
-            <button class="topbar-btn" onclick="showPage('packages');showAddPackage()"><i class="fa-solid fa-plus"></i> Add Package</button>
-          </div>
-          <table>
-            <thead><tr><th>Package Name</th><th>Category</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="dash-table"><tr><td colspan="5" style="text-align:center;color:var(--text3);padding:32px;">No packages yet.</td></tr></tbody>
-          </table>
+        <div class="tbl-wrap">
+          <div class="tbl-hd"><div class="tbl-title">Recent Packages</div><button class="tb-btn primary" style="padding:7px 16px;font-size:.66rem;" onclick="showPage('packages');showPkgForm(null)"><i class="fa-solid fa-plus"></i> Add Package</button></div>
+          <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="d-tbl"><tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:40px;">No packages yet.</td></tr></tbody></table>
         </div>
       </div>
 
-      <!-- ── PACKAGES ── -->
+      <!-- ══ PACKAGES ══ -->
       <div class="page" id="page-packages">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:24px;">
-          <button class="topbar-btn primary" onclick="showAddPackage()"><i class="fa-solid fa-plus"></i> New Package</button>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:22px;">
+          <button class="tb-btn primary" onclick="showPkgForm(null)"><i class="fa-solid fa-plus"></i> New Package</button>
         </div>
-        <div id="pkg-list-view">
-          <div class="table-wrap">
-            <div class="table-head">
-              <div class="table-title">All Packages</div>
-              <input class="search-input" placeholder="Search..." oninput="filterPackages(this.value)"/>
-            </div>
-            <table>
-              <thead><tr><th>Image</th><th>Name (EN)</th><th>Name (AR)</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody id="pkg-table"><tr><td colspan="7" style="text-align:center;color:var(--text3);padding:32px;">No packages yet.</td></tr></tbody>
-            </table>
+        <!-- List -->
+        <div id="pkg-list">
+          <div class="tbl-wrap">
+            <div class="tbl-hd"><div class="tbl-title">All Packages</div><input class="s-input" placeholder="Search..." oninput="filterPkgs(this.value)"/></div>
+            <table><thead><tr><th>Image</th><th>Name (EN)</th><th>Name (AR)</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="pkg-tbl"></tbody></table>
           </div>
         </div>
-        <div id="pkg-form-view" style="display:none;">
-          <button onclick="showPkgList()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:.82rem;margin-bottom:20px;display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-arrow-left"></i> Back to list</button>
-          <div class="form-section">
-            <div class="fs-title">📦 Package Details</div>
+        <!-- Form -->
+        <div id="pkg-form">
+          <button onclick="cancelPkg()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:.8rem;margin-bottom:20px;display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-arrow-left"></i> Back to list</button>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-box"></i> Package Details</div>
             <div class="form-grid">
-              <div class="f-group"><label class="f-label">Package Name (English)</label><input class="f-input" id="pkg-name-en" type="text" placeholder="e.g. Swiss Peak Sanctuary"/></div>
-              <div class="f-group"><label class="f-label">Package Name (Arabic)</label><input class="f-input" id="pkg-name-ar" type="text" placeholder="مثال: ملاذ قمم سويسرا" dir="rtl"/></div>
-              <div class="f-group"><label class="f-label">Category (English)</label><input class="f-input" id="pkg-cat-en" type="text" placeholder="e.g. Alpine Elite"/></div>
-              <div class="f-group"><label class="f-label">Category (Arabic)</label><input class="f-input" id="pkg-cat-ar" type="text" placeholder="مثال: النخبة الجبلية" dir="rtl"/></div>
-              <div class="f-group"><label class="f-label">Starting Price (SAR)</label><input class="f-input" id="pkg-price" type="number" placeholder="e.g. 2500"/></div>
-              <div class="f-group"><label class="f-label">Duration</label><input class="f-input" id="pkg-duration" type="text" placeholder="e.g. 7 Nights / 8 Days"/></div>
-              <div class="f-group"><label class="f-label">Image URL <span style="color:var(--text3);text-transform:none;letter-spacing:0;">(paste a link)</span></label><input class="f-input" id="pkg-img-url" type="url" placeholder="https://..." oninput="previewImgUrl(this.value)"/></div>
-              <div class="f-group" style="display:flex;align-items:flex-end;">
-                <div id="pkg-img-preview" style="width:80px;height:60px;border-radius:4px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:.7rem;">No img</div>
-              </div>
-              <div class="f-group fg-full"><label class="f-label">Description (English)</label><textarea class="f-input f-textarea" id="pkg-desc-en" placeholder="Describe this package..."></textarea></div>
-              <div class="f-group fg-full"><label class="f-label">Description (Arabic)</label><textarea class="f-input f-textarea" id="pkg-desc-ar" dir="rtl" placeholder="وصف الباقة..."></textarea></div>
-              <div class="f-group"><label class="f-label">Status</label><select class="f-input f-select" id="pkg-status"><option value="active">Active</option><option value="featured">Featured ⭐</option><option value="draft">Draft</option></select></div>
+              <div class="f-grp"><label class="f-lbl">Name (English)</label><input class="f-inp" id="pk-name-en" type="text" placeholder="e.g. Swiss Peak Sanctuary"/></div>
+              <div class="f-grp"><label class="f-lbl">Name (Arabic)</label><input class="f-inp" id="pk-name-ar" type="text" placeholder="مثال: ملاذ قمم سويسرا" dir="rtl"/></div>
+              <div class="f-grp"><label class="f-lbl">Category (EN)</label><input class="f-inp" id="pk-cat-en" type="text" placeholder="Alpine Elite"/></div>
+              <div class="f-grp"><label class="f-lbl">Category (AR)</label><input class="f-inp" id="pk-cat-ar" type="text" placeholder="النخبة الجبلية" dir="rtl"/></div>
+              <div class="f-grp"><label class="f-lbl">Price (SAR)</label><input class="f-inp" id="pk-price" type="number" placeholder="2500"/></div>
+              <div class="f-grp"><label class="f-lbl">Duration</label><input class="f-inp" id="pk-dur" type="text" placeholder="7 Nights / 8 Days"/></div>
+              <div class="f-grp fg-full"><label class="f-lbl">Description (EN)</label><textarea class="f-inp f-ta" id="pk-desc-en"></textarea></div>
+              <div class="f-grp fg-full"><label class="f-lbl">Description (AR)</label><textarea class="f-inp f-ta" id="pk-desc-ar" dir="rtl"></textarea></div>
+              <div class="f-grp"><label class="f-lbl">Status</label><select class="f-inp f-sel" id="pk-status"><option value="active">Active</option><option value="featured">Featured ⭐</option><option value="draft">Draft</option></select></div>
             </div>
           </div>
-          <div class="form-section">
-            <div class="fs-title">✅ What's Included</div>
-            <div id="includes-list"></div>
-            <button class="add-price-btn" onclick="addInclude()"><i class="fa-solid fa-plus"></i> Add Item</button>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-image"></i> Package Image</div>
+            <div class="img-upload-wrap">
+              <div class="img-drop" id="pk-img-drop">
+                <input type="file" accept="image/*" onchange="handlePkgImg(this)"/>
+                <div class="img-drop-ico"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                <div class="img-drop-txt">Click or drag to upload</div>
+                <div class="img-drop-sub">JPG, PNG, WebP — max 8MB</div>
+              </div>
+              <div class="img-preview-box" id="pk-img-preview">
+                <span>No image</span>
+                <img id="pk-img-el" alt=""/>
+                <button class="img-clear" onclick="clearPkgImg()">&times;</button>
+              </div>
+            </div>
           </div>
-          <div class="form-section">
-            <div class="fs-title">⚙️ Options</div>
-            <div class="toggle-row"><span class="toggle-label">Show on Homepage</span><label class="toggle"><input type="checkbox" id="pkg-homepage" checked/><span class="toggle-slider"></span></label></div>
-            <div class="toggle-row"><span class="toggle-label">Show "Featured" badge</span><label class="toggle"><input type="checkbox" id="pkg-featured"/><span class="toggle-slider"></span></label></div>
-            <div class="toggle-row"><span class="toggle-label">Available for booking</span><label class="toggle"><input type="checkbox" id="pkg-bookable" checked/><span class="toggle-slider"></span></label></div>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-list-check"></i> What's Included</div>
+            <div id="pk-inc-list"></div>
+            <button class="add-row-btn" onclick="addInc()"><i class="fa-solid fa-plus"></i> Add Item</button>
+          </div>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-sliders"></i> Options</div>
+            <div class="toggle-row"><div><div class="tg-lbl">Show on Homepage</div></div><label class="toggle"><input type="checkbox" id="pk-hp" checked/><span class="tg-sl"></span></label></div>
+            <div class="toggle-row"><div><div class="tg-lbl">Featured Badge</div></div><label class="toggle"><input type="checkbox" id="pk-ft"/><span class="tg-sl"></span></label></div>
+            <div class="toggle-row"><div><div class="tg-lbl">Available for Booking</div></div><label class="toggle"><input type="checkbox" id="pk-bk" checked/><span class="tg-sl"></span></label></div>
           </div>
           <div style="display:flex;gap:12px;justify-content:flex-end;">
-            <button class="topbar-btn" onclick="showPkgList()">Cancel</button>
-            <button class="topbar-btn primary" onclick="savePackage()"><i class="fa-solid fa-floppy-disk"></i> Save Package</button>
+            <button class="tb-btn" onclick="cancelPkg()">Cancel</button>
+            <button class="tb-btn primary" onclick="savePkg()"><i class="fa-solid fa-floppy-disk"></i> Save Package</button>
           </div>
         </div>
       </div>
 
-      <!-- ── OFFERS & PRICING ── -->
+      <!-- ══ OFFERS ══ -->
       <div class="page" id="page-offers">
-        <div class="form-section">
-          <div class="fs-title">🏷️ Special Offers</div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-tag"></i> Special Offers</div>
           <div id="offers-list"></div>
-          <button class="add-price-btn" onclick="addOffer()"><i class="fa-solid fa-plus"></i> Add Offer</button>
+          <button class="add-row-btn" onclick="addOffer()"><i class="fa-solid fa-plus"></i> Add Offer</button>
         </div>
-        <div class="form-section">
-          <div class="fs-title">💰 Service Pricing</div>
-          <div class="f-hint" style="margin-bottom:16px;">Prices shown on the website</div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-dollar-sign"></i> Service Pricing</div>
+          <p class="f-hint" style="margin-bottom:16px;">Prices shown on the website contact form options</p>
           <div id="pricing-list"></div>
-          <button class="add-price-btn" onclick="addPriceRow()"><i class="fa-solid fa-plus"></i> Add Service</button>
+          <button class="add-row-btn" onclick="addPriceRow()"><i class="fa-solid fa-plus"></i> Add Service</button>
         </div>
-        <div style="display:flex;justify-content:flex-end;">
-          <button class="topbar-btn primary" onclick="saveOffers()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-        </div>
+        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveOffers()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
       </div>
 
-      <!-- ── SERVICES ── -->
+      <!-- ══ SERVICES ══ -->
       <div class="page" id="page-services">
-        <div class="form-section">
-          <div class="fs-title">⚙️ Services Management</div>
-          <div class="f-hint" style="margin-bottom:16px;">Hidden services won't appear on the website</div>
-          <div id="services-list"></div>
-          <button class="add-price-btn" onclick="addServiceRow()"><i class="fa-solid fa-plus"></i> Add Service</button>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-star"></i> Services Management</div>
+          <p class="f-hint" style="margin-bottom:16px;">Hidden services won't appear in the bento grid or marquee</p>
+          <div id="svc-list"></div>
+          <button class="add-row-btn" onclick="addSvc()"><i class="fa-solid fa-plus"></i> Add Service</button>
         </div>
-        <div style="display:flex;justify-content:flex-end;">
-          <button class="topbar-btn primary" onclick="saveServices()"><i class="fa-solid fa-floppy-disk"></i> Save Services</button>
-        </div>
+        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveServices()"><i class="fa-solid fa-floppy-disk"></i> Save Services</button></div>
       </div>
 
-      <!-- ── GALLERY ── -->
+      <!-- ══ HERO EDITOR ══ -->
+      <div class="page" id="page-hero">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-panorama"></i> Hero Background Image</div>
+          <div class="img-upload-wrap">
+            <div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'heroImg','hero-preview-img','hero-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-mountain-sun"></i></div><div class="img-drop-txt">Upload Hero Background</div><div class="img-drop-sub">Recommended: 1920×1080px or larger</div></div>
+            <div class="img-preview-box" id="hero-preview-box"><span>No image set</span><img id="hero-preview-img" alt=""/><button class="img-clear" onclick="clearImg('heroImg','hero-preview-img','hero-preview-box')">&times;</button></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-feather"></i> Intro/Loader Eagle Image</div>
+          <div class="img-upload-wrap">
+            <div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'introImg','intro-preview-img','intro-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-kiwi-bird"></i></div><div class="img-drop-txt">Upload Intro Eagle Image</div><div class="img-drop-sub">Circular crop — use a high-quality eagle portrait</div></div>
+            <div class="img-preview-box" id="intro-preview-box" style="aspect-ratio:1;max-width:260px;border-radius:50%;"><span>No image set</span><img id="intro-preview-img" alt=""/><button class="img-clear" onclick="clearImg('introImg','intro-preview-img','intro-preview-box')">&times;</button></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-shield-halved"></i> Logo Image</div>
+          <div class="img-upload-wrap">
+            <div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'logoImg','logo-preview-img','logo-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-shield-halved"></i></div><div class="img-drop-txt">Upload Logo</div><div class="img-drop-sub">Square image — will display as a circle in navbar</div></div>
+            <div class="img-preview-box" id="logo-preview-box" style="aspect-ratio:1;max-width:180px;border-radius:50%;"><span>No logo</span><img id="logo-preview-img" alt=""/><button class="img-clear" onclick="clearImg('logoImg','logo-preview-img','logo-preview-box')">&times;</button></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-pen-nib"></i> Hero Content</div>
+          <div class="form-grid">
+            <div class="f-grp"><label class="f-lbl">Eyebrow Tag</label><input class="f-inp" id="h-tag" type="text" placeholder="ELEVATING EVERY JOURNEY"/></div>
+            <div class="f-grp"><label class="f-lbl">Hero Description</label><input class="f-inp" id="h-desc" type="text" placeholder="Short tagline..."/></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-chart-bar"></i> Hero Stats</div>
+          <div class="form-grid">
+            <div class="f-grp"><label class="f-lbl">Global Destinations</label><input class="f-inp" id="s-dest" type="number" placeholder="150"/></div>
+            <div class="f-grp"><label class="f-lbl">Private Fleet</label><input class="f-inp" id="s-fleet" type="number" placeholder="42"/></div>
+            <div class="f-grp"><label class="f-lbl">Elite Members (K)</label><input class="f-inp" id="s-mem" type="number" placeholder="12"/></div>
+            <div class="f-grp"><label class="f-lbl">Years Excellence</label><input class="f-inp" id="s-years" type="number" placeholder="30"/></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveHero()"><i class="fa-solid fa-floppy-disk"></i> Save Hero</button></div>
+      </div>
+
+      <!-- ══ GALLERY ══ -->
       <div class="page" id="page-gallery">
-        <div class="form-section">
-          <div class="fs-title">🖼️ Website Gallery — Image URLs</div>
-          <div class="f-hint" style="margin-bottom:16px;">Add image URLs to display in the gallery section on the website</div>
-          <div id="gallery-url-list"></div>
-          <button class="add-price-btn" onclick="addGalleryUrl()"><i class="fa-solid fa-plus"></i> Add Image URL</button>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-images"></i> Gallery Images</div>
+          <p class="f-hint" style="margin-bottom:18px;">Uploaded images are stored in your browser. Gallery section appears on site only when images exist.</p>
+          <div class="img-sq-grid" id="gal-grid">
+            <button class="img-add-btn" title="Add image">
+              <span style="pointer-events:none;font-size:1.8rem;">+</span>
+              <input type="file" accept="image/*" multiple onchange="addGalleryImgs(this)"/>
+            </button>
+          </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;">
-          <button class="topbar-btn primary" onclick="saveGallery()"><i class="fa-solid fa-floppy-disk"></i> Save Gallery</button>
-        </div>
+        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveGallery()"><i class="fa-solid fa-floppy-disk"></i> Save Gallery</button></div>
       </div>
 
-      <!-- ── SEO & INFO ── -->
+      <!-- ══ SEO & INFO ══ -->
       <div class="page" id="page-seo">
-        <div class="form-section">
-          <div class="fs-title">📞 Company Information</div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-address-card"></i> Company Information</div>
           <div class="form-grid">
-            <div class="f-group"><label class="f-label">Phone</label><input class="f-input" id="seo-phone" type="tel" dir="ltr"/></div>
-            <div class="f-group"><label class="f-label">WhatsApp Number</label><input class="f-input" id="seo-wa" type="tel" dir="ltr" placeholder="966501749914"/></div>
-            <div class="f-group"><label class="f-label">Email</label><input class="f-input" id="seo-email" type="email"/></div>
-            <div class="f-group"><label class="f-label">Location</label><input class="f-input" id="seo-location" type="text"/></div>
-            <div class="f-group"><label class="f-label">Instagram URL</label><input class="f-input" id="seo-ig" type="url" placeholder="https://instagram.com/..."/></div>
-            <div class="f-group"><label class="f-label">Snapchat URL</label><input class="f-input" id="seo-sc" type="url" placeholder="https://snapchat.com/..."/></div>
-            <div class="f-group"><label class="f-label">TikTok URL</label><input class="f-input" id="seo-tt" type="url" placeholder="https://tiktok.com/..."/></div>
+            <div class="f-grp"><label class="f-lbl">Phone</label><input class="f-inp" id="i-phone" type="tel" dir="ltr"/></div>
+            <div class="f-grp"><label class="f-lbl">WhatsApp Number</label><input class="f-inp" id="i-wa" type="tel" dir="ltr" placeholder="966501749914 (no + or spaces)"/></div>
+            <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="i-email" type="email"/></div>
+            <div class="f-grp"><label class="f-lbl">Location</label><input class="f-inp" id="i-loc" type="text"/></div>
+            <div class="f-grp"><label class="f-lbl">Instagram URL</label><input class="f-inp" id="i-ig" type="url" placeholder="https://instagram.com/..."/></div>
+            <div class="f-grp"><label class="f-lbl">Snapchat URL</label><input class="f-inp" id="i-sc" type="url" placeholder="https://snapchat.com/..."/></div>
+            <div class="f-grp"><label class="f-lbl">TikTok URL</label><input class="f-inp" id="i-tt" type="url" placeholder="https://tiktok.com/..."/></div>
           </div>
         </div>
-        <div class="form-section">
-          <div class="fs-title">🏠 Hero Section</div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-search"></i> SEO Settings</div>
           <div class="form-grid">
-            <div class="f-group"><label class="f-label">Hero Tagline (EN)</label><input class="f-input" id="seo-tag" type="text" placeholder="ELEVATING EVERY JOURNEY"/></div>
-            <div class="f-group"><label class="f-label">Hero Description (EN)</label><input class="f-input" id="seo-desc" type="text" placeholder="Short description..."/></div>
-            <div class="f-group fg-full"><label class="f-label">Hero Image URL</label><input class="f-input" id="seo-hero-img" type="url" placeholder="https://..."/></div>
+            <div class="f-grp fg-full"><label class="f-lbl">Page Title</label><input class="f-inp" id="i-title" type="text"/></div>
+            <div class="f-grp fg-full"><label class="f-lbl">Meta Description</label><textarea class="f-inp f-ta" id="i-meta" style="min-height:70px;"></textarea></div>
           </div>
         </div>
-        <div class="form-section">
-          <div class="fs-title">📊 Stats (Hero Numbers)</div>
-          <div class="form-grid">
-            <div class="f-group"><label class="f-label">Destinations</label><input class="f-input" id="stat-dest" type="number" placeholder="150"/></div>
-            <div class="f-group"><label class="f-label">Private Fleet</label><input class="f-input" id="stat-fleet" type="number" placeholder="42"/></div>
-            <div class="f-group"><label class="f-label">Elite Members (K)</label><input class="f-input" id="stat-members" type="number" placeholder="12"/></div>
-            <div class="f-group"><label class="f-label">Years Excellence</label><input class="f-input" id="stat-years" type="number" placeholder="30"/></div>
-          </div>
-        </div>
-        <div class="form-section">
-          <div class="fs-title">🔍 SEO Settings</div>
-          <div class="form-grid">
-            <div class="f-group fg-full"><label class="f-label">Page Title</label><input class="f-input" id="seo-title" type="text"/></div>
-            <div class="f-group fg-full"><label class="f-label">Meta Description</label><textarea class="f-input f-textarea" id="seo-meta" style="min-height:70px;"></textarea></div>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;">
-          <button class="topbar-btn primary" onclick="saveInfo()"><i class="fa-solid fa-floppy-disk"></i> Save Info</button>
-        </div>
+        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveInfo()"><i class="fa-solid fa-floppy-disk"></i> Save Info</button></div>
       </div>
 
-      <!-- ── SETTINGS ── -->
+      <!-- ══ SETTINGS ══ -->
       <div class="page" id="page-settings">
-        <div class="form-section">
-          <div class="fs-title">🔐 Change Password</div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-lock"></i> Change Password</div>
           <div class="form-grid">
-            <div class="f-group"><label class="f-label">Current Password</label><input class="f-input" type="password" id="cur-pass"/></div>
-            <div class="f-group"><label class="f-label">New Password</label><input class="f-input" type="password" id="new-pass"/></div>
-            <div class="f-group"><label class="f-label">Confirm New Password</label><input class="f-input" type="password" id="conf-pass"/></div>
+            <div class="f-grp"><label class="f-lbl">Current Password</label><input class="f-inp" type="password" id="cp-cur"/></div>
+            <div class="f-grp"><label class="f-lbl">New Password</label><input class="f-inp" type="password" id="cp-new"/></div>
+            <div class="f-grp"><label class="f-lbl">Confirm New Password</label><input class="f-inp" type="password" id="cp-conf"/></div>
           </div>
-          <button class="topbar-btn primary" style="margin-top:16px;" onclick="changePass()">Update Password</button>
+          <button class="tb-btn primary" style="margin-top:18px;" onclick="changePass()">Update Password</button>
         </div>
-        <div class="form-section">
-          <div class="fs-title">🌐 Website Settings</div>
-          <div class="toggle-row"><span class="toggle-label">Enable Intro Animation</span><label class="toggle"><input type="checkbox" id="set-intro" checked/><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Show WhatsApp Float Button</span><label class="toggle"><input type="checkbox" id="set-wa" checked/><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Maintenance Mode</span><label class="toggle"><input type="checkbox" id="set-maint"/><span class="toggle-slider"></span></label></div>
-          <div style="margin-top:16px;"></div>
-          <button class="topbar-btn primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Website Settings</div>
+          <div class="toggle-row"><div><div class="tg-lbl">Enable Intro Animation</div><div class="tg-hint">Shows cinematic eagle loader on every visit</div></div><label class="toggle"><input type="checkbox" id="set-intro" checked/><span class="tg-sl"></span></label></div>
+          <div class="toggle-row"><div><div class="tg-lbl">WhatsApp Float Button</div><div class="tg-hint">Animated floating WhatsApp button</div></div><label class="toggle"><input type="checkbox" id="set-wa" checked/><span class="tg-sl"></span></label></div>
+          <div class="toggle-row"><div><div class="tg-lbl">Maintenance Mode</div><div class="tg-hint">Hides site from visitors with a maintenance screen</div></div><label class="toggle"><input type="checkbox" id="set-maint"/><span class="tg-sl"></span></label></div>
+          <button class="tb-btn primary" style="margin-top:20px;" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
         </div>
-        <div class="form-section" style="border-color:rgba(255,100,100,.15);">
-          <div class="fs-title" style="color:#e74c3c;">⚠️ Danger Zone</div>
-          <button class="topbar-btn" style="border-color:rgba(255,100,100,.4);color:#e74c3c;" onclick="if(confirm('Reset ALL data? This cannot be undone!'))resetAll()"><i class="fa-solid fa-trash"></i> Reset All Data</button>
+        <div class="s-card" style="border-color:rgba(231,76,60,.2);">
+          <div class="s-title" style="color:var(--red);"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
+          <p style="font-size:.8rem;color:var(--txt3);margin-bottom:18px;">This will permanently delete all packages, gallery images, and settings.</p>
+          <button class="tb-btn" style="border-color:rgba(231,76,60,.35);color:var(--red);" onclick="confirmReset()"><i class="fa-solid fa-trash"></i> Reset All Data</button>
         </div>
       </div>
 
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- CONFIRM MODAL -->
+<div id="confirm-modal">
+  <div class="cm-box">
+    <div class="cm-ico">⚠️</div>
+    <div class="cm-title" id="cm-title">Are you sure?</div>
+    <div class="cm-msg" id="cm-msg">This action cannot be undone.</div>
+    <div class="cm-btns">
+      <button class="cm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="cm-ok" id="cm-ok">Delete</button>
     </div>
   </div>
 </div>
 
+<!-- TOAST -->
 <div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Saved!</span></div>
 
 <script>
-// ════════════════════════════════
-//  STATE
-// ════════════════════════════════
-let packages = load('ge_packages', []);
-let offers   = load('ge_offers', []);
-let pricing  = load('ge_pricing', defaultPricing());
-let services = load('ge_services', defaultServices());
-let gallery  = load('ge_gallery', []);
-let info     = load('ge_info', defaultInfo());
-let settings = load('ge_settings', defaultSettings());
-let editingPkg = null;
-const CREDS = { user: load('ge_user','admin'), pass: load('ge_pass','eagle2025') };
+/* ═══════════════════════════════════════
+   STORAGE HELPERS
+═══════════════════════════════════════ */
+const K={packages:'ge_packages',offers:'ge_offers',pricing:'ge_pricing',services:'ge_services',gallery:'ge_gallery',info:'ge_info',settings:'ge_settings',user:'ge_user',pass:'ge_pass'};
+function ls(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
+function ss(k,v){localStorage.setItem(k,JSON.stringify(v));}
 
-function load(key, def){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):def; }catch(e){ return def; } }
-function save(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
+/* State */
+let packages=ls(K.packages,[]);
+let offers=ls(K.offers,[]);
+let pricing=ls(K.pricing,defaultPricing());
+let services=ls(K.services,defaultSvc());
+let gallery=ls(K.gallery,[]);  // array of base64 strings
+let info=ls(K.info,defaultInfo());
+let settings=ls(K.settings,{intro:true,wa:true,maint:false});
+let editPkgIdx=null;
+let pkgImgData=''; // base64 for current pkg being edited
 
-function defaultPricing(){ return [
-  {name:'Tourist Visa', price:'500 SAR'},
-  {name:'Hotel Booking', price:'From 200 SAR/night'},
-  {name:'Flight Tickets', price:'From 800 SAR'},
-  {name:'Student Visa', price:'1200 SAR'},
-  {name:'International License', price:'350 SAR'},
-  {name:'Travel Insurance', price:'From 150 SAR'}
-];}
-function defaultServices(){ return [
-  {name:'Tourist Visas 🌍', icon:'🌍', status:'active'},
-  {name:'Hotel Bookings 🏨', icon:'🏨', status:'active'},
-  {name:'Flight Tickets ✈️', icon:'✈️', status:'active'},
-  {name:'Student Visas 🎓', icon:'🎓', status:'active'},
-  {name:'International Licenses 🚗', icon:'🚗', status:'active'},
-  {name:'Travel Insurance 🛡', icon:'🛡', status:'active'}
-];}
-function defaultInfo(){ return {
-  phone:'+966 50 174 9914', wa:'966501749914',
-  email:'info@globaleagletrv.com', location:'Saudi Arabia',
-  instagram:'https://instagram.com', snapchat:'https://snapchat.com', tiktok:'https://tiktok.com',
-  heroTag:'ELEVATING EVERY JOURNEY',
-  heroDesc:'Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.',
-  heroImg:'',
-  statDest:150, statFleet:42, statMembers:12, statYears:30,
-  seoTitle:'Global Eagle Travel | Rise Above. Aim High.',
-  seoMeta:'Global Eagle Travel — Your trusted partner for tourist visas, hotel bookings, flight tickets, and luxury travel in Saudi Arabia.'
-};}
-function defaultSettings(){ return { intro:true, wa:true, maint:false }; }
+function defaultPricing(){return [{name:'Tourist Visa',price:'500 SAR'},{name:'Hotel Booking',price:'From 200 SAR/night'},{name:'Flight Tickets',price:'From 800 SAR'},{name:'Student Visa',price:'1200 SAR'},{name:'International License',price:'350 SAR'},{name:'Travel Insurance',price:'From 150 SAR'}];}
+function defaultSvc(){return [{name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},{name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},{name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}];}
+function defaultInfo(){return {phone:'+966 50 174 9914',wa:'966501749914',email:'info@globaleagletrv.com',location:'Saudi Arabia',instagram:'https://instagram.com',snapchat:'https://snapchat.com',tiktok:'https://tiktok.com',heroTag:'ELEVATING EVERY JOURNEY',heroDesc:'Experience the world through the lens of pure luxury.',heroImg:'',introImg:'',logoImg:'',statDest:150,statFleet:42,statMembers:12,statYears:30,seoTitle:'Global Eagle Travel | Rise Above. Aim High.',seoMeta:'Global Eagle Travel — luxury travel & tourism in Saudi Arabia.'};}
 
-// ════════════════════════════════
-//  LOGIN
-// ════════════════════════════════
+const CREDS={user:ls(K.user,'admin'),pass:ls(K.pass,'eagle2025')};
+
+/* ═══════════════════════════════════════
+   LOGIN CANVAS
+═══════════════════════════════════════ */
+(function initLoginCanvas(){
+  const c=document.getElementById('login-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  let W=c.width=innerWidth,H=c.height=innerHeight;
+  window.addEventListener('resize',()=>{W=c.width=innerWidth;H=c.height=innerHeight;});
+  const pts=Array.from({length:120},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.1,r:Math.random()*1.5+.3,op:Math.random()*.6+.1,gold:Math.random()>.6}));
+  (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.3})`;ctx.fill();});requestAnimationFrame(loop);})();
+})();
+
+/* ═══════════════════════════════════════
+   AUTH
+═══════════════════════════════════════ */
 function doLogin(){
   const u=document.getElementById('l-user').value;
   const p=document.getElementById('l-pass').value;
-  if(u===CREDS.user && p===CREDS.pass){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='block';
-    refreshDash(); loadInfo(); loadSettings();
-  } else {
-    document.getElementById('login-err').style.display='block';
-    setTimeout(()=>document.getElementById('login-err').style.display='none',2500);
+  if(u===CREDS.user&&p===CREDS.pass){
+    document.getElementById('login').style.opacity='0';
+    document.getElementById('login').style.transition='opacity .6s';
+    setTimeout(()=>{document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';initApp();},620);
+  }else{
+    const err=document.getElementById('l-err');
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',2500);
   }
 }
-function doLogout(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('l-pass').value='';
+function doLogout(){document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';document.getElementById('login').style.opacity='1';document.getElementById('l-pass').value='';}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+function initApp(){
+  refreshDash();
+  loadInfo();
+  loadSettings();
+  loadHeroImages();
+  renderGalleryGrid();
+  // Apply logo if set
+  if(info.logoImg){const li=document.getElementById('sb-logo-img');if(li){li.src=info.logoImg;li.parentElement.style.display='';}}
 }
 
-// ════════════════════════════════
-//  PAGES
-// ════════════════════════════════
-const pageTitles={dashboard:'Dashboard',packages:'Packages',offers:'Offers & Pricing',services:'Services',gallery:'Gallery',seo:'SEO & Info',settings:'Settings'};
+/* ═══════════════════════════════════════
+   PAGES
+═══════════════════════════════════════ */
+const pageNames={dashboard:'Dashboard',packages:'Packages',offers:'Offers & Pricing',services:'Services',hero:'Hero Editor',gallery:'Gallery',seo:'SEO & Info',settings:'Settings'};
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelector(`.sb-item[onclick="showPage('${id}')"]`).classList.add('active');
-  document.getElementById('page-title').textContent=pageTitles[id];
+  document.querySelector(`.sb-item[onclick="showPage('${id}')"]`)?.classList.add('active');
+  document.getElementById('tb-title').textContent=pageNames[id]||id;
+  document.getElementById('sidebar').classList.remove('open');
+  if(id==='dashboard')refreshDash();
   if(id==='packages'){renderPkgTable();showPkgList();}
   if(id==='offers'){renderOffers();renderPricing();}
-  if(id==='services'){renderServices();}
-  if(id==='gallery'){renderGallery();}
-  if(id==='dashboard'){refreshDash();}
-  if(id==='seo'){loadInfo();}
-  if(id==='settings'){loadSettings();}
+  if(id==='services')renderServices();
+  if(id==='hero')loadHeroImages();
+  if(id==='gallery')renderGalleryGrid();
+  if(id==='seo')loadInfo();
+  if(id==='settings')loadSettings();
 }
 
-// ════════════════════════════════
-//  DASHBOARD
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════ */
 function refreshDash(){
-  const active = services.filter(s=>s.status==='active').length;
-  document.getElementById('dash-pkg').textContent=packages.length;
-  document.getElementById('dash-offers').textContent=offers.length;
-  document.getElementById('dash-gallery').textContent=gallery.length;
-  document.getElementById('dash-services').textContent=active;
-  document.getElementById('pkg-count').textContent=packages.length;
-  const tb=document.getElementById('dash-table');
-  if(!packages.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:32px;">No packages yet.</td></tr>';return;}
+  const active=services.filter(s=>s.status==='active').length;
+  document.getElementById('d-pkg').textContent=packages.length;
+  document.getElementById('d-off').textContent=offers.length;
+  document.getElementById('d-gal').textContent=gallery.filter(g=>!!g).length;
+  document.getElementById('d-svc').textContent=active;
+  document.getElementById('sb-pkg-cnt').textContent=packages.length;
+  const tb=document.getElementById('d-tbl');
+  if(!packages.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:40px;">No packages yet.</td></tr>';return;}
   tb.innerHTML=packages.map((p,i)=>`<tr>
     <td><strong>${p.nameEn||'—'}</strong></td>
     <td><span class="badge badge-blue">${p.catEn||'—'}</span></td>
     <td style="color:var(--gold);">${p.price?p.price+' SAR':'—'}</td>
-    <td><span class="badge ${badgeClass(p.status)}">${p.status||'active'}</span></td>
-    <td><button class="tbl-btn" onclick="editPkg(${i})">Edit</button></td>
+    <td><span class="badge ${bc(p.status)}">${p.status||'active'}</span></td>
+    <td><button class="t-btn" onclick="showPage('packages');editPkg(${i})">Edit</button></td>
   </tr>`).join('');
 }
-function badgeClass(s){ return s==='active'?'badge-green':s==='featured'?'badge-gold':'badge-red'; }
+function bc(s){return s==='active'?'badge-green':s==='featured'?'badge-gold':'badge-red';}
 
-// ════════════════════════════════
-//  PACKAGES
-// ════════════════════════════════
-function showAddPackage(){showPkgForm(null);}
-function showPkgList(){document.getElementById('pkg-list-view').style.display='block';document.getElementById('pkg-form-view').style.display='none';renderPkgTable();}
-function showPkgForm(i){
-  editingPkg=i;
-  const p=i!==null?packages[i]:{};
-  document.getElementById('pkg-list-view').style.display='none';
-  document.getElementById('pkg-form-view').style.display='block';
-  document.getElementById('pkg-name-en').value=p.nameEn||'';
-  document.getElementById('pkg-name-ar').value=p.nameAr||'';
-  document.getElementById('pkg-cat-en').value=p.catEn||'';
-  document.getElementById('pkg-cat-ar').value=p.catAr||'';
-  document.getElementById('pkg-price').value=p.price||'';
-  document.getElementById('pkg-duration').value=p.duration||'';
-  document.getElementById('pkg-desc-en').value=p.descEn||'';
-  document.getElementById('pkg-desc-ar').value=p.descAr||'';
-  document.getElementById('pkg-status').value=p.status||'active';
-  document.getElementById('pkg-homepage').checked=p.homepage!==false;
-  document.getElementById('pkg-featured').checked=!!p.featured;
-  document.getElementById('pkg-bookable').checked=p.bookable!==false;
-  document.getElementById('pkg-img-url').value=p.img||'';
-  previewImgUrl(p.img||'');
-  renderIncludes(p.includes||[]);
+/* ═══════════════════════════════════════
+   PACKAGES
+═══════════════════════════════════════ */
+function showPkgList(){document.getElementById('pkg-list').style.display='block';document.getElementById('pkg-form').style.display='none';renderPkgTable();}
+function showPkgForm(idx){
+  editPkgIdx=idx;pkgImgData='';
+  const p=idx!==null?packages[idx]:{};
+  document.getElementById('pkg-list').style.display='none';
+  document.getElementById('pkg-form').style.display='block';
+  document.getElementById('pk-name-en').value=p.nameEn||'';
+  document.getElementById('pk-name-ar').value=p.nameAr||'';
+  document.getElementById('pk-cat-en').value=p.catEn||'';
+  document.getElementById('pk-cat-ar').value=p.catAr||'';
+  document.getElementById('pk-price').value=p.price||'';
+  document.getElementById('pk-dur').value=p.duration||'';
+  document.getElementById('pk-desc-en').value=p.descEn||'';
+  document.getElementById('pk-desc-ar').value=p.descAr||'';
+  document.getElementById('pk-status').value=p.status||'active';
+  document.getElementById('pk-hp').checked=p.homepage!==false;
+  document.getElementById('pk-ft').checked=!!p.featured;
+  document.getElementById('pk-bk').checked=p.bookable!==false;
+  renderIncs(p.includes||[]);
+  // img preview
+  const prev=document.getElementById('pk-img-preview');
+  const img=document.getElementById('pk-img-el');
+  if(p.img){img.src=p.img;img.classList.add('loaded');prev.querySelector('span').style.display='none';pkgImgData=p.img;}
+  else{img.src='';img.classList.remove('loaded');prev.querySelector('span').style.display='';}
 }
-function editPkg(i){showPage('packages');showPkgForm(i);}
+function cancelPkg(){showPkgList();}
+function editPkg(i){showPkgForm(i);}
 
-function previewImgUrl(url){
-  const el=document.getElementById('pkg-img-preview');
-  if(url){el.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='Error'">`;}
-  else{el.textContent='No img';}
-}
-
-function savePackage(){
-  const p={
-    nameEn:document.getElementById('pkg-name-en').value.trim(),
-    nameAr:document.getElementById('pkg-name-ar').value.trim(),
-    catEn:document.getElementById('pkg-cat-en').value.trim(),
-    catAr:document.getElementById('pkg-cat-ar').value.trim(),
-    price:document.getElementById('pkg-price').value,
-    duration:document.getElementById('pkg-duration').value,
-    descEn:document.getElementById('pkg-desc-en').value,
-    descAr:document.getElementById('pkg-desc-ar').value,
-    status:document.getElementById('pkg-status').value,
-    homepage:document.getElementById('pkg-homepage').checked,
-    featured:document.getElementById('pkg-featured').checked,
-    bookable:document.getElementById('pkg-bookable').checked,
-    img:document.getElementById('pkg-img-url').value.trim(),
-    includes:[...document.querySelectorAll('#includes-list .f-input')].map(i=>i.value).filter(Boolean)
+function handlePkgImg(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>8*1024*1024){showToast('❌ Image too large (max 8MB)');return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    pkgImgData=e.target.result;
+    const img=document.getElementById('pk-img-el');
+    img.src=pkgImgData;img.classList.add('loaded');
+    document.getElementById('pk-img-preview').querySelector('span').style.display='none';
   };
-  if(!p.nameEn){showToast('❌ Package name (EN) required');return;}
-  if(editingPkg!==null)packages[editingPkg]=p; else packages.push(p);
-  save('ge_packages',packages);
+  r.readAsDataURL(file);
+}
+function clearPkgImg(){pkgImgData='';const img=document.getElementById('pk-img-el');img.src='';img.classList.remove('loaded');document.getElementById('pk-img-preview').querySelector('span').style.display='';}
+
+function savePkg(){
+  const p={
+    nameEn:document.getElementById('pk-name-en').value.trim(),
+    nameAr:document.getElementById('pk-name-ar').value.trim(),
+    catEn:document.getElementById('pk-cat-en').value.trim(),
+    catAr:document.getElementById('pk-cat-ar').value.trim(),
+    price:document.getElementById('pk-price').value,
+    duration:document.getElementById('pk-dur').value,
+    descEn:document.getElementById('pk-desc-en').value,
+    descAr:document.getElementById('pk-desc-ar').value,
+    status:document.getElementById('pk-status').value,
+    homepage:document.getElementById('pk-hp').checked,
+    featured:document.getElementById('pk-ft').checked,
+    bookable:document.getElementById('pk-bk').checked,
+    img:pkgImgData,
+    includes:[...document.querySelectorAll('#pk-inc-list .f-inp')].map(i=>i.value).filter(Boolean)
+  };
+  if(!p.nameEn){showToast('❌ English name required');return;}
+  if(editPkgIdx!==null)packages[editPkgIdx]=p;else packages.push(p);
+  ss(K.packages,packages);
   showToast('✅ Package saved!');
   showPkgList();refreshDash();
 }
 
 function renderPkgTable(){
-  const tb=document.getElementById('pkg-table');
-  if(!packages.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:32px;">No packages yet.</td></tr>';return;}
+  const tb=document.getElementById('pkg-tbl');
+  if(!packages.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--txt3);padding:40px;">No packages yet.</td></tr>';return;}
   tb.innerHTML=packages.map((p,i)=>`<tr>
-    <td>${p.img?`<img src="${p.img}" style="width:48px;height:36px;object-fit:cover;border-radius:2px;">`:'<div style="width:48px;height:36px;background:var(--bg2);border-radius:2px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:.7rem;">No img</div>'}</td>
+    <td>${p.img?`<img src="${p.img}" style="width:52px;height:40px;object-fit:cover;border-radius:4px;">`:'<div style="width:52px;height:40px;background:var(--bg3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:.65rem;">No img</div>'}</td>
     <td><strong>${p.nameEn||'—'}</strong></td>
     <td style="direction:rtl;">${p.nameAr||'—'}</td>
     <td><span class="badge badge-blue">${p.catEn||'—'}</span></td>
     <td style="color:var(--gold);">${p.price?p.price+' SAR':'—'}</td>
-    <td><span class="badge ${badgeClass(p.status)}">${p.status}</span></td>
+    <td><span class="badge ${bc(p.status)}">${p.status}</span></td>
     <td style="display:flex;gap:6px;">
-      <button class="tbl-btn" onclick="editPkg(${i})"><i class="fa-solid fa-pen"></i></button>
-      <button class="tbl-btn" onclick="deletePkg(${i})" style="border-color:rgba(255,100,100,.3);color:rgba(255,100,100,.6);"><i class="fa-solid fa-trash"></i></button>
+      <button class="t-btn" onclick="editPkg(${i})"><i class="fa-solid fa-pen"></i></button>
+      <button class="t-btn danger" onclick="deletePkg(${i})"><i class="fa-solid fa-trash"></i></button>
     </td>
   </tr>`).join('');
 }
-function deletePkg(i){if(!confirm('Delete this package?'))return;packages.splice(i,1);save('ge_packages',packages);renderPkgTable();refreshDash();showToast('🗑️ Package deleted');}
-function filterPackages(q){document.querySelectorAll('#pkg-table tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});}
+function deletePkg(i){confirmAction('Delete Package','Are you sure you want to delete this package? This cannot be undone.',()=>{packages.splice(i,1);ss(K.packages,packages);renderPkgTable();refreshDash();showToast('🗑️ Package deleted');});}
+function filterPkgs(q){document.querySelectorAll('#pkg-tbl tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none');}
 
-// ── INCLUDES ──
-function renderIncludes(items){
-  document.getElementById('includes-list').innerHTML=items.map(v=>`<div class="price-item"><input class="f-input pi-name" value="${v}" placeholder="e.g. Airport Transfer"/><button class="pi-remove" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+function renderIncs(items){
+  document.getElementById('pk-inc-list').innerHTML=items.map(v=>`<div class="row-item"><input class="f-inp ri-main" value="${v}" placeholder="e.g. Airport Transfer"/><button class="ri-rm" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button></div>`).join('');
 }
-function addInclude(){const el=document.getElementById('includes-list');const d=document.createElement('div');d.className='price-item';d.innerHTML='<input class="f-input pi-name" placeholder="e.g. Airport Transfer"/><button class="pi-remove" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>';el.appendChild(d);d.querySelector('input').focus();}
+function addInc(){const el=document.getElementById('pk-inc-list');const d=document.createElement('div');d.className='row-item';d.innerHTML='<input class="f-inp ri-main" placeholder="e.g. Airport Transfer"/><button class="ri-rm" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>';el.appendChild(d);d.querySelector('input').focus();}
 
-// ════════════════════════════════
-//  OFFERS
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   OFFERS & PRICING
+═══════════════════════════════════════ */
 function renderOffers(){
   const el=document.getElementById('offers-list');
-  if(!offers.length){el.innerHTML='<div style="color:var(--text3);font-size:.82rem;padding:16px 0;">No offers yet.</div>';return;}
-  el.innerHTML=offers.map((o,i)=>`<div class="price-item">
-    <input class="f-input pi-name" value="${o.title}" placeholder="Offer title" onchange="offers[${i}].title=this.value"/>
-    <input class="f-input pi-price" value="${o.discount}" placeholder="e.g. 20% OFF" onchange="offers[${i}].discount=this.value"/>
-    <button class="pi-remove" onclick="offers.splice(${i},1);renderOffers()"><i class="fa-solid fa-trash"></i></button>
+  if(!offers.length){el.innerHTML='<div style="color:var(--txt3);font-size:.8rem;padding:14px 0;">No offers yet.</div>';return;}
+  el.innerHTML=offers.map((o,i)=>`<div class="row-item">
+    <input class="f-inp ri-main" value="${o.title}" placeholder="Offer title" oninput="offers[${i}].title=this.value"/>
+    <input class="f-inp ri-sub" value="${o.discount}" placeholder="e.g. 20% OFF" oninput="offers[${i}].discount=this.value"/>
+    <button class="ri-rm" onclick="offers.splice(${i},1);renderOffers()"><i class="fa-solid fa-trash"></i></button>
   </div>`).join('');
 }
 function addOffer(){offers.push({title:'New Offer',discount:'10% OFF'});renderOffers();}
 
-// ════════════════════════════════
-//  PRICING
-// ════════════════════════════════
 function renderPricing(){
   const el=document.getElementById('pricing-list');
-  el.innerHTML=pricing.map((r,i)=>`<div class="price-item">
-    <input class="f-input pi-name" value="${r.name}" placeholder="Service name" onchange="pricing[${i}].name=this.value"/>
-    <input class="f-input pi-price" value="${r.price}" placeholder="Price" onchange="pricing[${i}].price=this.value"/>
-    <button class="pi-remove" onclick="pricing.splice(${i},1);renderPricing()"><i class="fa-solid fa-trash"></i></button>
+  el.innerHTML=pricing.map((r,i)=>`<div class="row-item">
+    <input class="f-inp ri-main" value="${r.name}" placeholder="Service name" oninput="pricing[${i}].name=this.value"/>
+    <input class="f-inp ri-sub" value="${r.price}" placeholder="Price" oninput="pricing[${i}].price=this.value"/>
+    <button class="ri-rm" onclick="pricing.splice(${i},1);renderPricing()"><i class="fa-solid fa-trash"></i></button>
   </div>`).join('');
 }
 function addPriceRow(){pricing.push({name:'',price:''});renderPricing();}
-function saveOffers(){
-  save('ge_offers',offers);
-  // rebuild pricing from DOM
-  pricing=[];
-  document.querySelectorAll('#pricing-list .price-item').forEach(row=>{
-    const inputs=row.querySelectorAll('input');
-    if(inputs[0].value.trim())pricing.push({name:inputs[0].value.trim(),price:inputs[1].value.trim()});
-  });
-  save('ge_pricing',pricing);
-  showToast('✅ Offers & Pricing saved!');
-}
+function saveOffers(){ss(K.offers,offers);ss(K.pricing,pricing);showToast('✅ Offers & Pricing saved!');}
 
-// ════════════════════════════════
-//  SERVICES
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   SERVICES
+═══════════════════════════════════════ */
 function renderServices(){
-  const el=document.getElementById('services-list');
-  el.innerHTML=services.map((s,i)=>`<div class="price-item">
-    <input class="f-input pi-name" value="${s.name}" placeholder="Service name" onchange="services[${i}].name=this.value"/>
-    <select class="f-input pi-price f-select" onchange="services[${i}].status=this.value">
+  const el=document.getElementById('svc-list');
+  el.innerHTML=services.map((s,i)=>`<div class="row-item">
+    <input class="f-inp ri-main" value="${s.name}" placeholder="Service name 🌍" oninput="services[${i}].name=this.value"/>
+    <select class="f-inp f-sel ri-sub" onchange="services[${i}].status=this.value">
       <option value="active" ${s.status==='active'?'selected':''}>Active</option>
       <option value="hidden" ${s.status==='hidden'?'selected':''}>Hidden</option>
     </select>
-    <button class="pi-remove" onclick="services.splice(${i},1);renderServices()"><i class="fa-solid fa-trash"></i></button>
+    <button class="ri-rm" onclick="services.splice(${i},1);renderServices()"><i class="fa-solid fa-trash"></i></button>
   </div>`).join('');
 }
-function addServiceRow(){services.push({name:'New Service',status:'active'});renderServices();}
-function saveServices(){save('ge_services',services);refreshDash();showToast('✅ Services saved!');}
+function addSvc(){services.push({name:'New Service',status:'active'});renderServices();}
+function saveServices(){ss(K.services,services);refreshDash();showToast('✅ Services saved!');}
 
-// ════════════════════════════════
-//  GALLERY
-// ════════════════════════════════
-function renderGallery(){
-  const el=document.getElementById('gallery-url-list');
-  if(!gallery.length){el.innerHTML='<div style="color:var(--text3);font-size:.82rem;padding:16px 0;">No gallery images yet.</div>';return;}
-  el.innerHTML=gallery.map((url,i)=>`<div class="price-item">
-    ${url?`<img src="${url}" style="width:60px;height:45px;object-fit:cover;border-radius:2px;flex-shrink:0;" onerror="this.style.display='none'">`:''}
-    <input class="f-input pi-name" value="${url}" placeholder="https://..." onchange="gallery[${i}]=this.value"/>
-    <button class="pi-remove" onclick="gallery.splice(${i},1);renderGallery()"><i class="fa-solid fa-trash"></i></button>
-  </div>`).join('');
+/* ═══════════════════════════════════════
+   IMAGE UPLOAD (general)
+═══════════════════════════════════════ */
+function uploadImg(input,infoKey,imgElId,boxId){
+  const file=input.files[0];if(!file)return;
+  if(file.size>10*1024*1024){showToast('❌ Image too large (max 10MB)');return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    const b64=e.target.result;
+    info[infoKey]=b64;ss(K.info,info);
+    const img=document.getElementById(imgElId);
+    img.src=b64;img.classList.add('loaded');
+    document.getElementById(boxId).querySelector('span').style.display='none';
+    // Update sidebar logo if logo uploaded
+    if(infoKey==='logoImg'){const li=document.getElementById('sb-logo-img');if(li){li.src=b64;li.parentElement.style.display='';}}
+    showToast('✅ Image uploaded & saved!');
+  };
+  r.readAsDataURL(file);
 }
-function addGalleryUrl(){gallery.push('');renderGallery();}
-function saveGallery(){save('ge_gallery',gallery);showToast('✅ Gallery saved!');}
+function clearImg(infoKey,imgElId,boxId){
+  info[infoKey]='';ss(K.info,info);
+  const img=document.getElementById(imgElId);img.src='';img.classList.remove('loaded');
+  document.getElementById(boxId).querySelector('span').style.display='';
+  showToast('🗑️ Image cleared');
+}
+function loadHeroImages(){
+  const imgs=[{k:'heroImg',i:'hero-preview-img',b:'hero-preview-box'},{k:'introImg',i:'intro-preview-img',b:'intro-preview-box'},{k:'logoImg',i:'logo-preview-img',b:'logo-preview-box'}];
+  imgs.forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
+  document.getElementById('h-tag').value=info.heroTag||'';
+  document.getElementById('h-desc').value=info.heroDesc||'';
+  document.getElementById('s-dest').value=info.statDest||150;
+  document.getElementById('s-fleet').value=info.statFleet||42;
+  document.getElementById('s-mem').value=info.statMembers||12;
+  document.getElementById('s-years').value=info.statYears||30;
+}
+function saveHero(){
+  info.heroTag=document.getElementById('h-tag').value;
+  info.heroDesc=document.getElementById('h-desc').value;
+  info.statDest=+document.getElementById('s-dest').value;
+  info.statFleet=+document.getElementById('s-fleet').value;
+  info.statMembers=+document.getElementById('s-mem').value;
+  info.statYears=+document.getElementById('s-years').value;
+  ss(K.info,info);
+  showToast('✅ Hero settings saved!');
+}
 
-// ════════════════════════════════
-//  INFO / SEO
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   GALLERY
+═══════════════════════════════════════ */
+function addGalleryImgs(input){
+  const files=[...input.files];
+  const tooBig=files.filter(f=>f.size>8*1024*1024);
+  if(tooBig.length){showToast(`❌ ${tooBig.length} file(s) exceed 8MB`);return;}
+  files.forEach(file=>{
+    const r=new FileReader();
+    r.onload=e=>{gallery.push(e.target.result);renderGalleryGrid();};
+    r.readAsDataURL(file);
+  });
+}
+function renderGalleryGrid(){
+  const grid=document.getElementById('gal-grid');
+  const addBtn=`<button class="img-add-btn" title="Add images"><span style="pointer-events:none;font-size:1.8rem;">+</span><input type="file" accept="image/*" multiple onchange="addGalleryImgs(this)"/></button>`;
+  const imgs=gallery.filter(g=>!!g).map((g,i)=>`<div class="img-sq"><img src="${g}" alt="Gallery ${i+1}"/><button class="img-sq-rm" onclick="removeGalImg(${i})">✕</button></div>`).join('');
+  grid.innerHTML=imgs+addBtn;
+}
+function removeGalImg(i){gallery.splice(i,1);renderGalleryGrid();}
+function saveGallery(){ss(K.gallery,gallery);refreshDash();showToast('✅ Gallery saved!');}
+
+/* ═══════════════════════════════════════
+   INFO / SEO
+═══════════════════════════════════════ */
 function loadInfo(){
-  document.getElementById('seo-phone').value=info.phone||'';
-  document.getElementById('seo-wa').value=info.wa||'';
-  document.getElementById('seo-email').value=info.email||'';
-  document.getElementById('seo-location').value=info.location||'';
-  document.getElementById('seo-ig').value=info.instagram||'';
-  document.getElementById('seo-sc').value=info.snapchat||'';
-  document.getElementById('seo-tt').value=info.tiktok||'';
-  document.getElementById('seo-tag').value=info.heroTag||'';
-  document.getElementById('seo-desc').value=info.heroDesc||'';
-  document.getElementById('seo-hero-img').value=info.heroImg||'';
-  document.getElementById('stat-dest').value=info.statDest||150;
-  document.getElementById('stat-fleet').value=info.statFleet||42;
-  document.getElementById('stat-members').value=info.statMembers||12;
-  document.getElementById('stat-years').value=info.statYears||30;
-  document.getElementById('seo-title').value=info.seoTitle||'';
-  document.getElementById('seo-meta').value=info.seoMeta||'';
+  document.getElementById('i-phone').value=info.phone||'';
+  document.getElementById('i-wa').value=info.wa||'';
+  document.getElementById('i-email').value=info.email||'';
+  document.getElementById('i-loc').value=info.location||'';
+  document.getElementById('i-ig').value=info.instagram||'';
+  document.getElementById('i-sc').value=info.snapchat||'';
+  document.getElementById('i-tt').value=info.tiktok||'';
+  document.getElementById('i-title').value=info.seoTitle||'';
+  document.getElementById('i-meta').value=info.seoMeta||'';
 }
 function saveInfo(){
-  info={
-    phone:document.getElementById('seo-phone').value,
-    wa:document.getElementById('seo-wa').value,
-    email:document.getElementById('seo-email').value,
-    location:document.getElementById('seo-location').value,
-    instagram:document.getElementById('seo-ig').value,
-    snapchat:document.getElementById('seo-sc').value,
-    tiktok:document.getElementById('seo-tt').value,
-    heroTag:document.getElementById('seo-tag').value,
-    heroDesc:document.getElementById('seo-desc').value,
-    heroImg:document.getElementById('seo-hero-img').value,
-    statDest:+document.getElementById('stat-dest').value,
-    statFleet:+document.getElementById('stat-fleet').value,
-    statMembers:+document.getElementById('stat-members').value,
-    statYears:+document.getElementById('stat-years').value,
-    seoTitle:document.getElementById('seo-title').value,
-    seoMeta:document.getElementById('seo-meta').value
-  };
-  save('ge_info',info);
+  Object.assign(info,{
+    phone:document.getElementById('i-phone').value,wa:document.getElementById('i-wa').value,
+    email:document.getElementById('i-email').value,location:document.getElementById('i-loc').value,
+    instagram:document.getElementById('i-ig').value,snapchat:document.getElementById('i-sc').value,
+    tiktok:document.getElementById('i-tt').value,seoTitle:document.getElementById('i-title').value,
+    seoMeta:document.getElementById('i-meta').value
+  });
+  ss(K.info,info);
   showToast('✅ Info & SEO saved!');
 }
 
-// ════════════════════════════════
-//  SETTINGS
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════ */
 function loadSettings(){
   document.getElementById('set-intro').checked=settings.intro!==false;
   document.getElementById('set-wa').checked=settings.wa!==false;
   document.getElementById('set-maint').checked=!!settings.maint;
 }
 function saveSettings(){
-  settings={
-    intro:document.getElementById('set-intro').checked,
-    wa:document.getElementById('set-wa').checked,
-    maint:document.getElementById('set-maint').checked
-  };
-  save('ge_settings',settings);
+  settings={intro:document.getElementById('set-intro').checked,wa:document.getElementById('set-wa').checked,maint:document.getElementById('set-maint').checked};
+  ss(K.settings,settings);
   showToast('✅ Settings saved!');
 }
-
-// ════════════════════════════════
-//  PASSWORD
-// ════════════════════════════════
 function changePass(){
-  const cur=document.getElementById('cur-pass').value;
-  const nw=document.getElementById('new-pass').value;
-  const cf=document.getElementById('conf-pass').value;
-  if(cur!==CREDS.pass){showToast('❌ Current password incorrect');return;}
-  if(nw!==cf||nw.length<6){showToast('❌ Passwords mismatch or too short');return;}
-  CREDS.pass=nw;save('ge_pass',nw);
+  const cur=document.getElementById('cp-cur').value;
+  const nw=document.getElementById('cp-new').value;
+  const cf=document.getElementById('cp-conf').value;
+  if(cur!==CREDS.pass){showToast('❌ Current password wrong');return;}
+  if(nw!==cf||nw.length<6){showToast('❌ Passwords mismatch / too short');return;}
+  CREDS.pass=nw;ss(K.pass,nw);
   showToast('✅ Password updated!');
-  ['cur-pass','new-pass','conf-pass'].forEach(id=>document.getElementById(id).value='');
+  ['cp-cur','cp-new','cp-conf'].forEach(id=>document.getElementById(id).value='');
 }
 
-// ════════════════════════════════
-//  SAVE ALL
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   SAVE ALL
+═══════════════════════════════════════ */
 function saveAll(){
-  save('ge_packages',packages);
-  save('ge_offers',offers);
-  save('ge_services',services);
-  save('ge_gallery',gallery);
-  save('ge_info',info);
-  save('ge_settings',settings);
-  showToast('✅ All changes saved!');
+  ss(K.packages,packages);ss(K.offers,offers);ss(K.pricing,pricing);
+  ss(K.services,services);ss(K.gallery,gallery);ss(K.info,info);ss(K.settings,settings);
+  showToast('✅ All changes saved to site!');
 }
 
-// ════════════════════════════════
-//  RESET
-// ════════════════════════════════
-function resetAll(){
-  ['ge_packages','ge_offers','ge_pricing','ge_services','ge_gallery','ge_info','ge_settings'].forEach(k=>localStorage.removeItem(k));
-  packages=[];offers=[];pricing=defaultPricing();services=defaultServices();gallery=[];info=defaultInfo();settings=defaultSettings();
-  refreshDash();showToast('🗑️ All data reset');
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+function confirmReset(){confirmAction('Reset All Data','This will delete ALL packages, gallery, settings, and uploaded images. This CANNOT be undone.',doReset);}
+function doReset(){
+  Object.values(K).forEach(k=>localStorage.removeItem(k));
+  packages=[];offers=[];pricing=defaultPricing();services=defaultSvc();gallery=[];info=defaultInfo();settings={intro:true,wa:true,maint:false};
+  refreshDash();renderGalleryGrid();loadInfo();loadSettings();loadHeroImages();
+  showToast('🗑️ All data reset');
 }
 
-// ════════════════════════════════
-//  TOAST
-// ════════════════════════════════
+/* ═══════════════════════════════════════
+   CONFIRM MODAL
+═══════════════════════════════════════ */
+let confirmCb=null;
+function confirmAction(title,msg,cb){
+  document.getElementById('cm-title').textContent=title;
+  document.getElementById('cm-msg').textContent=msg;
+  document.getElementById('cm-ok').onclick=()=>{closeConfirm();cb&&cb();};
+  document.getElementById('confirm-modal').classList.add('open');
+  confirmCb=cb;
+}
+function closeConfirm(){document.getElementById('confirm-modal').classList.remove('open');}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
 function showToast(msg){
   const t=document.getElementById('toast');
   document.getElementById('toast-msg').textContent=msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3000);
 }
-
-// ════════════════════════════════
-//  THEME & LANGUAGE
-// ════════════════════════════════
-function switchTheme(theme){
-  const html=document.documentElement;
-  if(theme==='light'){
-    html.classList.add('light-mode');
-    localStorage.setItem('theme','light');
-    document.getElementById('theme-dark').classList.remove('active');
-    document.getElementById('theme-light').classList.add('active');
-  }else{
-    html.classList.remove('light-mode');
-    localStorage.setItem('theme','dark');
-    document.getElementById('theme-dark').classList.add('active');
-    document.getElementById('theme-light').classList.remove('active');
-  }
-}
-
-function switchLang(lang){
-  localStorage.setItem('language',lang);
-  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  document.documentElement.lang=lang;
-  if(lang==='ar'){
-    document.getElementById('lang-en').classList.remove('active');
-    document.getElementById('lang-ar').classList.add('active');
-  }else{
-    document.getElementById('lang-en').classList.add('active');
-    document.getElementById('lang-ar').classList.remove('active');
-  }
-}
-
-// Initialize theme and language
-window.addEventListener('DOMContentLoaded',()=>{
-  const savedTheme=localStorage.getItem('theme')||'dark';
-  const savedLang=localStorage.getItem('language')||'en';
-  switchTheme(savedTheme);
-  switchLang(savedLang);
-});
 </script>
 </body>
 </html>
