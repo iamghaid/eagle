@@ -344,7 +344,8 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
       <div class="sb-item" onclick="showPage('offers')"><i class="fa-solid fa-tags"></i> Offers & Pricing</div>
       <div class="sb-item" onclick="showPage('services')"><i class="fa-solid fa-star"></i> Services</div>
       <div class="sb-sec">Content</div>
-      <div class="sb-item" onclick="showPage('hero')"><i class="fa-solid fa-image"></i> Hero Editor</div>
+      <div class="sb-item" onclick="showPage('hero-settings')"><i class="fa-solid fa-wand-sparkles"></i> Hero Settings</div>
+      <div class="sb-item" onclick="showPage('hero')"><i class="fa-solid fa-image"></i> Hero Images</div>
       <div class="sb-item" onclick="showPage('gallery')"><i class="fa-solid fa-images"></i> Gallery</div>
       <div class="sb-item" onclick="showPage('seo')"><i class="fa-solid fa-globe"></i> SEO & Info</div>
       <div class="sb-sec">System</div>
@@ -485,15 +486,160 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
         <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveServices()"><i class="fa-solid fa-floppy-disk"></i> Save Services</button></div>
       </div>
 
-      <!-- ══ HERO EDITOR ══ -->
-      <div class="page" id="page-hero">
-        <div class="s-card">
-          <div class="s-title"><i class="fa-solid fa-panorama"></i> Hero Background Image</div>
-          <div class="img-upload-wrap">
-            <div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'heroImg','hero-preview-img','hero-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-mountain-sun"></i></div><div class="img-drop-txt">Upload Hero Background</div><div class="img-drop-sub">Recommended: 1920×1080px or larger</div></div>
-            <div class="img-preview-box" id="hero-preview-box"><span>No image set</span><img id="hero-preview-img" alt=""/><button class="img-clear" onclick="clearImg('heroImg','hero-preview-img','hero-preview-box')">&times;</button></div>
+      <!-- ══ HERO SETTINGS (new) ══ -->
+      <div class="page" id="page-hero-settings">
+
+        <!-- live preview strip -->
+        <div class="s-card" style="overflow:hidden;padding:0;">
+          <div id="hs-preview" style="
+            min-height:160px;display:flex;align-items:flex-end;padding:28px 32px;
+            background:linear-gradient(125deg,rgba(0,0,0,.88),rgba(0,0,0,.38)),
+              url('https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs') center/cover;
+            border-radius:10px;position:relative;">
+            <div>
+              <div style="font-size:.55rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;" id="prev-tag">ELEVATING EVERY JOURNEY</div>
+              <div id="prev-title" style="font-family:'Cinzel',serif;font-size:2rem;color:#fff;line-height:1.1;margin-bottom:8px;">Beyond Every Horizon Lies<br/><em style="color:var(--gold);">Your Journey</em></div>
+              <div id="prev-sub" style="font-size:.82rem;color:rgba(255,255,255,.6);font-weight:300;max-width:380px;">Experience the world through the lens of pure luxury.</div>
+            </div>
+            <div style="position:absolute;top:14px;right:16px;font-size:.58rem;color:rgba(255,255,255,.3);letter-spacing:.14em;text-transform:uppercase;">Live Preview</div>
           </div>
         </div>
+
+        <!-- Title & Subtitle -->
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-heading"></i> Hero Text Content</div>
+          <div class="form-grid">
+            <div class="f-grp fg-full">
+              <label class="f-lbl">Hero Main Title <span style="color:var(--txt3);font-weight:300;text-transform:none;letter-spacing:0;">(use &lt;br/&gt; for line break, &lt;em&gt;word&lt;/em&gt; for gold italic)</span></label>
+              <textarea class="f-inp f-ta" id="hs-title" style="min-height:70px;" oninput="previewTitle()"
+                placeholder="Beyond Every Horizon Lies&lt;br/&gt;&lt;em&gt;Your Journey&lt;/em&gt;"></textarea>
+            </div>
+            <div class="f-grp fg-full">
+              <label class="f-lbl">Hero Subtitle / Description</label>
+              <textarea class="f-inp f-ta" id="hs-subtitle" style="min-height:60px;" oninput="previewSub()"
+                placeholder="Experience the world through the lens of pure luxury..."></textarea>
+            </div>
+            <div class="f-grp">
+              <label class="f-lbl">Eyebrow Tag Line</label>
+              <input class="f-inp" id="hs-tag" type="text" oninput="document.getElementById('prev-tag').textContent=this.value"
+                placeholder="ELEVATING EVERY JOURNEY"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-font"></i> Typography Controls</div>
+          <div class="form-grid">
+            <div class="f-grp">
+              <label class="f-lbl">Font Family</label>
+              <select class="f-inp f-sel" id="hs-font" onchange="previewTypo()">
+                <option value="">Default (Cinzel)</option>
+                <option value="'Cinzel',serif">Cinzel — Classic Luxury</option>
+                <option value="'Playfair Display',serif">Playfair Display — Editorial</option>
+                <option value="'Cormorant Garamond',serif">Cormorant Garamond — Refined</option>
+                <option value="'Trajan Pro',serif">Trajan Pro — Monumental</option>
+                <option value="'Poppins',sans-serif">Poppins — Modern Clean</option>
+                <option value="'Amiri',serif">Amiri — Arabic Luxury</option>
+                <option value="'IBM Plex Sans Arabic',sans-serif">IBM Plex Arabic</option>
+              </select>
+            </div>
+            <div class="f-grp">
+              <label class="f-lbl">Font Size</label>
+              <select class="f-inp f-sel" id="hs-size" onchange="previewTypo()">
+                <option value="">Default (responsive)</option>
+                <option value="3rem">Small — 3rem</option>
+                <option value="4rem">Medium — 4rem</option>
+                <option value="5rem">Large — 5rem (default)</option>
+                <option value="6rem">Extra Large — 6rem</option>
+                <option value="7rem">Huge — 7rem</option>
+              </select>
+            </div>
+            <div class="f-grp">
+              <label class="f-lbl">Font Weight</label>
+              <select class="f-inp f-sel" id="hs-weight" onchange="previewTypo()">
+                <option value="">Default</option>
+                <option value="300">Light — 300</option>
+                <option value="400">Regular — 400</option>
+                <option value="600">Semi Bold — 600</option>
+                <option value="700">Bold — 700 (default)</option>
+                <option value="900">Black — 900</option>
+              </select>
+            </div>
+            <div class="f-grp">
+              <label class="f-lbl">Text Color</label>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input class="f-inp" id="hs-color" type="color" value="#FFFFFF" style="padding:5px;width:60px;height:40px;flex-shrink:0;" onchange="previewTypo()"/>
+                <input class="f-inp" id="hs-color-hex" type="text" placeholder="#FFFFFF" style="flex:1;"
+                  oninput="document.getElementById('hs-color').value=this.value;previewTypo()"/>
+              </div>
+              <div class="f-hint">Leave default for the site's auto dark/light color</div>
+            </div>
+            <div class="f-grp">
+              <label class="f-lbl">Letter Spacing</label>
+              <select class="f-inp f-sel" id="hs-ls" onchange="previewTypo()">
+                <option value="">Default</option>
+                <option value="-.03em">Tight — -0.03em</option>
+                <option value="-.01em">Normal — -0.01em (default)</option>
+                <option value=".02em">Airy — 0.02em</option>
+                <option value=".06em">Spaced — 0.06em</option>
+                <option value=".12em">Wide — 0.12em</option>
+              </select>
+            </div>
+            <div class="f-grp">
+              <label class="f-lbl">Text Alignment</label>
+              <select class="f-inp f-sel" id="hs-align" onchange="previewTypo()">
+                <option value="">Default (left)</option>
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Images -->
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-circle-half-stroke"></i> Hero Background Images by Theme</div>
+          <p class="f-hint" style="margin-bottom:20px;">The site will automatically swap these when the visitor toggles Dark / Light mode.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div>
+              <label class="f-lbl" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span style="width:10px;height:10px;background:#1a1a1a;border-radius:50%;border:1px solid var(--border);"></span> Dark Theme Image</label>
+              <div class="img-drop" style="padding:22px 14px;">
+                <input type="file" accept="image/*" onchange="uploadImg(this,'heroImgDark','hdark-img','hdark-box')"/>
+                <div class="img-drop-ico" style="font-size:1.6rem;"><i class="fa-solid fa-moon"></i></div>
+                <div class="img-drop-txt" style="font-size:.74rem;">Upload Dark Hero</div>
+                <div class="img-drop-sub">Cinematic dark eagle image</div>
+              </div>
+              <div class="img-preview-box" id="hdark-box" style="margin-top:10px;aspect-ratio:16/9;">
+                <span>No image</span><img id="hdark-img" alt=""/>
+                <button class="img-clear" onclick="clearImg('heroImgDark','hdark-img','hdark-box')">&times;</button>
+              </div>
+            </div>
+            <div>
+              <label class="f-lbl" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><span style="width:10px;height:10px;background:#F0EAD6;border-radius:50%;border:1px solid var(--border);"></span> Light Theme Image</label>
+              <div class="img-drop" style="padding:22px 14px;">
+                <input type="file" accept="image/*" onchange="uploadImg(this,'heroImgLight','hlight-img','hlight-box')"/>
+                <div class="img-drop-ico" style="font-size:1.6rem;"><i class="fa-solid fa-sun"></i></div>
+                <div class="img-drop-txt" style="font-size:.74rem;">Upload Light Hero</div>
+                <div class="img-drop-sub">Bright, airy travel image</div>
+              </div>
+              <div class="img-preview-box" id="hlight-box" style="margin-top:10px;aspect-ratio:16/9;">
+                <span>No image</span><img id="hlight-img" alt=""/>
+                <button class="img-clear" onclick="clearImg('heroImgLight','hlight-img','hlight-box')">&times;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;justify-content:flex-end;">
+          <button class="tb-btn" onclick="resetHeroSettings()"><i class="fa-solid fa-rotate-left"></i> Reset to Default</button>
+          <button class="tb-btn primary" onclick="saveHeroSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Hero Settings</button>
+        </div>
+      </div>
+
+      <!-- ══ HERO IMAGES (legacy/renamed) ══ -->
+      <div class="page" id="page-hero">
         <div class="s-card">
           <div class="s-title"><i class="fa-solid fa-feather"></i> Intro/Loader Eagle Image</div>
           <div class="img-upload-wrap">
@@ -509,13 +655,6 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
           </div>
         </div>
         <div class="s-card">
-          <div class="s-title"><i class="fa-solid fa-pen-nib"></i> Hero Content</div>
-          <div class="form-grid">
-            <div class="f-grp"><label class="f-lbl">Eyebrow Tag</label><input class="f-inp" id="h-tag" type="text" placeholder="ELEVATING EVERY JOURNEY"/></div>
-            <div class="f-grp"><label class="f-lbl">Hero Description</label><input class="f-inp" id="h-desc" type="text" placeholder="Short tagline..."/></div>
-          </div>
-        </div>
-        <div class="s-card">
           <div class="s-title"><i class="fa-solid fa-chart-bar"></i> Hero Stats</div>
           <div class="form-grid">
             <div class="f-grp"><label class="f-lbl">Global Destinations</label><input class="f-inp" id="s-dest" type="number" placeholder="150"/></div>
@@ -524,7 +663,7 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
             <div class="f-grp"><label class="f-lbl">Years Excellence</label><input class="f-inp" id="s-years" type="number" placeholder="30"/></div>
           </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveHero()"><i class="fa-solid fa-floppy-disk"></i> Save Hero</button></div>
+        <div style="display:flex;justify-content:flex-end;"><button class="tb-btn primary" onclick="saveHero()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
       </div>
 
       <!-- ══ GALLERY ══ -->
@@ -632,8 +771,7 @@ let pkgImgData=''; // base64 for current pkg being edited
 
 function defaultPricing(){return [{name:'Tourist Visa',price:'500 SAR'},{name:'Hotel Booking',price:'From 200 SAR/night'},{name:'Flight Tickets',price:'From 800 SAR'},{name:'Student Visa',price:'1200 SAR'},{name:'International License',price:'350 SAR'},{name:'Travel Insurance',price:'From 150 SAR'}];}
 function defaultSvc(){return [{name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},{name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},{name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}];}
-function defaultInfo(){return {phone:'+966 50 174 9914',wa:'966501749914',email:'info@globaleagletrv.com',location:'Saudi Arabia',instagram:'https://instagram.com',snapchat:'https://snapchat.com',tiktok:'https://tiktok.com',heroTag:'ELEVATING EVERY JOURNEY',heroDesc:'Experience the world through the lens of pure luxury.',heroImg:'',introImg:'',logoImg:'',statDest:150,statFleet:42,statMembers:12,statYears:30,seoTitle:'Global Eagle Travel | Rise Above. Aim High.',seoMeta:'Global Eagle Travel — luxury travel & tourism in Saudi Arabia.'};}
-
+function defaultInfo(){return {phone:'+966 50 174 9914',wa:'966501749914',email:'info@globaleagletrv.com',location:'Saudi Arabia',instagram:'https://instagram.com',snapchat:'https://snapchat.com',tiktok:'https://tiktok.com',heroTag:'ELEVATING EVERY JOURNEY',heroDesc:'Experience the world through the lens of pure luxury.',heroTitle:'',heroSubtitle:'',heroImgDark:'',heroImgLight:'',heroImg:'',introImg:'',logoImg:'',heroFont:'',heroFontSize:'',heroFontWeight:'',heroColor:'',heroLetterSpacing:'',heroTextAlign:'',statDest:150,statFleet:42,statMembers:12,statYears:30,seoTitle:'Global Eagle Travel | Rise Above. Aim High.',seoMeta:'Global Eagle Travel — luxury travel & tourism in Saudi Arabia.'};}
 const CREDS={user:ls(K.user,'admin'),pass:ls(K.pass,'eagle2025')};
 
 /* ═══════════════════════════════════════
@@ -683,7 +821,7 @@ function initApp(){
 /* ═══════════════════════════════════════
    PAGES
 ═══════════════════════════════════════ */
-const pageNames={dashboard:'Dashboard',packages:'Packages',offers:'Offers & Pricing',services:'Services',hero:'Hero Editor',gallery:'Gallery',seo:'SEO & Info',settings:'Settings'};
+const pageNames={dashboard:'Dashboard',packages:'Packages',offers:'Offers & Pricing',services:'Services','hero-settings':'Hero Settings',hero:'Hero Images',gallery:'Gallery',seo:'SEO & Info',settings:'Settings'};
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
@@ -695,6 +833,7 @@ function showPage(id){
   if(id==='packages'){renderPkgTable();showPkgList();}
   if(id==='offers'){renderOffers();renderPricing();}
   if(id==='services')renderServices();
+  if(id==='hero-settings')loadHeroSettings();
   if(id==='hero')loadHeroImages();
   if(id==='gallery')renderGalleryGrid();
   if(id==='seo')loadInfo();
@@ -884,24 +1023,84 @@ function clearImg(infoKey,imgElId,boxId){
   showToast('🗑️ Image cleared');
 }
 function loadHeroImages(){
-  const imgs=[{k:'heroImg',i:'hero-preview-img',b:'hero-preview-box'},{k:'introImg',i:'intro-preview-img',b:'intro-preview-box'},{k:'logoImg',i:'logo-preview-img',b:'logo-preview-box'}];
+  const imgs=[{k:'introImg',i:'intro-preview-img',b:'intro-preview-box'},{k:'logoImg',i:'logo-preview-img',b:'logo-preview-box'}];
   imgs.forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
-  document.getElementById('h-tag').value=info.heroTag||'';
-  document.getElementById('h-desc').value=info.heroDesc||'';
   document.getElementById('s-dest').value=info.statDest||150;
   document.getElementById('s-fleet').value=info.statFleet||42;
   document.getElementById('s-mem').value=info.statMembers||12;
   document.getElementById('s-years').value=info.statYears||30;
 }
 function saveHero(){
-  info.heroTag=document.getElementById('h-tag').value;
-  info.heroDesc=document.getElementById('h-desc').value;
   info.statDest=+document.getElementById('s-dest').value;
   info.statFleet=+document.getElementById('s-fleet').value;
   info.statMembers=+document.getElementById('s-mem').value;
   info.statYears=+document.getElementById('s-years').value;
   ss(K.info,info);
-  showToast('✅ Hero settings saved!');
+  showToast('✅ Hero stats saved!');
+}
+
+/* ═══════════════════════════════════════
+   HERO SETTINGS (new)
+═══════════════════════════════════════ */
+function loadHeroSettings(){
+  document.getElementById('hs-title').value=info.heroTitle||'';
+  document.getElementById('hs-subtitle').value=info.heroSubtitle||'';
+  document.getElementById('hs-tag').value=info.heroTag||'';
+  document.getElementById('hs-font').value=info.heroFont||'';
+  document.getElementById('hs-size').value=info.heroFontSize||'';
+  document.getElementById('hs-weight').value=info.heroFontWeight||'';
+  const col=info.heroColor||'#FFFFFF';
+  document.getElementById('hs-color').value=col;
+  document.getElementById('hs-color-hex').value=col;
+  document.getElementById('hs-ls').value=info.heroLetterSpacing||'';
+  document.getElementById('hs-align').value=info.heroTextAlign||'';
+  // Dark/light hero images
+  const dp=[{k:'heroImgDark',i:'hdark-img',b:'hdark-box'},{k:'heroImgLight',i:'hlight-img',b:'hlight-box'}];
+  dp.forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
+  // Sync live preview
+  previewTitle(); previewSub(); previewTypo();
+  document.getElementById('prev-tag').textContent=info.heroTag||'ELEVATING EVERY JOURNEY';
+}
+
+function previewTitle(){
+  const val=document.getElementById('hs-title').value||'Beyond Every Horizon Lies<br/><em>Your Journey</em>';
+  document.getElementById('prev-title').innerHTML=val;
+}
+function previewSub(){
+  const val=document.getElementById('hs-subtitle').value||'Experience the world through the lens of pure luxury.';
+  document.getElementById('prev-sub').textContent=val;
+}
+function previewTypo(){
+  const el=document.getElementById('prev-title');
+  el.style.fontFamily=document.getElementById('hs-font').value||'';
+  el.style.fontSize=document.getElementById('hs-size').value||'';
+  el.style.fontWeight=document.getElementById('hs-weight').value||'';
+  const col=document.getElementById('hs-color').value;
+  document.getElementById('hs-color-hex').value=col;
+  el.style.letterSpacing=document.getElementById('hs-ls').value||'';
+  el.style.textAlign=document.getElementById('hs-align').value||'';
+}
+
+function saveHeroSettings(){
+  info.heroTitle=document.getElementById('hs-title').value.trim();
+  info.heroSubtitle=document.getElementById('hs-subtitle').value.trim();
+  info.heroTag=document.getElementById('hs-tag').value.trim();
+  info.heroFont=document.getElementById('hs-font').value;
+  info.heroFontSize=document.getElementById('hs-size').value;
+  info.heroFontWeight=document.getElementById('hs-weight').value;
+  info.heroColor=document.getElementById('hs-color').value;
+  info.heroLetterSpacing=document.getElementById('hs-ls').value;
+  info.heroTextAlign=document.getElementById('hs-align').value;
+  ss(K.info,info);
+  showToast('✅ Hero Settings saved — reload site to see changes!');
+}
+
+function resetHeroSettings(){
+  ['heroTitle','heroSubtitle','heroFont','heroFontSize','heroFontWeight','heroColor','heroLetterSpacing','heroTextAlign'].forEach(k=>info[k]='');
+  info.heroTag='ELEVATING EVERY JOURNEY';
+  ss(K.info,info);
+  loadHeroSettings();
+  showToast('🔄 Hero settings reset to default');
 }
 
 /* ═══════════════════════════════════════
