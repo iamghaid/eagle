@@ -895,13 +895,56 @@ function setLang(l){
 /* ══════════════════════════════════════
    THEME
 ══════════════════════════════════════ */
+const HERO_DARK_DEFAULT='https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs';
+
 let theme = localStorage.getItem('ge_theme')||'dark';
+
 function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
   localStorage.setItem('ge_theme',th);
+  // Swap hero background image
+  const heroImg=document.getElementById('hero-img');
+  if(heroImg){
+    const stored=ls('ge_info',null);
+    const darkSrc=(stored&&stored.heroImgDark)||HERO_DARK_DEFAULT;
+    const lightSrc=(stored&&stored.heroImgLight)||'';
+    const newSrc=th==='light'&&lightSrc?lightSrc:darkSrc;
+    if(heroImg.src!==newSrc){
+      gsap.to(heroImg,{opacity:0,duration:.35,onComplete:()=>{
+        heroImg.src=newSrc;
+        heroImg.onload=()=>gsap.to(heroImg,{opacity:1,duration:.55});
+      }});
+    }
+  }
+  // Apply admin hero typography overrides
+  _applyHeroTypo(th);
   // Drive pill indicator after DOM is ready
   requestAnimationFrame(()=>updateThemePill(th));
 }
+
+function _applyHeroTypo(th){
+  const stored=ls('ge_info',null);
+  if(!stored)return;
+  const h1=document.getElementById('h-h1');
+  const hp=document.getElementById('h-p');
+  const ht=document.querySelector('.hero-ey-text');
+  // Title text
+  if(stored.heroTitle&&h1)h1.innerHTML=stored.heroTitle;
+  // Subtitle text
+  if(stored.heroSubtitle&&hp)hp.textContent=stored.heroSubtitle;
+  // Eyebrow tag
+  if(stored.heroTag&&ht)ht.textContent=stored.heroTag;
+  // Typography: apply to h1
+  if(h1){
+    if(stored.heroFont)h1.style.fontFamily=stored.heroFont;
+    if(stored.heroFontSize)h1.style.fontSize=stored.heroFontSize;
+    if(stored.heroFontWeight)h1.style.fontWeight=stored.heroFontWeight;
+    if(stored.heroColor)h1.style.color=stored.heroColor;
+    if(stored.heroLetterSpacing)h1.style.letterSpacing=stored.heroLetterSpacing;
+    if(stored.heroTextAlign)h1.style.textAlign=stored.heroTextAlign;
+  }
+}
+
 function updateThemePill(th){
   const moon=document.getElementById('tp-moon');
   const sun=document.getElementById('tp-sun');
@@ -948,7 +991,13 @@ function defaultSvc(){return[
   ['ct-sc','ft-sc'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=sc;});
   ['ct-tt','ft-tt'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=tt;});
   ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=wa;});
-  if(info.heroImg&&info.heroImg.trim())document.getElementById('hero-img').src=info.heroImg;
+  // Hero images: use dark/light specific keys, fall back to legacy heroImg
+  const heroEl=document.getElementById('hero-img');
+  if(heroEl){
+    const src=theme==='light'&&info.heroImgLight?info.heroImgLight
+              :(info.heroImgDark||info.heroImg||'');
+    if(src)heroEl.src=src;
+  }
   if(info.introImg&&info.introImg.trim())document.getElementById('ldr-eagle-img').src=info.introImg;
   if(info.logoImg&&info.logoImg.trim()){
     ['nav-logo-img','ft-logo-img'].forEach(id=>{const el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});
@@ -956,6 +1005,8 @@ function defaultSvc(){return[
   if(info.heroTag)document.querySelector('.hero-ey-text').textContent=info.heroTag;
   if(info.heroDesc)document.getElementById('h-p').textContent=info.heroDesc;
   if(info.seoTitle)document.title=info.seoTitle;
+  // Apply typography overrides (title text + styles)
+  _applyHeroTypo(theme);
 })();
 
 /* WA float visibility */
