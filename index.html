@@ -342,12 +342,11 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 .pkg-empty i{font-size:3rem;color:var(--gold3);display:block;margin-bottom:18px;}
 
 /* ══════════════════════════════════════
-   PROCESS — STACKING CARDS
+   PROCESS — TRUE CARD DECK (peek strips)
+   Formula: container_h = card_h + (n-1)*peek_h
+   Card at stack pos i → translateY(i * peek_h)
 ══════════════════════════════════════ */
 #process-section{background:var(--bg0);}
-.process-top{
-  text-align:center;padding:var(--py) var(--px) 0;max-width:1300px;margin:0 auto;
-}
 #process{
   padding:80px var(--px) var(--py);
   display:grid;grid-template-columns:1fr 1fr;gap:80px;
@@ -356,45 +355,76 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 .proc-info{position:relative;}
 .proc-big-num{
   font-family:var(--fdisplay);font-size:clamp(6rem,14vw,11rem);
-  color:rgba(201,162,39,.06);line-height:1;font-weight:700;
-  transition:color .6s;user-select:none;
+  color:rgba(201,162,39,.06);line-height:1;font-weight:700;user-select:none;
 }
 .proc-step-tag{font-size:.58rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:10px;}
-.proc-title{font-family:var(--fdisplay);font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--txt);margin-bottom:18px;line-height:1.18;transition:all .5s;}
-.proc-desc{color:var(--txt2);font-size:.95rem;line-height:1.9;font-weight:300;max-width:380px;transition:all .5s;}
+.proc-title{font-family:var(--fdisplay);font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--txt);margin-bottom:18px;line-height:1.18;}
+.proc-desc{color:var(--txt2);font-size:.95rem;line-height:1.9;font-weight:300;max-width:380px;}
 .proc-dots{display:flex;gap:10px;margin-top:40px;}
 .p-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .45s;cursor:pointer;}
 .p-dot.active{background:var(--gold);transform:scale(1.5);}
 
-.proc-deck{
-  position:relative;height:420px;
-  perspective:1200px;
-}
+/* Deck container: 360 card + 3×54 peek = 522px */
+.proc-deck{position:relative;height:522px;}
+
 .p-card{
-  position:absolute;inset:0;
-  padding:44px 40px;border-radius:18px;
+  position:absolute;top:0;left:0;right:0;height:360px;
+  border-radius:16px;
   background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
   border:1px solid var(--border);
-  display:flex;flex-direction:column;justify-content:space-between;
-  will-change:transform,opacity;overflow:hidden;
-  transition:border-color .4s;
+  display:flex;flex-direction:column;
+  overflow:hidden;cursor:pointer;
+  will-change:transform,opacity;
 }
 .p-card::before{
   content:'';position:absolute;inset:0;border-radius:inherit;
   background:linear-gradient(130deg,var(--glow2) 0%,transparent 65%);
+  pointer-events:none;
 }
 .p-card.active{border-color:var(--border2);}
-.pc-num{font-family:var(--fdisplay);font-size:4.5rem;color:rgba(201,162,39,.08);line-height:1;font-weight:700;}
-.pc-icon{font-size:2.6rem;margin-bottom:8px;}
-.pc-title{font-family:var(--fdisplay);font-size:1.5rem;color:var(--txt);margin-bottom:10px;line-height:1.2;}
-.pc-desc{font-size:.83rem;color:var(--txt2);line-height:1.75;font-weight:300;}
-.pc-glow{
-  position:absolute;bottom:-50px;right:-50px;
-  width:220px;height:220px;
-  background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
-  filter:blur(30px);opacity:0;transition:opacity .6s;pointer-events:none;
+.p-card:not(.active):hover .pc-peek{background:rgba(201,162,39,.07);}
+
+/* Body: main content — only fully visible on front card */
+.pc-body{
+  flex:1;padding:30px 34px 0;
+  display:flex;flex-direction:column;gap:8px;
+  opacity:0;transition:opacity .38s;pointer-events:none;
 }
-.p-card.active .pc-glow{opacity:1;}
+.p-card.active .pc-body{opacity:1;pointer-events:auto;}
+
+.pc-num-big{
+  font-family:var(--fdisplay);font-size:5rem;
+  color:rgba(201,162,39,.07);line-height:1;font-weight:700;margin-bottom:-6px;
+}
+.pc-icon-big{font-size:2.4rem;line-height:1;}
+.pc-card-title{font-family:var(--fdisplay);font-size:1.42rem;color:var(--txt);line-height:1.2;margin-top:4px;}
+.pc-card-desc{font-size:.82rem;color:var(--txt2);line-height:1.78;font-weight:300;}
+
+/* Peek strip: always visible — shows step badge + name */
+.pc-peek{
+  display:flex;align-items:center;gap:14px;
+  padding:0 24px;height:54px;flex-shrink:0;
+  border-top:1px solid var(--border);
+  transition:background .28s;
+  position:relative;z-index:1;
+}
+.pc-peek-badge{
+  font-family:var(--fdisplay);font-size:.66rem;color:var(--gold);
+  letter-spacing:.14em;background:rgba(201,162,39,.1);
+  padding:4px 10px;border-radius:4px;flex-shrink:0;
+}
+.pc-peek-name{font-size:.82rem;color:var(--txt2);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc-peek-arr{
+  font-size:.7rem;color:var(--txt3);
+  transition:color .3s,transform .35s;flex-shrink:0;
+}
+.p-card.active .pc-peek-arr{color:var(--gold);transform:rotate(-90deg);}
+.pc-card-glow{
+  position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;
+  background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
+  filter:blur(28px);opacity:0;pointer-events:none;transition:opacity .5s;
+}
+.p-card.active .pc-card-glow{opacity:1;}
 
 /* ══════════════════════════════════════
    SERVICES — BENTO
