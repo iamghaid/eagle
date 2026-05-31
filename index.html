@@ -128,32 +128,48 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
 
 /* Controls */
-.nav-ctrl{display:flex;align-items:center;gap:10px;}
+.nav-ctrl{display:flex;align-items:center;gap:12px;}
 
-/* Language Switcher */
-.lang-sw{
-  display:flex;align-items:center;gap:3px;
-  background:var(--glass);border:1px solid var(--border);border-radius:30px;padding:3px;
-  backdrop-filter:blur(12px);
+/* ── Language Toggle ── */
+.lang-toggle{
+  display:flex;align-items:center;gap:0;
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:30px;padding:6px 14px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 }
-.lang-btn{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 11px;border-radius:24px;
-  font-size:.62rem;font-weight:600;letter-spacing:.08em;
-  color:var(--txt3);transition:all .3s var(--ease1);cursor:pointer;
+.lt-btn{
+  background:none;border:none;padding:0 9px;
+  font-size:.66rem;font-weight:600;letter-spacing:.04em;
+  color:var(--txt3);transition:color .32s var(--ease1);cursor:pointer;
+  font-family:var(--fbody);line-height:1;white-space:nowrap;
 }
-.lang-btn.active{background:var(--gold);color:#000;}
-.lang-flag{font-size:.85rem;}
+.lt-btn.active{color:var(--gold);}
+.lt-btn[data-lang="ar"]{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.72rem;}
+.lt-sep{color:var(--border2);font-size:.78rem;user-select:none;opacity:.6;}
 
-/* Theme toggle */
-.theme-btn{
-  width:38px;height:38px;border-radius:50%;
-  border:1px solid var(--border);background:var(--glass);
-  color:var(--gold);font-size:.88rem;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .35s;backdrop-filter:blur(10px);
+/* ── Premium Theme Pill ── */
+.theme-pill{
+  display:flex;align-items:center;
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:30px;padding:4px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  cursor:pointer;position:relative;
+  transition:border-color .35s,box-shadow .35s;
 }
-.theme-btn:hover{background:var(--glow2);border-color:var(--gold);box-shadow:0 0 22px var(--glow);}
+.theme-pill:hover{border-color:var(--gold);box-shadow:0 0 20px var(--glow);}
+.tp-track{display:flex;align-items:center;gap:2px;position:relative;}
+.tp-ind{
+  position:absolute;top:0;bottom:0;left:0;
+  background:var(--gold);border-radius:24px;
+  transition:left .4s cubic-bezier(.34,1.56,.64,1),width .4s cubic-bezier(.34,1.56,.64,1);
+  z-index:0;pointer-events:none;
+}
+.tp-opt{
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:24px;font-size:.8rem;position:relative;z-index:1;
+  transition:color .35s;color:var(--txt3);user-select:none;
+}
+.tp-opt.active{color:#000;}
 
 /* CTA button */
 .nav-cta{
@@ -529,7 +545,8 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   .hero-stats{gap:24px;}
   .proc-deck{height:360px;}
   .p-card{padding:32px 26px;}
-  .lang-btn span{display:none;}
+  .lt-btn[data-lang="en"]{font-size:.6rem;}
+  .lt-btn[data-lang="ar"]{font-size:.66rem;}
 }
 </style>
 </head>
@@ -577,11 +594,18 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
     <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
   </ul>
   <div class="nav-ctrl">
-    <div class="lang-sw">
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')"><span class="lang-flag">🇺🇸</span><span>EN</span></button>
-      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')"><span class="lang-flag">🇸🇦</span><span>AR</span></button>
+    <div class="lang-toggle">
+      <button class="lt-btn active" id="btn-en" data-lang="en" onclick="setLang('en')">English</button>
+      <span class="lt-sep">|</span>
+      <button class="lt-btn" id="btn-ar" data-lang="ar" onclick="setLang('ar')">العربية</button>
     </div>
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
+    <div class="theme-pill" id="theme-pill" onclick="toggleTheme()" title="Toggle theme">
+      <div class="tp-track" id="tp-track">
+        <div class="tp-ind" id="tp-ind"></div>
+        <div class="tp-opt" id="tp-moon"><i class="fa-solid fa-moon"></i></div>
+        <div class="tp-opt" id="tp-sun"><i class="fa-solid fa-sun"></i></div>
+      </div>
+    </div>
     <button class="nav-cta" onclick="goTo('contact')" data-i18n="nav.cta">Inquire Now</button>
     <button id="ham" onclick="document.getElementById('mob-nav').classList.add('open')">
       <span></span><span></span><span></span>
@@ -598,7 +622,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   <canvas id="hero-canvas"></canvas>
   <div class="hero-inner">
     <div class="hero-eyebrow" id="h-eyebrow"><div class="hero-ey-line"></div><div class="hero-ey-text" data-i18n="hero.tag">ELEVATING EVERY JOURNEY</div></div>
-    <h1 class="hero-h1" id="h-h1">Power. Vision.<br/><em>Freedom.</em></h1>
+    <h1 class="hero-h1" id="h-h1">Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em></h1>
     <p class="hero-p" id="h-p" data-i18n="hero.desc">Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.</p>
     <div class="hero-btns" id="h-btns">
       <button class="btn-gold" onclick="goTo('packages')" data-i18n="hero.btn1">Explore Packages</button>
@@ -792,7 +816,7 @@ gsap.registerPlugin(ScrollTrigger);
 const T = {
   en:{
     nav:{home:'Home',packages:'Packages',services:'Services',process:'Process',contact:'Contact',cta:'Inquire Now',tagline:'Travel & Tourism'},
-    hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Power. Vision.<br/><em>Freedom.</em>',desc:'Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},
+    hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em>',desc:'Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},
     stats:{dest:'Global Destinations',fleet:'Private Fleet',members:'Elite Members',years:'Years Excellence'},
     pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},
     proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our dedicated expert team.',c1t:'Booking',c1d:'We secure the finest accommodations and flights at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 personal concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — we will be with you every step of the way.'},
@@ -803,7 +827,7 @@ const T = {
   },
   ar:{
     nav:{home:'الرئيسية',packages:'الباقات',services:'خدماتنا',process:'كيف نعمل',contact:'تواصل معنا',cta:'استفسر الآن',tagline:'سفر وسياحة'},
-    hero:{tag:'نرتقي بكل رحلة',h1:'قوة. رؤية.<br/><em>حرية.</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية. رحلاتنا الخاصة ووجهاتنا المختارة تُعيد تعريف الاستكشاف العالمي.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},
+    hero:{tag:'نرتقي بكل رحلة',h1:'وراء كل أفق<br/>تنتظرك<br/><em>رحلتك الاستثنائية</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية. رحلاتنا الخاصة ووجهاتنا المختارة تُعيد تعريف الاستكشاف العالمي.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},
     stats:{dest:'وجهة عالمية',fleet:'أسطول خاص',members:'عضو مميز',years:'سنوات التميز'},
     pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},
     proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك وتفضيلاتك السياحية مع فريقنا المتخصص.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات بأسعار تنافسية لا مثيل لها.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة لا تُنسى مع رعاية شاملة على مدار الساعة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن نكون معك في كل لحظة من رحلتك.'},
@@ -833,7 +857,9 @@ function setLang(l){
   document.getElementById('btn-ar').classList.toggle('active',l==='ar');
   // update process info panel
   procData.forEach((d,i)=>{d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
-  updateProcInfo(currentCard,true);
+  updateProcInfo(currentCard);
+  // re-align theme pill (RTL may shift layout)
+  requestAnimationFrame(()=>updateThemePill(theme));
 }
 
 /* ══════════════════════════════════════
@@ -842,8 +868,21 @@ function setLang(l){
 let theme = localStorage.getItem('ge_theme')||'dark';
 function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
-  document.getElementById('theme-icon').className=th==='dark'?'fa-solid fa-moon':'fa-solid fa-sun';
   localStorage.setItem('ge_theme',th);
+  // Drive pill indicator after DOM is ready
+  requestAnimationFrame(()=>updateThemePill(th));
+}
+function updateThemePill(th){
+  const moon=document.getElementById('tp-moon');
+  const sun=document.getElementById('tp-sun');
+  const ind=document.getElementById('tp-ind');
+  if(!moon||!sun||!ind)return;
+  const active=th==='dark'?moon:sun;
+  const inactive=th==='dark'?sun:moon;
+  active.classList.add('active');
+  inactive.classList.remove('active');
+  ind.style.left=active.offsetLeft+'px';
+  ind.style.width=active.offsetWidth+'px';
 }
 function toggleTheme(){theme=theme==='dark'?'light':'dark';applyTheme(theme);}
 applyTheme(theme);
@@ -1077,6 +1116,8 @@ function initLoaderCanvas(){
    ANIMATE IN (after loader)
 ══════════════════════════════════════ */
 function animIn(){
+  // Re-sync theme pill now that DOM is fully visible
+  updateThemePill(theme);
   // Hero elements stagger
   gsap.to('#h-eyebrow',{opacity:1,y:0,duration:1,delay:.1,ease:'power3.out'});
   gsap.to('#h-h1',{opacity:1,y:0,duration:1.1,delay:.25,ease:'power3.out'});
@@ -1120,7 +1161,9 @@ function initScrollReveals(){
 }
 
 /* ══════════════════════════════════════
-   PROCESS STACKING CARDS
+   PROCESS — UNO STACK CARDS
+   FIX: never tween textContent with GSAP
+   (causes decimal interpolation bug)
 ══════════════════════════════════════ */
 const procData=[
   {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our dedicated expert team.'},
@@ -1130,80 +1173,136 @@ const procData=[
 ];
 let currentCard=0;
 let procTimer=null;
+let procAnimating=false;
+
+// Stack positions: index 0 = front card, 3 = back card
 const STACK=[
-  {x:0,y:0,scale:1,opacity:1,zIndex:4,rotate:0},
-  {x:10,y:16,scale:.965,opacity:.65,zIndex:3,rotate:1.2},
-  {x:20,y:30,scale:.93,opacity:.38,zIndex:2,rotate:2.2},
-  {x:30,y:42,scale:.895,opacity:.18,zIndex:1,rotate:3}
+  {x:0,  y:0,  scale:1,    opacity:1,   zIndex:10, rotate:0  },
+  {x:9,  y:13, scale:.968, opacity:.68, zIndex:7,  rotate:1.4},
+  {x:18, y:26, scale:.936, opacity:.4,  zIndex:4,  rotate:2.6},
+  {x:27, y:39, scale:.904, opacity:.2,  zIndex:1,  rotate:3.8}
 ];
 
 function initProcessCards(){
   const cards=[...document.querySelectorAll('.p-card')];
-  // Initial stack
+  // Set initial stack positions instantly
   cards.forEach((c,i)=>{
-    const s=STACK[i]||STACK[STACK.length-1];
-    gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotate:s.rotate});
+    const s=STACK[i]||STACK[3];
+    gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotation:s.rotate});
+    c.classList.toggle('active',i===0);
   });
-  // Auto-cycle
-  procTimer=setInterval(()=>nextCard(),3800);
-  // Click cards to advance
-  cards.forEach(c=>c.addEventListener('click',()=>{clearInterval(procTimer);nextCard();procTimer=setInterval(()=>nextCard(),3800);}));
+  // Update info panel without animation on load
+  _setInfoDirect(0);
+  // Start auto-cycle
+  _startTimer();
+  // Dot clicks
+  document.querySelectorAll('.p-dot').forEach((dot,i)=>
+    dot.addEventListener('click',()=>goToCard(i))
+  );
 }
 
-function getStackedCards(){
-  const all=[...document.querySelectorAll('.p-card')];
-  // Reorder so currentCard is index 0
-  const reordered=[];
-  for(let i=0;i<all.length;i++){
-    reordered.push(all[(currentCard+i)%all.length]);
-  }
-  return reordered;
+function _startTimer(){
+  clearInterval(procTimer);
+  procTimer=setInterval(nextCard,4200);
+}
+
+function _getCards(){ return [...document.querySelectorAll('.p-card')]; }
+
+// ── Set info text instantly (no GSAP textContent tween) ──
+function _setInfoDirect(idx){
+  const d=procData[idx];
+  if(!d)return;
+  document.getElementById('proc-num').textContent=d.num;
+  document.getElementById('proc-title').textContent=d.title;
+  document.getElementById('proc-desc').textContent=d.desc;
+  document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
+}
+
+// ── Crossfade info text with opacity only (no textContent tween) ──
+function updateProcInfo(idx){
+  const d=procData[idx];
+  if(!d)return;
+  const els=[
+    document.getElementById('proc-num'),
+    document.getElementById('proc-title'),
+    document.getElementById('proc-desc')
+  ];
+  gsap.to(els,{opacity:0,y:-6,duration:.22,ease:'power2.in',
+    onComplete:()=>{
+      // Set text AFTER fade-out, never during a tween
+      document.getElementById('proc-num').textContent=d.num;
+      document.getElementById('proc-title').textContent=d.title;
+      document.getElementById('proc-desc').textContent=d.desc;
+      gsap.to(els,{opacity:1,y:0,duration:.38,ease:'power3.out'});
+    }
+  });
+  document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
 }
 
 function nextCard(){
-  const allCards=[...document.querySelectorAll('.p-card')];
-  const front=allCards[currentCard];
-  // Slide current card UP and out
-  gsap.to(front,{y:-130,opacity:0,scale:.88,rotate:-2,duration:.55,ease:'power3.in',onComplete:()=>{
-    currentCard=(currentCard+1)%allCards.length;
-    // Reset the exited card to bottom of stack
-    const newIdx=(currentCard+allCards.length-1)%allCards.length;
-    gsap.set(allCards[newIdx],{x:STACK[3].x,y:STACK[3].y+60,scale:STACK[3].scale,opacity:0,zIndex:1,rotate:STACK[3].rotate});
-    // Reanimate all cards to their new stack positions
-    allCards.forEach((_,i)=>{
-      const ci=(i-currentCard+allCards.length)%allCards.length;
-      const s=STACK[ci]||STACK[3];
-      gsap.to(allCards[i],{x:s.x,y:s.y,scale:s.scale,opacity:ci===0?1:s.opacity,zIndex:s.zIndex,rotate:s.rotate,duration:.7,ease:'power3.out'});
-    });
-    // Update active class
-    allCards.forEach(c=>c.classList.remove('active'));
-    allCards[currentCard].classList.add('active');
-    updateProcInfo(currentCard,false);
-  }});
+  if(procAnimating)return;
+  procAnimating=true;
+  const cards=_getCards();
+  const front=cards[currentCard];
+
+  // 1. Fly front card off to the upper-left
+  gsap.to(front,{
+    x:-80,y:-110,scale:.82,opacity:0,rotation:-6,
+    duration:.55,ease:'power3.in',
+    onComplete:()=>{
+      // 2. Advance index
+      currentCard=(currentCard+1)%cards.length;
+
+      // 3. Teleport exited card to bottom-of-stack position (off-screen below)
+      const backIdx=(currentCard+cards.length-1)%cards.length;
+      const bs=STACK[3];
+      gsap.set(front,{
+        x:bs.x+10,y:bs.y+50,scale:bs.scale-.02,
+        opacity:0,zIndex:0,rotation:bs.rotate+1
+      });
+
+      // 4. Animate all cards to their new stack positions
+      cards.forEach((card,cardIdx)=>{
+        const stackPos=(cardIdx-currentCard+cards.length)%cards.length;
+        const s=STACK[stackPos]||STACK[3];
+        gsap.to(card,{
+          x:s.x,y:s.y,scale:s.scale,
+          opacity:stackPos===0?1:s.opacity,
+          zIndex:s.zIndex,rotation:s.rotate,
+          duration:.65,ease:'power3.out'
+        });
+        card.classList.toggle('active',cardIdx===currentCard);
+      });
+
+      // 5. Update text panel
+      updateProcInfo(currentCard);
+      setTimeout(()=>procAnimating=false,680);
+    }
+  });
 }
 
 function goToCard(idx){
-  clearInterval(procTimer);
-  currentCard=idx;
-  const allCards=[...document.querySelectorAll('.p-card')];
-  allCards.forEach((_,i)=>{
-    const ci=(i-currentCard+allCards.length)%allCards.length;
-    const s=STACK[ci]||STACK[3];
-    gsap.to(allCards[i],{x:s.x,y:s.y,scale:s.scale,opacity:ci===0?1:s.opacity,zIndex:s.zIndex,rotate:s.rotate,duration:.6,ease:'power3.out'});
-    allCards[i].classList.toggle('active',i===currentCard);
-  });
-  updateProcInfo(idx,true);
-  procTimer=setInterval(()=>nextCard(),3800);
-}
+  if(idx===currentCard||procAnimating)return;
+  procAnimating=true;
+  _startTimer(); // reset timer
 
-function updateProcInfo(idx,animate){
-  const d=procData[idx];
-  if(!d)return;
-  const dur=animate?.4:.25;
-  gsap.to('#proc-num',{opacity:0,y:-10,duration:dur,onComplete:()=>gsap.to('#proc-num',{textContent:d.num,opacity:1,y:0,duration:dur})});
-  gsap.to('#proc-title',{opacity:0,y:8,duration:dur,onComplete:()=>{document.getElementById('proc-title').textContent=d.title;gsap.to('#proc-title',{opacity:1,y:0,duration:dur});}});
-  gsap.to('#proc-desc',{opacity:0,duration:dur,onComplete:()=>{document.getElementById('proc-desc').textContent=d.desc;gsap.to('#proc-desc',{opacity:1,duration:dur});}});
-  [...document.querySelectorAll('.p-dot')].forEach((dot,i)=>dot.classList.toggle('active',i===idx));
+  const cards=_getCards();
+  currentCard=idx;
+
+  cards.forEach((card,cardIdx)=>{
+    const stackPos=(cardIdx-currentCard+cards.length)%cards.length;
+    const s=STACK[stackPos]||STACK[3];
+    gsap.to(card,{
+      x:s.x,y:s.y,scale:s.scale,
+      opacity:stackPos===0?1:s.opacity,
+      zIndex:s.zIndex,rotation:s.rotate,
+      duration:.6,ease:'power3.out'
+    });
+    card.classList.toggle('active',cardIdx===currentCard);
+  });
+
+  updateProcInfo(idx);
+  setTimeout(()=>procAnimating=false,650);
 }
 
 /* ══════════════════════════════════════
