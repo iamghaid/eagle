@@ -621,14 +621,23 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
 
 <script>
 /* ══════════════════════════════════════
-   FIREBASE SETUP
+   FIREBASE CONFIG — مدمج مباشرة
 ══════════════════════════════════════ */
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAE1yGGAtBb7_LMrLJuK5-UsKvL5uAIw4w",
+  authDomain: "eagle-b6d1c.firebaseapp.com",
+  databaseURL: "https://eagle-b6d1c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "eagle-b6d1c",
+  storageBucket: "eagle-b6d1c.firebasestorage.app",
+  messagingSenderId: "756161808889",
+  appId: "1:756161808889:web:3605212055ea921a0a5528"
+};
+
 var db = null;
 var firebaseMode = false;
 var siteData = {packages:[],offers:[],services:[],gallery:[],info:null,settings:{intro:true,wa:true,maint:false}};
 
 function lsGet(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-var FBKEY='ge_firebase_config';
 
 function initFirebaseApp(cfg){
   try{
@@ -671,10 +680,9 @@ function toArr(v){
 }
 
 async function loadSiteData(){
-  var fbCfg = lsGet(FBKEY, null);
-  if(fbCfg && fbCfg.databaseURL){
-    var ok = initFirebaseApp(fbCfg);
-    if(ok){
+  // استخدم الـ config المدمج مباشرة — يشتغل على كل الأجهزة
+  var ok = initFirebaseApp(FIREBASE_CONFIG);
+  if(ok){
       try{
         var snap = await db.ref('/').once('value');
         var data = snap.val()||{};
@@ -703,7 +711,6 @@ async function loadSiteData(){
       }catch(e){
         console.warn('Firebase read failed, fallback to localStorage',e);
       }
-    }
   }
   loadFromLocalStorage();
 }
