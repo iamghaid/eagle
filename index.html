@@ -99,96 +99,35 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
   border-bottom:1px solid var(--border);
 }
 [data-theme="light"] #nav.scrolled{background:rgba(240,234,214,.88);}
-
-/* Logo */
 .nav-logo{display:flex;align-items:center;gap:10px;}
-.nav-logo-ring{
-  width:38px;height:38px;border-radius:50%;overflow:hidden;
-  border:1px solid var(--border);flex-shrink:0;
-  transition:border-color .4s,box-shadow .4s;
-  background:var(--bg2);
-}
+.nav-logo-ring{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1px solid var(--border);flex-shrink:0;transition:border-color .4s,box-shadow .4s;background:var(--bg2);}
 .nav-logo-ring img{width:100%;height:100%;object-fit:cover;}
 .nav-logo:hover .nav-logo-ring{border-color:var(--gold);box-shadow:0 0 22px var(--glow);}
 .nav-logo-wordmark{line-height:1;}
 .nav-logo-name{font-family:var(--fdisplay);font-size:.92rem;color:var(--gold);letter-spacing:.18em;display:block;}
 .nav-logo-tagline{font-size:.5rem;letter-spacing:.22em;color:var(--txt3);text-transform:uppercase;}
-
-/* Links */
 .nav-links{display:flex;gap:36px;list-style:none;}
-.nav-links a{
-  font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
-  color:var(--txt2);position:relative;transition:color .3s;
-}
-.nav-links a::after{
-  content:'';position:absolute;bottom:-5px;left:0;
-  width:0;height:1px;background:var(--gold);transition:width .35s var(--ease1);
-}
+.nav-links a{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--txt2);position:relative;transition:color .3s;}
+.nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:1px;background:var(--gold);transition:width .35s var(--ease1);}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-
-/* Controls */
 .nav-ctrl{display:flex;align-items:center;gap:12px;}
-
-/* ── Language Toggle ── */
-.lang-toggle{
-  display:flex;align-items:center;gap:0;
-  background:var(--glass);border:1px solid var(--border);
-  border-radius:30px;padding:6px 14px;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-}
-.lt-btn{
-  background:none;border:none;padding:0 9px;
-  font-size:.66rem;font-weight:600;letter-spacing:.04em;
-  color:var(--txt3);transition:color .32s var(--ease1);cursor:pointer;
-  font-family:var(--fbody);line-height:1;white-space:nowrap;
-}
+.lang-toggle{display:flex;align-items:center;gap:0;background:var(--glass);border:1px solid var(--border);border-radius:30px;padding:6px 14px;backdrop-filter:blur(14px);}
+.lt-btn{background:none;border:none;padding:0 9px;font-size:.66rem;font-weight:600;letter-spacing:.04em;color:var(--txt3);transition:color .32s var(--ease1);cursor:pointer;font-family:var(--fbody);line-height:1;white-space:nowrap;}
 .lt-btn.active{color:var(--gold);}
 .lt-btn[data-lang="ar"]{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.72rem;}
 .lt-sep{color:var(--border2);font-size:.78rem;user-select:none;opacity:.6;}
-
-/* ── Premium Theme Pill ── */
-.theme-pill{
-  display:flex;align-items:center;
-  background:var(--glass);border:1px solid var(--border);
-  border-radius:30px;padding:4px;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  cursor:pointer;position:relative;
-  transition:border-color .35s,box-shadow .35s;
-}
+.theme-pill{display:flex;align-items:center;background:var(--glass);border:1px solid var(--border);border-radius:30px;padding:4px;backdrop-filter:blur(14px);cursor:pointer;position:relative;transition:border-color .35s,box-shadow .35s;}
 .theme-pill:hover{border-color:var(--gold);box-shadow:0 0 20px var(--glow);}
 .tp-track{display:flex;align-items:center;gap:2px;position:relative;}
-.tp-ind{
-  position:absolute;top:0;bottom:0;left:0;
-  background:var(--gold);border-radius:24px;
-  transition:left .4s cubic-bezier(.34,1.56,.64,1),width .4s cubic-bezier(.34,1.56,.64,1);
-  z-index:0;pointer-events:none;
-}
-.tp-opt{
-  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
-  border-radius:24px;font-size:.8rem;position:relative;z-index:1;
-  transition:color .35s;color:var(--txt3);user-select:none;
-}
+.tp-ind{position:absolute;top:0;bottom:0;left:0;background:var(--gold);border-radius:24px;transition:left .4s cubic-bezier(.34,1.56,.64,1),width .4s cubic-bezier(.34,1.56,.64,1);z-index:0;pointer-events:none;}
+.tp-opt{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:24px;font-size:.8rem;position:relative;z-index:1;transition:color .35s;color:var(--txt3);user-select:none;}
 .tp-opt.active{color:#000;}
-
-/* CTA button */
-.nav-cta{
-  padding:9px 22px;border:1px solid var(--gold);color:var(--gold);
-  font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-  border-radius:2px;transition:all .35s;
-}
+.nav-cta{padding:9px 22px;border:1px solid var(--gold);color:var(--gold);font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;transition:all .35s;}
 .nav-cta:hover{background:var(--gold);color:#000;box-shadow:0 0 30px var(--glow);}
-
-/* Hamburger */
 #ham{display:none;flex-direction:column;gap:5px;padding:5px;}
 #ham span{display:block;width:22px;height:1.5px;background:var(--gold);transition:.3s;}
-
-/* Mobile Nav */
-#mob-nav{
-  position:fixed;inset:0;z-index:600;background:var(--bg2);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;
-  transform:translateX(101%);transition:transform .55s var(--ease2);
-}
+#mob-nav{position:fixed;inset:0;z-index:600;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(101%);transition:transform .55s var(--ease2);}
 #mob-nav.open{transform:translateX(0);}
 #mob-close{position:absolute;top:24px;right:24px;font-size:1.6rem;color:var(--gold);}
 #mob-nav a{font-family:var(--fdisplay);font-size:clamp(1.6rem,5vw,2.6rem);color:var(--txt2);transition:color .3s;}
@@ -200,82 +139,28 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 #hero{position:relative;width:100%;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;z-index:0;}
 .hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transform-origin:center;}
-.hero-bg::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(125deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.48) 55%,rgba(0,0,0,.1) 100%);
-}
-.hero-bg::before{
-  content:'';position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to top,var(--bg0) 0%,transparent 45%);
-}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(125deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.48) 55%,rgba(0,0,0,.1) 100%);}
+.hero-bg::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,var(--bg0) 0%,transparent 45%);}
 #hero-canvas{position:absolute;inset:0;z-index:1;pointer-events:none;}
-
-.hero-inner{
-  position:relative;z-index:2;
-  max-width:1300px;width:100%;margin:0 auto;
-  padding:170px var(--px) 220px;
-}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:14px;margin-bottom:22px;
-  opacity:0;transform:translateY(24px);
-}
+.hero-inner{position:relative;z-index:2;max-width:1300px;width:100%;margin:0 auto;padding:170px var(--px) 220px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:14px;margin-bottom:22px;opacity:0;transform:translateY(24px);}
 .hero-ey-line{width:30px;height:1px;background:var(--gold);}
 .hero-ey-text{font-size:.62rem;letter-spacing:.38em;color:var(--gold);text-transform:uppercase;font-weight:600;}
-.hero-h1{
-  font-family:var(--fdisplay);
-  font-size:clamp(2.8rem,7.5vw,6.4rem);
-  line-height:1.04;letter-spacing:-.01em;
-  margin-bottom:26px;
-  opacity:0;transform:translateY(32px);
-}
+.hero-h1{font-family:var(--fdisplay);font-size:clamp(2.8rem,7.5vw,6.4rem);line-height:1.04;letter-spacing:-.01em;margin-bottom:26px;opacity:0;transform:translateY(32px);}
 .hero-h1 em{color:var(--gold);font-style:italic;display:block;}
-.hero-p{
-  max-width:480px;color:var(--txt2);
-  font-size:clamp(.88rem,1.4vw,1.02rem);
-  line-height:1.95;font-weight:300;margin-bottom:50px;
-  opacity:0;transform:translateY(28px);
-}
+.hero-p{max-width:480px;color:var(--txt2);font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.95;font-weight:300;margin-bottom:50px;opacity:0;transform:translateY(28px);}
 .hero-btns{display:flex;gap:14px;flex-wrap:wrap;opacity:0;transform:translateY(24px);}
-
-.btn-gold{
-  padding:16px 38px;background:var(--gold);color:#000;
-  font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  border-radius:2px;transition:all .4s;position:relative;overflow:hidden;
-}
-.btn-gold::before{
-  content:'';position:absolute;inset:0;
-  background:rgba(255,255,255,.18);transform:translateX(-110%);
-  transition:transform .45s var(--ease1);
-}
+.btn-gold{padding:16px 38px;background:var(--gold);color:#000;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border-radius:2px;transition:all .4s;position:relative;overflow:hidden;}
+.btn-gold::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);transform:translateX(-110%);transition:transform .45s var(--ease1);}
 .btn-gold:hover::before{transform:translateX(0);}
 .btn-gold:hover{box-shadow:0 0 45px var(--glow);}
-
-.btn-ghost{
-  padding:16px 38px;border:1px solid rgba(201,162,39,.38);color:var(--gold);
-  font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-  border-radius:2px;backdrop-filter:blur(8px);background:var(--glass);transition:all .4s;
-}
+.btn-ghost{padding:16px 38px;border:1px solid rgba(201,162,39,.38);color:var(--gold);font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-radius:2px;backdrop-filter:blur(8px);background:var(--glass);transition:all .4s;}
 .btn-ghost:hover{border-color:var(--gold);background:var(--glow2);box-shadow:0 0 30px rgba(201,162,39,.14);}
-
-/* Stats */
-.hero-stats{
-  position:absolute;bottom:0;left:0;right:0;z-index:2;
-  padding:36px var(--px);
-  background:linear-gradient(to top,var(--bg0) 0%,transparent 100%);
-  display:flex;flex-wrap:wrap;gap:44px;align-items:flex-end;
-}
-.stat-val{
-  font-family:var(--fdisplay);font-size:clamp(1.7rem,3.2vw,2.7rem);
-  color:var(--gold);line-height:1;font-weight:600;
-}
+.hero-stats{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:36px var(--px);background:linear-gradient(to top,var(--bg0) 0%,transparent 100%);display:flex;flex-wrap:wrap;gap:44px;align-items:flex-end;}
+.stat-val{font-family:var(--fdisplay);font-size:clamp(1.7rem,3.2vw,2.7rem);color:var(--gold);line-height:1;font-weight:600;}
 .stat-lbl{font-size:.58rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;margin-top:5px;}
 .stat-sep{width:1px;height:38px;background:var(--border);align-self:center;flex-shrink:0;}
-
-/* Scroll cue */
-.scroll-cue{
-  position:absolute;bottom:145px;right:var(--px);z-index:2;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-}
+.scroll-cue{position:absolute;bottom:145px;right:var(--px);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;}
 .scroll-cue span{font-size:.55rem;letter-spacing:.28em;color:var(--txt3);text-transform:uppercase;}
 .scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scl 2.2s ease-in-out infinite;}
 @keyframes scl{0%,100%{opacity:.35}50%{opacity:1}}
@@ -283,18 +168,11 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 /* ══════════════════════════════════════
    MARQUEE
 ══════════════════════════════════════ */
-.marquee-wrap{
-  overflow:hidden;padding:18px 0;
-  background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-}
+.marquee-wrap{overflow:hidden;padding:18px 0;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
 .marquee-track{display:flex;width:max-content;animation:mq 32s linear infinite;gap:56px;align-items:center;}
 [dir="rtl"] .marquee-track{animation-direction:reverse;}
 @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.mq-item{
-  display:flex;align-items:center;gap:18px;
-  font-size:.62rem;letter-spacing:.28em;color:rgba(201,162,39,.5);
-  text-transform:uppercase;font-weight:600;white-space:nowrap;
-}
+.mq-item{display:flex;align-items:center;gap:18px;font-size:.62rem;letter-spacing:.28em;color:rgba(201,162,39,.5);text-transform:uppercase;font-weight:600;white-space:nowrap;}
 .mq-dot{width:3px;height:3px;background:var(--gold);border-radius:50%;opacity:.4;}
 
 /* ══════════════════════════════════════
@@ -311,23 +189,13 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 ══════════════════════════════════════ */
 #packages{background:var(--bg1);}
 .pkg-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:58px;flex-wrap:wrap;gap:18px;}
-.pkg-all{
-  font-size:.66rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;
-  font-weight:600;display:flex;align-items:center;gap:8px;transition:gap .3s;
-}
+.pkg-all{font-size:.66rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:8px;transition:gap .3s;}
 .pkg-all:hover{gap:14px;}
 .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 .pkg-card{position:relative;overflow:hidden;border-radius:3px;cursor:pointer;background:var(--bg3);}
-.pkg-card img{
-  width:100%;aspect-ratio:3/4;object-fit:cover;
-  transition:transform .85s var(--ease1),opacity .5s;opacity:.78;display:block;
-}
+.pkg-card img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .85s var(--ease1),opacity .5s;opacity:.78;display:block;}
 .pkg-card:hover img{transform:scale(1.08);opacity:1;}
-.pkg-ov{
-  position:absolute;inset:0;padding:26px;
-  background:linear-gradient(to top,rgba(0,0,0,.93) 0%,rgba(0,0,0,.18) 55%,transparent 100%);
-  display:flex;flex-direction:column;justify-content:flex-end;
-}
+.pkg-ov{position:absolute;inset:0;padding:26px;background:linear-gradient(to top,rgba(0,0,0,.93) 0%,rgba(0,0,0,.18) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;}
 .pkg-cat{font-size:.58rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
 .pkg-name{font-family:var(--fdisplay);font-size:1.35rem;color:#fff;line-height:1.2;}
 .pkg-dur{font-size:.7rem;color:rgba(255,255,255,.45);margin-top:5px;}
@@ -338,92 +206,36 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 .pkg-card:hover .pkg-cta{opacity:1;transform:translateY(0);}
 .pkg-card:nth-child(2){margin-top:50px;}
 .pkg-feat{position:absolute;top:18px;left:18px;background:var(--gold);color:#000;font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;}
-.pkg-empty{grid-column:1/-1;text-align:center;padding:100px 24px;color:var(--txt3);}
-.pkg-empty i{font-size:3rem;color:var(--gold3);display:block;margin-bottom:18px;}
 
 /* ══════════════════════════════════════
-   PROCESS — TRUE CARD DECK (peek strips)
-   Formula: container_h = card_h + (n-1)*peek_h
-   Card at stack pos i → translateY(i * peek_h)
+   PROCESS
 ══════════════════════════════════════ */
 #process-section{background:var(--bg0);}
-#process{
-  padding:80px var(--px) var(--py);
-  display:grid;grid-template-columns:1fr 1fr;gap:80px;
-  max-width:1300px;margin:0 auto;align-items:center;
-}
+#process{padding:80px var(--px) var(--py);display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1300px;margin:0 auto;align-items:center;}
 .proc-info{position:relative;}
-.proc-big-num{
-  font-family:var(--fdisplay);font-size:clamp(6rem,14vw,11rem);
-  color:rgba(201,162,39,.06);line-height:1;font-weight:700;user-select:none;
-}
+.proc-big-num{font-family:var(--fdisplay);font-size:clamp(6rem,14vw,11rem);color:rgba(201,162,39,.06);line-height:1;font-weight:700;user-select:none;}
 .proc-step-tag{font-size:.58rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:10px;}
 .proc-title{font-family:var(--fdisplay);font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--txt);margin-bottom:18px;line-height:1.18;}
 .proc-desc{color:var(--txt2);font-size:.95rem;line-height:1.9;font-weight:300;max-width:380px;}
 .proc-dots{display:flex;gap:10px;margin-top:40px;}
 .p-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .45s;cursor:pointer;}
 .p-dot.active{background:var(--gold);transform:scale(1.5);}
-
-/* Deck container: 360 card + 3×54 peek = 522px */
 .proc-deck{position:relative;height:522px;}
-
-.p-card{
-  position:absolute;top:0;left:0;right:0;height:360px;
-  border-radius:16px;
-  background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  border:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;cursor:pointer;
-  will-change:transform,opacity;
-}
-.p-card::before{
-  content:'';position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(130deg,var(--glow2) 0%,transparent 65%);
-  pointer-events:none;
-}
+.p-card{position:absolute;top:0;left:0;right:0;height:360px;border-radius:16px;background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;cursor:pointer;will-change:transform,opacity;}
+.p-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(130deg,var(--glow2) 0%,transparent 65%);pointer-events:none;}
 .p-card.active{border-color:var(--border2);}
-.p-card:not(.active):hover .pc-peek{background:rgba(201,162,39,.07);}
-
-/* Body: main content — only fully visible on front card */
-.pc-body{
-  flex:1;padding:30px 34px 0;
-  display:flex;flex-direction:column;gap:8px;
-  opacity:0;transition:opacity .38s;pointer-events:none;
-}
+.pc-body{flex:1;padding:30px 34px 0;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity .38s;pointer-events:none;}
 .p-card.active .pc-body{opacity:1;pointer-events:auto;}
-
-.pc-num-big{
-  font-family:var(--fdisplay);font-size:5rem;
-  color:rgba(201,162,39,.07);line-height:1;font-weight:700;margin-bottom:-6px;
-}
+.pc-num-big{font-family:var(--fdisplay);font-size:5rem;color:rgba(201,162,39,.07);line-height:1;font-weight:700;margin-bottom:-6px;}
 .pc-icon-big{font-size:2.4rem;line-height:1;}
 .pc-card-title{font-family:var(--fdisplay);font-size:1.42rem;color:var(--txt);line-height:1.2;margin-top:4px;}
 .pc-card-desc{font-size:.82rem;color:var(--txt2);line-height:1.78;font-weight:300;}
-
-/* Peek strip: always visible — shows step badge + name */
-.pc-peek{
-  display:flex;align-items:center;gap:14px;
-  padding:0 24px;height:54px;flex-shrink:0;
-  border-top:1px solid var(--border);
-  transition:background .28s;
-  position:relative;z-index:1;
-}
-.pc-peek-badge{
-  font-family:var(--fdisplay);font-size:.66rem;color:var(--gold);
-  letter-spacing:.14em;background:rgba(201,162,39,.1);
-  padding:4px 10px;border-radius:4px;flex-shrink:0;
-}
+.pc-peek{display:flex;align-items:center;gap:14px;padding:0 24px;height:54px;flex-shrink:0;border-top:1px solid var(--border);transition:background .28s;position:relative;z-index:1;}
+.pc-peek-badge{font-family:var(--fdisplay);font-size:.66rem;color:var(--gold);letter-spacing:.14em;background:rgba(201,162,39,.1);padding:4px 10px;border-radius:4px;flex-shrink:0;}
 .pc-peek-name{font-size:.82rem;color:var(--txt2);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-peek-arr{
-  font-size:.7rem;color:var(--txt3);
-  transition:color .3s,transform .35s;flex-shrink:0;
-}
+.pc-peek-arr{font-size:.7rem;color:var(--txt3);transition:color .3s,transform .35s;flex-shrink:0;}
 .p-card.active .pc-peek-arr{color:var(--gold);transform:rotate(-90deg);}
-.pc-card-glow{
-  position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;
-  background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
-  filter:blur(28px);opacity:0;pointer-events:none;transition:opacity .5s;
-}
+.pc-card-glow{position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);filter:blur(28px);opacity:0;pointer-events:none;transition:opacity .5s;}
 .p-card.active .pc-card-glow{opacity:1;}
 
 /* ══════════════════════════════════════
@@ -431,11 +243,7 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 ══════════════════════════════════════ */
 #services{background:var(--bg1);}
 .bento{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:60px;}
-.b-base{
-  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--border);border-radius:14px;
-  transition:border-color .4s,transform .4s,box-shadow .4s;overflow:hidden;position:relative;
-}
+.b-base{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:14px;transition:border-color .4s,transform .4s,box-shadow .4s;overflow:hidden;position:relative;}
 .b-base:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .b-big{grid-column:span 2;grid-row:span 2;padding:50px 44px;display:flex;flex-direction:column;justify-content:space-between;min-height:400px;}
 .b-big-wm{position:absolute;right:-20px;top:-16px;font-size:170px;opacity:.025;pointer-events:none;line-height:1;}
@@ -469,7 +277,6 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 .soc-row{display:flex;gap:10px;margin-top:38px;}
 .soc-btn{width:44px;height:44px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.88rem;transition:all .35s;}
 .soc-btn:hover{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 24px var(--glow);}
-
 .cf-wrap{background:var(--glass);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:16px;padding:46px;}
 .cf-row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .cf-grp{border-bottom:1px solid var(--border);padding:12px 0;margin-bottom:4px;transition:border-color .35s;}
@@ -478,11 +285,7 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 .cf-inp{background:transparent;border:none;width:100%;color:var(--txt);font-family:var(--fbody);font-size:.88rem;outline:none;}
 .cf-inp::placeholder{color:var(--txt3);}
 .cf-inp option{background:var(--bg3);}
-.btn-submit{
-  width:100%;padding:17px;margin-top:26px;background:var(--gold);color:#000;
-  font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  border-radius:2px;transition:all .4s;position:relative;overflow:hidden;
-}
+.btn-submit{width:100%;padding:17px;margin-top:26px;background:var(--gold);color:#000;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border-radius:2px;transition:all .4s;position:relative;overflow:hidden;}
 .btn-submit::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);transform:translateX(-110%);transition:.45s;}
 .btn-submit:hover::before{transform:translateX(0);}
 .btn-submit:hover{box-shadow:0 0 40px var(--glow);}
@@ -513,43 +316,22 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
 .ft-copy{font-size:.66rem;letter-spacing:.1em;color:var(--txt3);}
 
 /* WA Float */
-#wa-float{
-  position:fixed;bottom:28px;right:28px;z-index:400;
-  width:54px;height:54px;background:#25D366;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 22px rgba(37,211,102,.4);
-  animation:waPulse 3s ease-in-out infinite;transition:transform .3s;
-}
+#wa-float{position:fixed;bottom:28px;right:28px;z-index:400;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 22px rgba(37,211,102,.4);animation:waPulse 3s ease-in-out infinite;transition:transform .3s;}
 #wa-float:hover{transform:scale(1.12);}
 @keyframes waPulse{0%,100%{box-shadow:0 4px 22px rgba(37,211,102,.4)}50%{box-shadow:0 4px 44px rgba(37,211,102,.7)}}
 #wa-float svg{width:26px;height:26px;fill:#fff;}
 
-/* ══════════════════════════════════════
-   REVEAL
-══════════════════════════════════════ */
+/* REVEAL */
 .rv{opacity:0;transform:translateY(36px);}
 .rv.on{opacity:1;transform:none;transition:opacity .8s var(--ease1),transform .8s var(--ease1);}
 
-/* ══════════════════════════════════════
-   OFFERS BANNER
-══════════════════════════════════════ */
-#offers-banner{
-  display:none;padding:14px var(--px);
-  background:linear-gradient(90deg,var(--glow2),transparent);
-  border-bottom:1px solid var(--border);
-}
+/* OFFERS BANNER */
+#offers-banner{display:none;padding:14px var(--px);background:linear-gradient(90deg,var(--glow2),transparent);border-bottom:1px solid var(--border);}
 .off-in{max-width:1300px;margin:0 auto;display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
-.off-chip{
-  display:inline-flex;align-items:center;gap:10px;
-  background:rgba(201,162,39,.1);border:1px solid var(--border);
-  padding:7px 16px;font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.08em;
-  border-radius:2px;
-}
+.off-chip{display:inline-flex;align-items:center;gap:10px;background:rgba(201,162,39,.1);border:1px solid var(--border);padding:7px 16px;font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.08em;border-radius:2px;}
 .off-chip span{color:var(--txt2);font-weight:300;}
 
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
+/* RESPONSIVE */
 @media(max-width:1100px){
   .pkg-grid{grid-template-columns:1fr 1fr;}
   .pkg-card:nth-child(2){margin-top:0;}
@@ -575,14 +357,12 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   .hero-stats{gap:24px;}
   .proc-deck{height:360px;}
   .p-card{padding:32px 26px;}
-  .lt-btn[data-lang="en"]{font-size:.6rem;}
-  .lt-btn[data-lang="ar"]{font-size:.66rem;}
 }
 </style>
 </head>
 <body>
 
-<!-- ════ LOADER ════ -->
+<!-- LOADER -->
 <div id="loader">
   <canvas id="ldr-canvas"></canvas>
   <div class="ldr-ring" id="ldr-ring">
@@ -597,7 +377,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   <div class="ldr-bar"><div class="ldr-fill" id="ldr-fill"></div></div>
 </div>
 
-<!-- ════ MOBILE NAV ════ -->
+<!-- MOBILE NAV -->
 <div id="mob-nav">
   <button id="mob-close" onclick="closeMob()">✕</button>
   <a href="#hero" onclick="closeMob()" data-i18n="nav.home">Home</a>
@@ -607,13 +387,13 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   <a href="#contact" onclick="closeMob()" data-i18n="nav.contact">Contact</a>
 </div>
 
-<!-- ════ NAV ════ -->
+<!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
     <div class="nav-logo-ring"><img id="nav-logo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/></div>
     <div class="nav-logo-wordmark">
       <span class="nav-logo-name">Global Eagle</span>
-      <span class="nav-logo-tagline" data-i18n="nav.tagline">Travel & Tourism</span>
+      <span class="nav-logo-tagline" data-i18n="nav.tagline">Travel &amp; Tourism</span>
     </div>
   </a>
   <ul class="nav-links">
@@ -643,17 +423,17 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   </div>
 </nav>
 
-<!-- ════ OFFERS BANNER ════ -->
+<!-- OFFERS BANNER -->
 <div id="offers-banner"><div class="off-in" id="off-in"></div></div>
 
-<!-- ════ HERO ════ -->
+<!-- HERO -->
 <section id="hero">
   <div class="hero-bg"><img id="hero-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs" alt="Hero"/></div>
   <canvas id="hero-canvas"></canvas>
   <div class="hero-inner">
     <div class="hero-eyebrow" id="h-eyebrow"><div class="hero-ey-line"></div><div class="hero-ey-text" data-i18n="hero.tag">ELEVATING EVERY JOURNEY</div></div>
     <h1 class="hero-h1" id="h-h1">Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em></h1>
-    <p class="hero-p" id="h-p" data-i18n="hero.desc">Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.</p>
+    <p class="hero-p" id="h-p" data-i18n="hero.desc">Experience the world through the lens of pure luxury.</p>
     <div class="hero-btns" id="h-btns">
       <button class="btn-gold" onclick="goTo('packages')" data-i18n="hero.btn1">Explore Packages</button>
       <button class="btn-ghost" onclick="goTo('services')" data-i18n="hero.btn2">Our Services</button>
@@ -671,10 +451,10 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   </div>
 </section>
 
-<!-- ════ MARQUEE ════ -->
+<!-- MARQUEE -->
 <div class="marquee-wrap"><div class="marquee-track" id="mq-track"></div></div>
 
-<!-- ════ PACKAGES ════ -->
+<!-- PACKAGES -->
 <section id="packages" class="sec">
   <div class="sec-in">
     <div class="pkg-hd rv">
@@ -685,7 +465,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   </div>
 </section>
 
-<!-- ════ PROCESS ════ -->
+<!-- PROCESS -->
 <div id="process-section" style="background:var(--bg0);">
   <div class="sec-in" style="text-align:center;padding:var(--py) var(--px) 0;">
     <span class="sec-tag rv" data-i18n="proc.tag">The Journey</span>
@@ -696,7 +476,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
       <div class="proc-big-num" id="proc-num">01</div>
       <div class="proc-step-tag" data-i18n="proc.step">Step</div>
       <div class="proc-title" id="proc-title">Planning</div>
-      <p class="proc-desc" id="proc-desc">Share your vision and travel preferences with our dedicated expert team.</p>
+      <p class="proc-desc" id="proc-desc">Share your vision with our expert team.</p>
       <div class="proc-dots" id="proc-dots">
         <div class="p-dot active" onclick="goToCard(0)"></div>
         <div class="p-dot" onclick="goToCard(1)"></div>
@@ -706,30 +486,30 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
     </div>
     <div class="proc-deck" id="proc-deck">
       <div class="p-card active" data-idx="0">
-        <div class="pc-num">01</div>
-        <div><div class="pc-icon">🗺️</div><div class="pc-title" data-i18n="proc.c0t">Planning</div><div class="pc-desc" data-i18n="proc.c0d">Share your vision and travel preferences with our dedicated expert team.</div></div>
-        <div class="pc-glow"></div>
+        <div class="pc-body"><div class="pc-num-big">01</div><div class="pc-icon-big">🗺️</div><div class="pc-card-title" data-i18n="proc.c0t">Planning</div><div class="pc-card-desc" data-i18n="proc.c0d">Share your vision and travel preferences.</div></div>
+        <div class="pc-peek"><span class="pc-peek-badge">01</span><span class="pc-peek-name">Planning</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
+        <div class="pc-card-glow"></div>
       </div>
       <div class="p-card" data-idx="1">
-        <div class="pc-num">02</div>
-        <div><div class="pc-icon">📋</div><div class="pc-title" data-i18n="proc.c1t">Booking</div><div class="pc-desc" data-i18n="proc.c1d">We secure the finest accommodations and flights at the most competitive rates.</div></div>
-        <div class="pc-glow"></div>
+        <div class="pc-body"><div class="pc-num-big">02</div><div class="pc-icon-big">📋</div><div class="pc-card-title" data-i18n="proc.c1t">Booking</div><div class="pc-card-desc" data-i18n="proc.c1d">We secure the finest accommodations.</div></div>
+        <div class="pc-peek"><span class="pc-peek-badge">02</span><span class="pc-peek-name">Booking</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
+        <div class="pc-card-glow"></div>
       </div>
       <div class="p-card" data-idx="2">
-        <div class="pc-num">03</div>
-        <div><div class="pc-icon">✨</div><div class="pc-title" data-i18n="proc.c2t">Experience</div><div class="pc-desc" data-i18n="proc.c2d">Enjoy a flawless luxury journey with 24/7 personal concierge support.</div></div>
-        <div class="pc-glow"></div>
+        <div class="pc-body"><div class="pc-num-big">03</div><div class="pc-icon-big">✨</div><div class="pc-card-title" data-i18n="proc.c2t">Experience</div><div class="pc-card-desc" data-i18n="proc.c2d">Enjoy a flawless luxury journey.</div></div>
+        <div class="pc-peek"><span class="pc-peek-badge">03</span><span class="pc-peek-name">Experience</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
+        <div class="pc-card-glow"></div>
       </div>
       <div class="p-card" data-idx="3">
-        <div class="pc-num">04</div>
-        <div><div class="pc-icon">🏆</div><div class="pc-title" data-i18n="proc.c3t">Destination</div><div class="pc-desc" data-i18n="proc.c3d">Arrive at your dream destination — we are with you every step of the way.</div></div>
-        <div class="pc-glow"></div>
+        <div class="pc-body"><div class="pc-num-big">04</div><div class="pc-icon-big">🏆</div><div class="pc-card-title" data-i18n="proc.c3t">Destination</div><div class="pc-card-desc" data-i18n="proc.c3d">Arrive at your dream destination.</div></div>
+        <div class="pc-peek"><span class="pc-peek-badge">04</span><span class="pc-peek-name">Destination</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
+        <div class="pc-card-glow"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════ SERVICES ════ -->
+<!-- SERVICES -->
 <section id="services" class="sec">
   <div class="sec-in">
     <div class="rv"><span class="sec-tag" data-i18n="svc.tag">What We Offer</span><h2 class="sec-h2" data-i18n="svc.title">Global Eagle Services</h2></div>
@@ -737,15 +517,15 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   </div>
 </section>
 
-<!-- ════ GALLERY ════ -->
+<!-- GALLERY -->
 <section id="gallery" class="sec">
   <div class="sec-in">
-    <div class="rv"><span class="sec-tag" data-i18n="gal.tag">Our World</span><h2 class="sec-h2" data-i18n="gal.title">Visual Journey</h2></div>
+    <div class="rv"><span class="sec-tag">Our World</span><h2 class="sec-h2">Visual Journey</h2></div>
     <div class="gal-grid" id="gal-grid"></div>
   </div>
 </section>
 
-<!-- ════ CONTACT ════ -->
+<!-- CONTACT -->
 <section id="contact" class="sec">
   <div class="sec-in">
     <div class="ct-grid">
@@ -767,15 +547,9 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
           <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.fn">First Name</label><input class="cf-inp" id="f1" type="text" placeholder="John"/></div>
           <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ln">Last Name</label><input class="cf-inp" id="f2" type="text" placeholder="Doe"/></div>
         </div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.em2">Email Address</label><input class="cf-inp" id="f3" type="email" placeholder="john@example.com"/></div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ph">Phone Number</label><input class="cf-inp" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
-        <div class="cf-grp">
-          <label class="cf-lbl" data-i18n="ct.svc">Service</label>
-          <select class="cf-inp" id="f5">
-            <option>Tourist Visa</option><option>Hotel Booking</option><option>Flight Tickets</option>
-            <option>Student Visa</option><option>International License</option><option>Travel Insurance</option>
-          </select>
-        </div>
+        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.em2">Email</label><input class="cf-inp" id="f3" type="email" placeholder="john@example.com"/></div>
+        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ph">Phone</label><input class="cf-inp" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
+        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.svc">Service</label><select class="cf-inp" id="f5"><option>Tourist Visa</option><option>Hotel Booking</option><option>Flight Tickets</option><option>Student Visa</option><option>International License</option><option>Travel Insurance</option></select></div>
         <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.msg">Message</label><textarea class="cf-inp" id="f6" rows="3" placeholder="Tell us about your journey..." style="resize:none;"></textarea></div>
         <button class="btn-submit" onclick="sendWA()" data-i18n="ct.btn">Send Inquiry ✈</button>
       </div>
@@ -783,7 +557,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   </div>
 </section>
 
-<!-- ════ FOOTER ════ -->
+<!-- FOOTER -->
 <footer>
   <div class="ft-in">
     <div class="ft-grid">
@@ -792,7 +566,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
           <div class="ft-logo-ring"><img id="ft-logo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/></div>
           <span class="ft-logo-name">Global Eagle</span>
         </div>
-        <p class="ft-desc" data-i18n="ft.desc">Your trusted partner in premium travel & tourism. Redefining high-end journeys since 1994.</p>
+        <p class="ft-desc" data-i18n="ft.desc">Your trusted partner in premium travel & tourism.</p>
         <div class="ft-socs">
           <a id="ft-ig" href="#" target="_blank" class="ft-soc"><i class="fa-brands fa-instagram"></i></a>
           <a id="ft-sc" href="#" target="_blank" class="ft-soc"><i class="fa-brands fa-snapchat"></i></a>
@@ -813,14 +587,14 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
         <div class="ft-h" data-i18n="ft.co">Company</div>
         <ul class="ft-links">
           <li><a href="#">About Us</a></li><li><a href="#">Careers</a></li>
-          <li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li><li><a href="#">Terms</a></li>
         </ul>
       </div>
       <div>
         <div class="ft-h" data-i18n="ft.nl">Newsletter</div>
-        <p class="ft-desc" data-i18n="ft.nl-d">Get exclusive deals and travel inspiration.</p>
+        <p class="ft-desc" data-i18n="ft.nl-d">Exclusive deals and travel inspiration.</p>
         <div class="nl-row">
-          <input class="nl-inp" type="email" placeholder="Your email address" data-i18n-ph="ft.nl-ph"/>
+          <input class="nl-inp" type="email" placeholder="Your email"/>
           <button class="nl-btn" onclick="alert('Subscribed! ✈')" data-i18n="ft.nl-b">JOIN</button>
         </div>
       </div>
@@ -837,592 +611,340 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   <svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.46.66 4.77 1.8 6.77L2 30l7.47-1.77A13.94 13.94 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.5a11.44 11.44 0 01-5.84-1.6l-.42-.25-4.33 1.03 1.05-4.2-.28-.44A11.45 11.45 0 014.5 16C4.5 9.6 9.6 4.5 16 4.5S27.5 9.6 27.5 16 22.4 27.5 16 27.5zm6.27-8.57c-.34-.17-2.02-.99-2.33-1.1-.31-.12-.54-.17-.77.17-.23.34-.88 1.1-1.08 1.33-.2.23-.4.26-.74.09-.34-.17-1.44-.53-2.74-1.68-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.12-.23.06-.43-.03-.6-.09-.17-.77-1.85-1.05-2.53-.28-.67-.56-.58-.77-.59h-.65c-.23 0-.6.09-.91.43-.31.34-1.2 1.17-1.2 2.85s1.22 3.3 1.4 3.53c.17.23 2.42 3.69 5.86 5.17.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2.02-.82 2.31-1.62.28-.8.28-1.48.2-1.62-.09-.14-.31-.23-.65-.4z"/></svg>
 </a>
 
-<script>
+<!-- ══════════════════════════════════════
+   FIREBASE + SITE LOGIC
+══════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 gsap.registerPlugin(ScrollTrigger);
 
-/* ══════════════════════════════════════
-   TRANSLATIONS
-══════════════════════════════════════ */
-const T = {
-  en:{
-    nav:{home:'Home',packages:'Packages',services:'Services',process:'Process',contact:'Contact',cta:'Inquire Now',tagline:'Travel & Tourism'},
-    hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em>',desc:'Experience the world through the lens of pure luxury. Our private charters and curated destinations redefine global exploration.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},
-    stats:{dest:'Global Destinations',fleet:'Private Fleet',members:'Elite Members',years:'Years Excellence'},
-    pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},
-    proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our dedicated expert team.',c1t:'Booking',c1d:'We secure the finest accommodations and flights at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 personal concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — we will be with you every step of the way.'},
-    svc:{tag:'What We Offer',title:'Global Eagle Services'},
-    gal:{tag:'Our World',title:'Visual Journey'},
-    ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message'},
-    ft:{desc:'Your trusted partner in premium travel & tourism. Redefining high-end journeys since 1994.',ex:'Explore',co:'Company',nl:'Newsletter','nl-d':'Get exclusive deals and travel inspiration.','nl-ph':'Your email address','nl-b':'JOIN',copy:'© 2025 Global Eagle Travel. The Majesty of Flight.','wa-link':'WhatsApp Us'}
-  },
-  ar:{
-    nav:{home:'الرئيسية',packages:'الباقات',services:'خدماتنا',process:'كيف نعمل',contact:'تواصل معنا',cta:'استفسر الآن',tagline:'سفر وسياحة'},
-    hero:{tag:'نرتقي بكل رحلة',h1:'وراء كل أفق<br/>تنتظرك<br/><em>رحلتك الاستثنائية</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية. رحلاتنا الخاصة ووجهاتنا المختارة تُعيد تعريف الاستكشاف العالمي.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},
-    stats:{dest:'وجهة عالمية',fleet:'أسطول خاص',members:'عضو مميز',years:'سنوات التميز'},
-    pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},
-    proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك وتفضيلاتك السياحية مع فريقنا المتخصص.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات بأسعار تنافسية لا مثيل لها.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة لا تُنسى مع رعاية شاملة على مدار الساعة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن نكون معك في كل لحظة من رحلتك.'},
-    svc:{tag:'ما نقدمه',title:'خدمات النسر العالمي'},
-    gal:{tag:'عالمنا',title:'رحلة بصرية'},
-    ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك'},
-    ft:{desc:'شريكك الموثوق في السفر والسياحة الفاخرة. نُعيد تعريف الرحلات الراقية منذ ١٩٩٤.',ex:'استكشف',co:'الشركة',nl:'النشرة البريدية','nl-d':'احصل على أفضل العروض وإلهام السفر.','nl-ph':'بريدك الإلكتروني','nl-b':'اشتراك',copy:'© ٢٠٢٥ نسر عالمي للسفر. جلال الطيران.','wa-link':'تواصل عبر واتساب'}
-  }
+/* ── Translations ── */
+const T={
+  en:{nav:{home:'Home',packages:'Packages',services:'Services',process:'Process',contact:'Contact',cta:'Inquire Now',tagline:'Travel & Tourism'},hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em>',desc:'Experience the world through the lens of pure luxury.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},stats:{dest:'Global Destinations',fleet:'Private Fleet',members:'Elite Members',years:'Years Excellence'},pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our expert team.',c1t:'Booking',c1d:'We secure the finest accommodations at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — with us every step.'},svc:{tag:'What We Offer',title:'Global Eagle Services',concierge:'From visa processing to private transfers.',explore:'Explore Services'},ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message'},ft:{desc:'Your trusted partner in premium travel & tourism.',ex:'Explore',co:'Company',nl:'Newsletter','nl-d':'Get exclusive deals and travel inspiration.','nl-b':'JOIN',copy:'© 2025 Global Eagle Travel.','wa-link':'WhatsApp Us'}},
+  ar:{nav:{home:'الرئيسية',packages:'الباقات',services:'خدماتنا',process:'كيف نعمل',contact:'تواصل معنا',cta:'استفسر الآن',tagline:'سفر وسياحة'},hero:{tag:'نرتقي بكل رحلة',h1:'وراء كل أفق<br/>تنتظرك<br/><em>رحلتك الاستثنائية</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},stats:{dest:'وجهة عالمية',fleet:'أسطول خاص',members:'عضو مميز',years:'سنوات التميز'},pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك مع فريقنا.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة مع رعاية شاملة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن معك دائماً.'},svc:{tag:'ما نقدمه',title:'خدمات النسر العالمي',concierge:'من تأشيرات السفر إلى النقل الخاص.',explore:'استكشف الخدمات'},ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك'},ft:{desc:'شريكك الموثوق في السفر والسياحة الفاخرة.',ex:'استكشف',co:'الشركة',nl:'النشرة البريدية','nl-d':'أفضل العروض وإلهام السفر.','nl-b':'اشتراك',copy:'© ٢٠٢٥ نسر عالمي للسفر.','wa-link':'تواصل عبر واتساب'}}
 };
 
-let lang = 'en';
-function t(k){ const p=k.split('.'); let v=T[lang]; for(const x of p){if(v&&v[x]!=null)v=v[x];else return k;} return v; }
+let lang='en';
+function t(k){const p=k.split('.');let v=T[lang];for(const x of p){if(v&&v[x]!=null)v=v[x];else return k;}return v;}
 
-function setLang(l){
-  lang=l;
-  const html=document.documentElement;
-  html.lang=l; html.dir=l==='ar'?'rtl':'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const v=t(el.dataset.i18n);
-    if(typeof v==='string')el.textContent=v;
-  });
-  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const v=t(el.dataset.i18nPh);if(v)el.placeholder=v;});
-  // hero h1 needs innerHTML
-  const h1=document.getElementById('h-h1');
-  if(h1)h1.innerHTML=t('hero.h1');
+window.setLang=function(l){
+  lang=l;const html=document.documentElement;
+  html.lang=l;html.dir=l==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;});
+  const h1=document.getElementById('h-h1');if(h1)h1.innerHTML=t('hero.h1');
   document.getElementById('btn-en').classList.toggle('active',l==='en');
   document.getElementById('btn-ar').classList.toggle('active',l==='ar');
-  // update process info panel
   procData.forEach((d,i)=>{d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
   updateProcInfo(currentCard);
-  // re-align theme pill (RTL may shift layout)
   requestAnimationFrame(()=>updateThemePill(theme));
-}
+};
 
-/* ══════════════════════════════════════
-   THEME
-══════════════════════════════════════ */
+/* ── Theme ── */
+let theme=localStorage.getItem('ge_theme')||'dark';
 const HERO_DARK_DEFAULT='https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs';
-
-let theme = localStorage.getItem('ge_theme')||'dark';
 
 function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
   localStorage.setItem('ge_theme',th);
-  // Swap hero background image
   const heroImg=document.getElementById('hero-img');
-  if(heroImg){
-    const stored=ls('ge_info',null);
-    const darkSrc=(stored&&stored.heroImgDark)||HERO_DARK_DEFAULT;
-    const lightSrc=(stored&&stored.heroImgLight)||'';
-    const newSrc=th==='light'&&lightSrc?lightSrc:darkSrc;
-    if(heroImg.src!==newSrc){
-      gsap.to(heroImg,{opacity:0,duration:.35,onComplete:()=>{
-        heroImg.src=newSrc;
-        heroImg.onload=()=>gsap.to(heroImg,{opacity:1,duration:.55});
-      }});
-    }
+  if(heroImg&&siteData.info){
+    const src=th==='light'&&siteData.info.heroImgLight?siteData.info.heroImgLight:(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
+    if(heroImg.src!==src){gsap.to(heroImg,{opacity:0,duration:.35,onComplete:()=>{heroImg.src=src;heroImg.onload=()=>gsap.to(heroImg,{opacity:1,duration:.55});}});}
   }
-  // Apply admin hero typography overrides
   _applyHeroTypo(th);
-  // Drive pill indicator after DOM is ready
   requestAnimationFrame(()=>updateThemePill(th));
 }
-
 function _applyHeroTypo(th){
-  const stored=ls('ge_info',null);
-  if(!stored)return;
+  const info=siteData.info;if(!info)return;
   const h1=document.getElementById('h-h1');
   const hp=document.getElementById('h-p');
-  const ht=document.querySelector('.hero-ey-text');
-  // Title text
-  if(stored.heroTitle&&h1)h1.innerHTML=stored.heroTitle;
-  // Subtitle text
-  if(stored.heroSubtitle&&hp)hp.textContent=stored.heroSubtitle;
-  // Eyebrow tag
-  if(stored.heroTag&&ht)ht.textContent=stored.heroTag;
-  // Typography: apply to h1
+  if(info.heroTitle&&h1)h1.innerHTML=info.heroTitle;
+  if(info.heroSubtitle&&hp)hp.textContent=info.heroSubtitle;
+  if(info.heroTag)document.querySelector('.hero-ey-text').textContent=info.heroTag;
   if(h1){
-    if(stored.heroFont)h1.style.fontFamily=stored.heroFont;
-    if(stored.heroFontSize)h1.style.fontSize=stored.heroFontSize;
-    if(stored.heroFontWeight)h1.style.fontWeight=stored.heroFontWeight;
-    if(stored.heroColor)h1.style.color=stored.heroColor;
-    if(stored.heroLetterSpacing)h1.style.letterSpacing=stored.heroLetterSpacing;
-    if(stored.heroTextAlign)h1.style.textAlign=stored.heroTextAlign;
+    if(info.heroFont)h1.style.fontFamily=info.heroFont;
+    if(info.heroFontSize)h1.style.fontSize=info.heroFontSize;
+    if(info.heroFontWeight)h1.style.fontWeight=info.heroFontWeight;
+    if(info.heroColor)h1.style.color=info.heroColor;
+    if(info.heroLetterSpacing)h1.style.letterSpacing=info.heroLetterSpacing;
+    if(info.heroTextAlign)h1.style.textAlign=info.heroTextAlign;
   }
 }
-
 function updateThemePill(th){
-  const moon=document.getElementById('tp-moon');
-  const sun=document.getElementById('tp-sun');
-  const ind=document.getElementById('tp-ind');
+  const moon=document.getElementById('tp-moon'),sun=document.getElementById('tp-sun'),ind=document.getElementById('tp-ind');
   if(!moon||!sun||!ind)return;
   const active=th==='dark'?moon:sun;
   const inactive=th==='dark'?sun:moon;
-  active.classList.add('active');
-  inactive.classList.remove('active');
-  ind.style.left=active.offsetLeft+'px';
-  ind.style.width=active.offsetWidth+'px';
+  active.classList.add('active');inactive.classList.remove('active');
+  ind.style.left=active.offsetLeft+'px';ind.style.width=active.offsetWidth+'px';
 }
-function toggleTheme(){theme=theme==='dark'?'light':'dark';applyTheme(theme);}
+window.toggleTheme=function(){theme=theme==='dark'?'light':'dark';applyTheme(theme);};
 applyTheme(theme);
 
 /* ══════════════════════════════════════
-   LOCALSTORAGE DATA
+   FIREBASE DATA LOADING
 ══════════════════════════════════════ */
-function ls(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-const packages=ls('ge_packages',[]);
-const offers=ls('ge_offers',[]);
-const services=ls('ge_services',defaultSvc());
-const gallery=ls('ge_gallery',[]);
-const info=ls('ge_info',null);
-const settings=ls('ge_settings',{intro:true,wa:true,maint:false});
+const FBKEY='ge_firebase_config';
+let siteData={packages:[],offers:[],services:[],gallery:[],info:null,settings:{intro:true,wa:true,maint:false}};
+let db=null;
 
-function defaultSvc(){return[
-  {name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},
-  {name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},
-  {name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}
-];}
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 
-/* ── Apply info ── */
-(function applyInfo(){
-  if(!info)return;
+async function loadSiteData(){
+  const fbCfg=lsGet(FBKEY,null);
+  if(fbCfg&&fbCfg.databaseURL){
+    try{
+      const app=initializeApp(fbCfg,'ge-site-'+Date.now());
+      db=getDatabase(app);
+      // Load all in parallel
+      const [pkSnap,offSnap,svcSnap,galSnap,infoSnap,setSnap]=await Promise.all([
+        get(ref(db,'packages')),get(ref(db,'offers')),get(ref(db,'services')),
+        get(ref(db,'gallery')),get(ref(db,'info')),get(ref(db,'settings'))
+      ]);
+      const arr=s=>s.exists()?(Array.isArray(s.val())?s.val():Object.values(s.val()||{})):[];
+      siteData.packages=arr(pkSnap);
+      siteData.offers=arr(offSnap);
+      siteData.services=arr(svcSnap);
+      siteData.gallery=arr(galSnap);
+      siteData.info=infoSnap.exists()?infoSnap.val():null;
+      siteData.settings=setSnap.exists()?setSnap.val():{intro:true,wa:true,maint:false};
+      // Real-time updates
+      onValue(ref(db,'packages'),s=>{siteData.packages=s.exists()?(Array.isArray(s.val())?s.val():Object.values(s.val()||{})):[];buildPkgs();buildMarquee();});
+      onValue(ref(db,'info'),s=>{if(s.exists()){siteData.info=s.val();applyInfo();_applyHeroTypo(theme);}});
+    }catch(e){
+      console.warn('Firebase load failed, using localStorage fallback',e);
+      _loadFromLocalStorage();
+    }
+  }else{
+    _loadFromLocalStorage();
+  }
+}
+
+function _loadFromLocalStorage(){
+  siteData.packages=lsGet('ge_packages',[]);
+  siteData.offers=lsGet('ge_offers',[]);
+  siteData.services=lsGet('ge_services',defaultSvc());
+  siteData.gallery=lsGet('ge_gallery',[]);
+  siteData.info=lsGet('ge_info',null);
+  siteData.settings=lsGet('ge_settings',{intro:true,wa:true,maint:false});
+}
+
+function defaultSvc(){return[{name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},{name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},{name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}];}
+
+/* ── Apply info to DOM ── */
+function applyInfo(){
+  const info=siteData.info;if(!info)return;
   const wa='https://wa.me/'+(info.wa||'966501749914');
-  const ig=info.instagram||'https://instagram.com';
-  const sc=info.snapchat||'https://snapchat.com';
-  const tt=info.tiktok||'https://tiktok.com';
   if(info.phone)document.getElementById('ct-phone').textContent=info.phone;
   if(info.email)document.getElementById('ct-email').textContent=info.email;
   if(info.location)document.getElementById('ct-loc').textContent=info.location;
-  ['ct-ig','ft-ig'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=ig;});
-  ['ct-sc','ft-sc'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=sc;});
-  ['ct-tt','ft-tt'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=tt;});
+  ['ct-ig','ft-ig'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=info.instagram||'#';});
+  ['ct-sc','ft-sc'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=info.snapchat||'#';});
+  ['ct-tt','ft-tt'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=info.tiktok||'#';});
   ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=wa;});
-  // Hero images: use dark/light specific keys, fall back to legacy heroImg
   const heroEl=document.getElementById('hero-img');
-  if(heroEl){
-    const src=theme==='light'&&info.heroImgLight?info.heroImgLight
-              :(info.heroImgDark||info.heroImg||'');
-    if(src)heroEl.src=src;
-  }
-  if(info.introImg&&info.introImg.trim())document.getElementById('ldr-eagle-img').src=info.introImg;
-  if(info.logoImg&&info.logoImg.trim()){
-    ['nav-logo-img','ft-logo-img'].forEach(id=>{const el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});
-  }
-  if(info.heroTag)document.querySelector('.hero-ey-text').textContent=info.heroTag;
-  if(info.heroDesc)document.getElementById('h-p').textContent=info.heroDesc;
+  if(heroEl){const src=theme==='light'&&info.heroImgLight?info.heroImgLight:(info.heroImgDark||info.heroImg||'');if(src)heroEl.src=src;}
+  if(info.introImg)document.getElementById('ldr-eagle-img').src=info.introImg;
+  if(info.logoImg){['nav-logo-img','ft-logo-img'].forEach(id=>{const el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});}
   if(info.seoTitle)document.title=info.seoTitle;
-  // Apply typography overrides (title text + styles)
-  _applyHeroTypo(theme);
-})();
+}
 
-/* WA float visibility */
-if(!settings.wa)document.getElementById('wa-float').style.display='none';
+/* ══════════════════════════════════════
+   BUILD SITE CONTENT
+══════════════════════════════════════ */
+function buildMarquee(){
+  const svcs=(siteData.services||[]).filter(s=>s.status!=='hidden').map(s=>s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim());
+  const items=[...svcs,...svcs].map(n=>`<div class="mq-item">${n}<span class="mq-dot"></span></div>`).join('');
+  document.getElementById('mq-track').innerHTML=items+items;
+}
 
-/* ── Offers banner ── */
-if(offers.length){
+function buildPkgs(){
+  const grid=document.getElementById('pkg-grid');
+  const visible=(siteData.packages||[]).filter(p=>p.status!=='draft'&&p.homepage!==false);
+  const fallbacks=['https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY','https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY','https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k'];
+  const defaultCards=[{nameEn:'Swiss Peak Sanctuary',catEn:'Alpine Elite',price:'2500',duration:'7 Nights'},{nameEn:'Azure Maldives Villa',catEn:'Oceanic Escape',price:'3800',duration:'10 Nights'},{nameEn:'Golden Sands Safari',catEn:'Desert Majesty',price:'1900',duration:'5 Nights'}];
+  const cards=visible.length?visible:defaultCards;
+  grid.innerHTML=cards.map((p,i)=>`<div class="pkg-card rv">${p.featured?'<div class="pkg-feat">⭐ Featured</div>':''}<img src="${p.img||fallbacks[i%3]}" alt="${p.nameEn||''}" onerror="this.src='${fallbacks[i%3]}'"/><div class="pkg-ov"><div class="pkg-cat">${p.catEn||'—'}</div><div class="pkg-name">${p.nameEn||p.name||'—'}</div>${p.duration?`<div class="pkg-dur">${p.duration}</div>`:''} ${p.price?`<div class="pkg-prc">From ${p.price} SAR</div>`:''}<div class="pkg-line"></div><div class="pkg-cta" onclick="goTo('contact')">Inquire Now →</div></div></div>`).join('');
+  const c2=grid.querySelector('.pkg-card:nth-child(2)');
+  if(c2&&cards.length>=2)c2.style.marginTop='50px';
+}
+
+function buildSvc(){
+  const active=(siteData.services||[]).filter(s=>s.status!=='hidden');
+  const bento=document.getElementById('svc-bento');
+  const getIcon=n=>n.match(/[\u{1F300}-\u{1FFFF}]/gu)?.[0]||'✦';
+  const getName=n=>n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
+  const descs=['All global destinations covered.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for international education.','Drive legally in most countries.','Complete medical & security coverage.'];
+  let html=`<div class="b-base b-big rv"><div class="b-big-wm">✈</div><div><span class="sec-tag" data-i18n="svc.tag">What We Offer</span><h3 style="font-family:var(--fdisplay);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;" data-i18n="svc.title">Global Eagle<br/>Concierge</h3><p class="b-desc" style="max-width:300px;" data-i18n="svc.concierge">From visa processing to private transfers.</p></div><button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo('contact')" data-i18n="svc.explore">Explore Services</button></div>`;
+  const types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
+  active.slice(0,6).forEach((s,i)=>{const ico=getIcon(s.name),name=getName(s.name),tp=types[i]||'b-cell';
+    if(tp==='b-wide')html+=`<div class="b-base b-wide rv"><div class="b-icon-ring">${ico}</div><div><div class="b-title">${name}</div><div class="b-desc">${descs[i]||''}</div></div></div>`;
+    else html+=`<div class="b-base b-cell rv"><div class="b-ico">${ico}</div><div class="b-title">${name}</div><div class="b-desc">${descs[i]||''}</div></div>`;
+  });
+  bento.innerHTML=html;
+}
+
+function buildGal(){
+  const valid=(siteData.gallery||[]).filter(u=>u&&u.trim());
+  if(!valid.length)return;
+  document.getElementById('gallery').style.display='block';
+  document.getElementById('gal-grid').innerHTML=valid.map(u=>`<img class="gal-img rv" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('');
+}
+
+function buildOffers(){
+  const offers=siteData.offers||[];
+  if(!offers.length)return;
   const banner=document.getElementById('offers-banner');
   document.getElementById('off-in').innerHTML=offers.map(o=>`<div class="off-chip"><i class="fa-solid fa-tag"></i>${o.title}<span>— ${o.discount}</span></div>`).join('');
   banner.style.display='block';
 }
 
 /* ══════════════════════════════════════
-   MARQUEE BUILD
-══════════════════════════════════════ */
-(function buildMarquee(){
-  const svcs=services.filter(s=>s.status!=='hidden').map(s=>s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim());
-  const items=[...svcs,...svcs].map(n=>`<div class="mq-item">${n}<span class="mq-dot"></span></div>`).join('');
-  document.getElementById('mq-track').innerHTML=items+items;
-})();
-
-/* ══════════════════════════════════════
-   PACKAGES BUILD
-══════════════════════════════════════ */
-(function buildPkgs(){
-  const grid=document.getElementById('pkg-grid');
-  const visible=packages.filter(p=>p.status!=='draft'&&p.homepage!==false);
-  const fallbacks=[
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k'
-  ];
-  const defaultCards=[{nameEn:'Swiss Peak Sanctuary',catEn:'Alpine Elite',price:'2500',duration:'7 Nights'},{nameEn:'Azure Maldives Villa',catEn:'Oceanic Escape',price:'3800',duration:'10 Nights'},{nameEn:'Golden Sands Safari',catEn:'Desert Majesty',price:'1900',duration:'5 Nights'}];
-  const cards=visible.length?visible:defaultCards;
-  grid.innerHTML=cards.map((p,i)=>`
-    <div class="pkg-card rv">
-      ${p.featured?'<div class="pkg-feat">⭐ Featured</div>':''}
-      <img src="${p.img||fallbacks[i%3]}" alt="${p.nameEn}" onerror="this.src='${fallbacks[i%3]}'"/>
-      <div class="pkg-ov">
-        <div class="pkg-cat">${p.catEn||'—'}</div>
-        <div class="pkg-name">${p.nameEn||p.name||'—'}</div>
-        ${p.duration?`<div class="pkg-dur">${p.duration}</div>`:''}
-        ${p.price?`<div class="pkg-prc">From ${p.price} SAR</div>`:''}
-        <div class="pkg-line"></div>
-        <div class="pkg-cta" onclick="goTo('contact')">Inquire Now →</div>
-      </div>
-    </div>`).join('');
-  const c2=grid.querySelector('.pkg-card:nth-child(2)');
-  if(c2&&cards.length>=2)c2.style.marginTop='50px';
-})();
-
-/* ══════════════════════════════════════
-   SERVICES BUILD
-══════════════════════════════════════ */
-(function buildSvc(){
-  const active=services.filter(s=>s.status!=='hidden');
-  const bento=document.getElementById('svc-bento');
-  const getIcon=n=>n.match(/[\u{1F300}-\u{1FFFF}]/gu)?.[0]||'✦';
-  const getName=n=>n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
-  const descs=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
-  let html=`<div class="b-base b-big rv">
-    <div class="b-big-wm">✈</div>
-    <div>
-      <span class="sec-tag" data-i18n="svc.tag">What We Offer</span>
-      <h3 style="font-family:var(--fdisplay);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;" data-i18n="svc.title">Global Eagle<br/>Concierge</h3>
-      <p class="b-desc" style="max-width:300px;" data-i18n="svc.concierge">From visa processing to private transfers — seamless travel from start to finish.</p>
-    </div>
-    <button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo('contact')" data-i18n="svc.explore">Explore Services</button>
-  </div>`;
-  const types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
-  active.slice(0,6).forEach((s,i)=>{
-    const ico=getIcon(s.name),name=getName(s.name),t=types[i]||'b-cell';
-    if(t==='b-wide'){
-      html+=`<div class="b-base b-wide rv">
-        <div class="b-icon-ring">${ico}</div>
-        <div><div class="b-title">${name}</div><div class="b-desc">${descs[i]||''}</div></div>
-      </div>`;
-    }else{
-      html+=`<div class="b-base b-cell rv">
-        <div class="b-ico">${ico}</div>
-        <div class="b-title">${name}</div>
-        <div class="b-desc">${descs[i]||''}</div>
-      </div>`;
-    }
-  });
-  bento.innerHTML=html;
-})();
-
-/* ══════════════════════════════════════
-   GALLERY BUILD
-══════════════════════════════════════ */
-(function buildGal(){
-  const valid=gallery.filter(u=>u&&u.trim());
-  if(!valid.length)return;
-  document.getElementById('gallery').style.display='block';
-  document.getElementById('gal-grid').innerHTML=valid.map(u=>`<img class="gal-img rv" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('');
-})();
-
-/* ══════════════════════════════════════
-   PARTICLE CANVAS (Hero)
+   PARTICLES
 ══════════════════════════════════════ */
 function initParticles(canvasId){
-  const canvas=document.getElementById(canvasId);
-  if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  let W,H,pts;
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const ctx=canvas.getContext('2d');let W,H,pts;
   function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
-  function makePts(){pts=Array.from({length:90},()=>({
-    x:Math.random()*W,y:Math.random()*H,
-    vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.12,
-    r:Math.random()*1.4+.3,op:Math.random()*.55+.1,
-    gold:Math.random()>.55
-  }));}
-  resize();makePts();
-  window.addEventListener('resize',()=>{resize();makePts();});
-  (function loop(){
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
-      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.35})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(loop);
-  })();
+  function makePts(){pts=Array.from({length:90},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.12,r:Math.random()*1.4+.3,op:Math.random()*.55+.1,gold:Math.random()>.55}));}
+  resize();makePts();window.addEventListener('resize',()=>{resize();makePts();});
+  (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.35})`;ctx.fill();});requestAnimationFrame(loop);})();
 }
-
-/* ══════════════════════════════════════
-   LOADER CANVAS PARTICLES
-══════════════════════════════════════ */
 function initLoaderCanvas(){
-  const canvas=document.getElementById('ldr-canvas');
-  if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  let W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;
-  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;});
-  const pts=Array.from({length:160},()=>({
-    x:Math.random()*W,y:Math.random()*H,
-    vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.15,
-    r:Math.random()*1.8+.2,op:Math.random()*.65+.05,
-    gold:Math.random()>.6
-  }));
+  const canvas=document.getElementById('ldr-canvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');let W=canvas.width=innerWidth,H=canvas.height=innerHeight;
+  window.addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;});
+  const pts=Array.from({length:160},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.15,r:Math.random()*1.8+.2,op:Math.random()*.65+.05,gold:Math.random()>.6}));
   let running=true;
-  (function loop(){
-    if(!running)return;
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.3})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(loop);
-  })();
-  return ()=>{running=false;};
+  (function loop(){if(!running)return;ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.3})`;ctx.fill();});requestAnimationFrame(loop);})();
+  return()=>{running=false;};
 }
 
 /* ══════════════════════════════════════
-   LOADER SEQUENCE
+   LOADER + INIT
 ══════════════════════════════════════ */
-(function initLoader(){
+(async function init(){
+  await loadSiteData();
+  applyInfo();
+  _applyHeroTypo(theme);
+  buildMarquee();buildPkgs();buildSvc();buildGal();buildOffers();
+  if(!siteData.settings.wa)document.getElementById('wa-float').style.display='none';
+
   const loader=document.getElementById('loader');
-  if(!loader||!settings.intro){
-    loader&&loader.remove();
-    animIn();return;
-  }
+  if(!loader||!siteData.settings.intro){loader&&loader.remove();animIn();return;}
   const stopPts=initLoaderCanvas();
   const fill=document.getElementById('ldr-fill');
   let pct=0;
-  const barInt=setInterval(()=>{
-    pct=Math.min(pct+(Math.random()*2+1),100);
-    fill.style.width=pct+'%';
-    if(pct>=100)clearInterval(barInt);
-  },42);
+  const barInt=setInterval(()=>{pct=Math.min(pct+(Math.random()*2+1),100);fill.style.width=pct+'%';if(pct>=100)clearInterval(barInt);},42);
   setTimeout(()=>document.getElementById('ldr-ring').classList.add('show'),380);
   setTimeout(()=>document.getElementById('ldr-text').classList.add('show'),900);
-  setTimeout(()=>{
-    gsap.to(loader,{opacity:0,duration:.9,ease:'power2.in',onComplete:()=>{
-      loader.remove();stopPts&&stopPts();animIn();
-    }});
-  },3100);
+  setTimeout(()=>{gsap.to(loader,{opacity:0,duration:.9,ease:'power2.in',onComplete:()=>{loader.remove();stopPts&&stopPts();animIn();}});},3100);
 })();
 
-/* ══════════════════════════════════════
-   ANIMATE IN (after loader)
-══════════════════════════════════════ */
 function animIn(){
-  // Re-sync theme pill now that DOM is fully visible
   updateThemePill(theme);
-  // Hero elements stagger
   gsap.to('#h-eyebrow',{opacity:1,y:0,duration:1,delay:.1,ease:'power3.out'});
   gsap.to('#h-h1',{opacity:1,y:0,duration:1.1,delay:.25,ease:'power3.out'});
   gsap.to('#h-p',{opacity:1,y:0,duration:1,delay:.4,ease:'power3.out'});
   gsap.to('#h-btns',{opacity:1,y:0,duration:.9,delay:.55,ease:'power3.out'});
-  // Stats count up
-  const sInfo=info||{};
-  countUp('s1',sInfo.statDest||150,'+');
-  countUp('s2',sInfo.statFleet||42,'+');
-  countUp('s3',sInfo.statMembers||12,'K+');
-  countUp('s4',sInfo.statYears||30,'+');
-  // Particles
+  const info=siteData.info||{};
+  countUp('s1',info.statDest||150,'+');
+  countUp('s2',info.statFleet||42,'+');
+  countUp('s3',info.statMembers||12,'K+');
+  countUp('s4',info.statYears||30,'+');
   initParticles('hero-canvas');
-  // Scroll reveals
   initScrollReveals();
-  // Process cards
   initProcessCards();
-  // GSAP parallax on hero img
-  ScrollTrigger.create({
-    trigger:'#hero',start:'top top',end:'bottom top',scrub:true,
-    onUpdate(self){gsap.set('.hero-bg img',{y:self.progress*80});}
-  });
+  ScrollTrigger.create({trigger:'#hero',start:'top top',end:'bottom top',scrub:true,onUpdate(self){gsap.set('.hero-bg img',{y:self.progress*80});}});
 }
 
 function countUp(id,target,suffix){
   const el=document.getElementById(id);if(!el)return;
   let cur=0;const step=target/55;
-  const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.floor(cur)+suffix;if(cur>=target)clearInterval(t);},28);
+  const ti=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.floor(cur)+suffix;if(cur>=target)clearInterval(ti);},28);
 }
-
-/* ══════════════════════════════════════
-   SCROLL REVEALS
-══════════════════════════════════════ */
 function initScrollReveals(){
-  document.querySelectorAll('.rv').forEach(el=>{
-    ScrollTrigger.create({
-      trigger:el,start:'top 88%',
-      onEnter(){gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out'});}
-    });
-  });
+  document.querySelectorAll('.rv').forEach(el=>{ScrollTrigger.create({trigger:el,start:'top 88%',onEnter(){gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out'});}});});
 }
 
 /* ══════════════════════════════════════
-   PROCESS — UNO STACK CARDS
-   FIX: never tween textContent with GSAP
-   (causes decimal interpolation bug)
+   PROCESS CARDS
 ══════════════════════════════════════ */
 const procData=[
-  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our dedicated expert team.'},
-  {num:'02',title:'Booking',desc:'We secure the finest accommodations and flights at the most competitive rates.'},
-  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 personal concierge support.'},
-  {num:'04',title:'Destination',desc:'Arrive at your dream destination — we will be with you every step of the way.'}
+  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our expert team.'},
+  {num:'02',title:'Booking',desc:'We secure the finest accommodations at the most competitive rates.'},
+  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 concierge support.'},
+  {num:'04',title:'Destination',desc:'Arrive at your dream destination — with us every step.'}
 ];
-let currentCard=0;
-let procTimer=null;
-let procAnimating=false;
-
-// Stack positions: index 0 = front card, 3 = back card
-const STACK=[
-  {x:0,  y:0,  scale:1,    opacity:1,   zIndex:10, rotate:0  },
-  {x:9,  y:13, scale:.968, opacity:.68, zIndex:7,  rotate:1.4},
-  {x:18, y:26, scale:.936, opacity:.4,  zIndex:4,  rotate:2.6},
-  {x:27, y:39, scale:.904, opacity:.2,  zIndex:1,  rotate:3.8}
-];
+let currentCard=0,procAnimating=false,procTimer=null;
+const STACK=[{x:0,y:0,scale:1,opacity:1,zIndex:10,rotate:0},{x:9,y:13,scale:.968,opacity:.68,zIndex:7,rotate:1.4},{x:18,y:26,scale:.936,opacity:.4,zIndex:4,rotate:2.6},{x:27,y:39,scale:.904,opacity:.2,zIndex:1,rotate:3.8}];
 
 function initProcessCards(){
   const cards=[...document.querySelectorAll('.p-card')];
-  // Set initial stack positions instantly
-  cards.forEach((c,i)=>{
-    const s=STACK[i]||STACK[3];
-    gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotation:s.rotate});
-    c.classList.toggle('active',i===0);
-  });
-  // Update info panel without animation on load
-  _setInfoDirect(0);
-  // Start auto-cycle
-  _startTimer();
-  // Dot clicks
-  document.querySelectorAll('.p-dot').forEach((dot,i)=>
-    dot.addEventListener('click',()=>goToCard(i))
-  );
+  cards.forEach((c,i)=>{const s=STACK[i]||STACK[3];gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotation:s.rotate});c.classList.toggle('active',i===0);});
+  _setInfoDirect(0);_startTimer();
+  document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.addEventListener('click',()=>goToCard(i)));
 }
-
-function _startTimer(){
-  clearInterval(procTimer);
-  procTimer=setInterval(nextCard,4200);
-}
-
-function _getCards(){ return [...document.querySelectorAll('.p-card')]; }
-
-// ── Set info text instantly (no GSAP textContent tween) ──
+function _startTimer(){clearInterval(procTimer);procTimer=setInterval(nextCard,4200);}
 function _setInfoDirect(idx){
-  const d=procData[idx];
-  if(!d)return;
+  const d=procData[idx];if(!d)return;
   document.getElementById('proc-num').textContent=d.num;
   document.getElementById('proc-title').textContent=d.title;
   document.getElementById('proc-desc').textContent=d.desc;
   document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
 }
-
-// ── Crossfade info text with opacity only (no textContent tween) ──
 function updateProcInfo(idx){
-  const d=procData[idx];
-  if(!d)return;
-  const els=[
-    document.getElementById('proc-num'),
-    document.getElementById('proc-title'),
-    document.getElementById('proc-desc')
-  ];
-  gsap.to(els,{opacity:0,y:-6,duration:.22,ease:'power2.in',
-    onComplete:()=>{
-      // Set text AFTER fade-out, never during a tween
-      document.getElementById('proc-num').textContent=d.num;
-      document.getElementById('proc-title').textContent=d.title;
-      document.getElementById('proc-desc').textContent=d.desc;
-      gsap.to(els,{opacity:1,y:0,duration:.38,ease:'power3.out'});
-    }
-  });
+  const d=procData[idx];if(!d)return;
+  const els=[document.getElementById('proc-num'),document.getElementById('proc-title'),document.getElementById('proc-desc')];
+  gsap.to(els,{opacity:0,y:-6,duration:.22,ease:'power2.in',onComplete:()=>{
+    document.getElementById('proc-num').textContent=d.num;
+    document.getElementById('proc-title').textContent=d.title;
+    document.getElementById('proc-desc').textContent=d.desc;
+    gsap.to(els,{opacity:1,y:0,duration:.38,ease:'power3.out'});
+  }});
   document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
 }
-
 function nextCard(){
-  if(procAnimating)return;
-  procAnimating=true;
-  const cards=_getCards();
+  if(procAnimating)return;procAnimating=true;
+  const cards=[...document.querySelectorAll('.p-card')];
   const front=cards[currentCard];
-
-  // 1. Fly front card off to the upper-left
-  gsap.to(front,{
-    x:-80,y:-110,scale:.82,opacity:0,rotation:-6,
-    duration:.55,ease:'power3.in',
-    onComplete:()=>{
-      // 2. Advance index
-      currentCard=(currentCard+1)%cards.length;
-
-      // 3. Teleport exited card to bottom-of-stack position (off-screen below)
-      const backIdx=(currentCard+cards.length-1)%cards.length;
-      const bs=STACK[3];
-      gsap.set(front,{
-        x:bs.x+10,y:bs.y+50,scale:bs.scale-.02,
-        opacity:0,zIndex:0,rotation:bs.rotate+1
-      });
-
-      // 4. Animate all cards to their new stack positions
-      cards.forEach((card,cardIdx)=>{
-        const stackPos=(cardIdx-currentCard+cards.length)%cards.length;
-        const s=STACK[stackPos]||STACK[3];
-        gsap.to(card,{
-          x:s.x,y:s.y,scale:s.scale,
-          opacity:stackPos===0?1:s.opacity,
-          zIndex:s.zIndex,rotation:s.rotate,
-          duration:.65,ease:'power3.out'
-        });
-        card.classList.toggle('active',cardIdx===currentCard);
-      });
-
-      // 5. Update text panel
-      updateProcInfo(currentCard);
-      setTimeout(()=>procAnimating=false,680);
-    }
-  });
+  gsap.to(front,{x:-80,y:-110,scale:.82,opacity:0,rotation:-6,duration:.55,ease:'power3.in',onComplete:()=>{
+    currentCard=(currentCard+1)%cards.length;
+    const bs=STACK[3];gsap.set(front,{x:bs.x+10,y:bs.y+50,scale:bs.scale-.02,opacity:0,zIndex:0,rotation:bs.rotate+1});
+    cards.forEach((card,ci)=>{const sp=(ci-currentCard+cards.length)%cards.length;const s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.65,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
+    updateProcInfo(currentCard);setTimeout(()=>procAnimating=false,680);
+  }});
 }
-
-function goToCard(idx){
-  if(idx===currentCard||procAnimating)return;
-  procAnimating=true;
-  _startTimer(); // reset timer
-
-  const cards=_getCards();
-  currentCard=idx;
-
-  cards.forEach((card,cardIdx)=>{
-    const stackPos=(cardIdx-currentCard+cards.length)%cards.length;
-    const s=STACK[stackPos]||STACK[3];
-    gsap.to(card,{
-      x:s.x,y:s.y,scale:s.scale,
-      opacity:stackPos===0?1:s.opacity,
-      zIndex:s.zIndex,rotation:s.rotate,
-      duration:.6,ease:'power3.out'
-    });
-    card.classList.toggle('active',cardIdx===currentCard);
-  });
-
-  updateProcInfo(idx);
-  setTimeout(()=>procAnimating=false,650);
-}
+window.goToCard=function(idx){
+  if(idx===currentCard||procAnimating)return;procAnimating=true;_startTimer();
+  const cards=[...document.querySelectorAll('.p-card')];currentCard=idx;
+  cards.forEach((card,ci)=>{const sp=(ci-currentCard+cards.length)%cards.length;const s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.6,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
+  updateProcInfo(idx);setTimeout(()=>procAnimating=false,650);
+};
 
 /* ══════════════════════════════════════
-   NAV SCROLL
+   NAV + MISC
 ══════════════════════════════════════ */
 window.addEventListener('scroll',()=>{
   document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
-  // Update active nav link
   const sections=['hero','packages','services','process-section','contact'];
-  sections.forEach(id=>{
-    const sec=document.getElementById(id);
-    if(!sec)return;
-    const r=sec.getBoundingClientRect();
-    const link=document.querySelector(`.nav-links a[href="#${id}"]`);
-    if(link)link.classList.toggle('active',r.top<=100&&r.bottom>0);
-  });
+  sections.forEach(id=>{const sec=document.getElementById(id);if(!sec)return;const r=sec.getBoundingClientRect();const link=document.querySelector(`.nav-links a[href="#${id}"]`);if(link)link.classList.toggle('active',r.top<=100&&r.bottom>0);});
 },{passive:true});
+document.addEventListener('mousemove',e=>{const mx=(e.clientX/innerWidth-.5)*18;const my=(e.clientY/innerHeight-.5)*10;gsap.to('.hero-bg img',{x:mx*.2,y:my*.15,duration:1.2,ease:'power2.out'});});
 
-/* Mouse parallax on hero */
-document.addEventListener('mousemove',e=>{
-  const mx=(e.clientX/innerWidth-.5)*18;
-  const my=(e.clientY/innerHeight-.5)*10;
-  gsap.to('.hero-bg img',{x:mx*.2,y:my*.15,duration:1.2,ease:'power2.out'});
-});
+window.closeMob=function(){document.getElementById('mob-nav').classList.remove('open');};
+window.goTo=function(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});};
 
-/* ══════════════════════════════════════
-   HELPERS
-══════════════════════════════════════ */
-function closeMob(){document.getElementById('mob-nav').classList.remove('open');}
-function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
-
-function sendWA(){
+window.sendWA=function(){
   const f1=document.getElementById('f1').value.trim();
   const f4=document.getElementById('f4').value.trim();
   if(!f1||!f4){alert(lang==='ar'?'يرجى إدخال الاسم ورقم الهاتف':'Please fill in Name and Phone.');return;}
-  const waNum=(info&&info.wa)||'966501749914';
+  const waNum=(siteData.info&&siteData.info.wa)||'966501749914';
   const msg=`✈ New Inquiry — Global Eagle Travel\n\nName: ${f1} ${document.getElementById('f2').value}\nPhone: ${f4}\nEmail: ${document.getElementById('f3').value}\nService: ${document.getElementById('f5').value}\nMessage: ${document.getElementById('f6').value}`;
   window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
-}
+};
 </script>
 </body>
 </html>
