@@ -210,33 +210,47 @@ button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 /* ══════════════════════════════════════
    PROCESS
 ══════════════════════════════════════ */
+/* ══ PROCESS — STEPS GRID ══ */
 #process-section{background:var(--bg0);}
-#process{padding:80px var(--px) var(--py);display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1300px;margin:0 auto;align-items:center;}
-.proc-info{position:relative;}
-.proc-big-num{font-family:var(--fdisplay);font-size:clamp(6rem,14vw,11rem);color:rgba(201,162,39,.06);line-height:1;font-weight:700;user-select:none;}
-.proc-step-tag{font-size:.58rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:10px;}
-.proc-title{font-family:var(--fdisplay);font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--txt);margin-bottom:18px;line-height:1.18;}
-.proc-desc{color:var(--txt2);font-size:.95rem;line-height:1.9;font-weight:300;max-width:380px;}
-.proc-dots{display:flex;gap:10px;margin-top:40px;}
+#process{padding:60px var(--px) var(--py);max-width:1300px;margin:0 auto;}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:64px;}
+/* connecting line */
+.steps-grid::before{content:'';position:absolute;top:38px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold),var(--gold),transparent);opacity:.3;z-index:0;}
+.step-item{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px;position:relative;cursor:pointer;transition:transform .3s;}
+.step-item:hover{transform:translateY(-4px);}
+/* circle */
+.step-circle{width:76px;height:76px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:all .45s;flex-shrink:0;margin-bottom:24px;}
+.step-circle-inner{width:54px;height:54px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:all .45s;}
+.step-item.active .step-circle{border-color:var(--gold);box-shadow:0 0 32px var(--glow);}
+.step-item.active .step-circle-inner{background:rgba(201,162,39,.12);}
+/* number badge */
+.step-num{position:absolute;top:-6px;right:-6px;width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#000;font-family:var(--fdisplay);}
+/* content */
+.step-content{flex:1;}
+.step-title{font-family:var(--fdisplay);font-size:1rem;color:var(--txt);margin-bottom:10px;transition:color .3s;}
+.step-item.active .step-title{color:var(--gold);}
+.step-desc{font-size:.78rem;color:var(--txt3);line-height:1.75;font-weight:300;transition:color .3s;}
+.step-item.active .step-desc{color:var(--txt2);}
+/* expanded card below */
+.step-detail{
+  grid-column:1/-1;
+  background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border:1px solid var(--border2);border-radius:16px;
+  padding:36px 44px;margin-top:40px;
+  display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.step-detail::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,var(--glow2),transparent 60%);pointer-events:none;}
+.step-detail-num{font-family:var(--fdisplay);font-size:clamp(5rem,10vw,8rem);color:rgba(201,162,39,.07);line-height:1;font-weight:700;user-select:none;}
+.step-detail-body{}
+.step-detail-tag{font-size:.56rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+.step-detail-title{font-family:var(--fdisplay);font-size:clamp(1.4rem,3vw,2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;}
+.step-detail-desc{font-size:.9rem;color:var(--txt2);line-height:1.9;font-weight:300;max-width:500px;}
+.step-detail-glow{position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);filter:blur(40px);opacity:.6;pointer-events:none;}
+/* dots */
+.proc-dots{display:flex;gap:10px;margin-top:32px;justify-content:center;}
 .p-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .45s;cursor:pointer;}
 .p-dot.active{background:var(--gold);transform:scale(1.5);}
-.proc-deck{position:relative;height:522px;}
-.p-card{position:absolute;top:0;left:0;right:0;height:360px;border-radius:16px;background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;cursor:pointer;will-change:transform,opacity;}
-.p-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(130deg,var(--glow2) 0%,transparent 65%);pointer-events:none;}
-.p-card.active{border-color:var(--border2);}
-.pc-body{flex:1;padding:30px 34px 0;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity .38s;pointer-events:none;}
-.p-card.active .pc-body{opacity:1;pointer-events:auto;}
-.pc-num-big{font-family:var(--fdisplay);font-size:5rem;color:rgba(201,162,39,.07);line-height:1;font-weight:700;margin-bottom:-6px;}
-.pc-icon-big{font-size:2.4rem;line-height:1;}
-.pc-card-title{font-family:var(--fdisplay);font-size:1.42rem;color:var(--txt);line-height:1.2;margin-top:4px;}
-.pc-card-desc{font-size:.82rem;color:var(--txt2);line-height:1.78;font-weight:300;}
-.pc-peek{display:flex;align-items:center;gap:14px;padding:0 24px;height:54px;flex-shrink:0;border-top:1px solid var(--border);transition:background .28s;position:relative;z-index:1;}
-.pc-peek-badge{font-family:var(--fdisplay);font-size:.66rem;color:var(--gold);letter-spacing:.14em;background:rgba(201,162,39,.1);padding:4px 10px;border-radius:4px;flex-shrink:0;}
-.pc-peek-name{font-size:.82rem;color:var(--txt2);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-peek-arr{font-size:.7rem;color:var(--txt3);transition:color .3s,transform .35s;flex-shrink:0;}
-.p-card.active .pc-peek-arr{color:var(--gold);transform:rotate(-90deg);}
-.pc-card-glow{position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);filter:blur(28px);opacity:0;pointer-events:none;transition:opacity .5s;}
-.p-card.active .pc-card-glow{opacity:1;}
 
 /* ══════════════════════════════════════
    SERVICES — BENTO
@@ -336,10 +350,16 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   .pkg-grid{grid-template-columns:1fr 1fr;}
   .pkg-card:nth-child(2){margin-top:0;}
   .pkg-card:nth-child(3){grid-column:span 2;}
-  #process{grid-template-columns:1fr;gap:56px;}
   .bento{grid-template-columns:1fr 1fr;}
   .b-big,.b-wide{grid-column:span 2;}
   .ft-grid{grid-template-columns:1fr 1fr;}
+  .step-detail{padding:28px 32px;gap:20px;}
+}
+@media(max-width:768px){
+  .steps-grid{grid-template-columns:repeat(2,1fr);}
+  .steps-grid::before{display:none;}
+  .step-detail{grid-column:1/-1;padding:24px;grid-template-columns:1fr;}
+  .step-detail-num{display:none;}
 }
 @media(max-width:900px){
   .nav-links,.nav-cta{display:none;}
@@ -355,8 +375,13 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   .ft-grid{grid-template-columns:1fr;}
   .stat-sep{display:none;}
   .hero-stats{gap:24px;}
-  .proc-deck{height:360px;}
-  .p-card{padding:32px 26px;}
+  .steps-grid{grid-template-columns:1fr 1fr;}
+  .step-circle{width:60px;height:60px;}
+  .step-circle-inner{width:42px;height:42px;font-size:1.2rem;}
+  .step-title{font-size:.88rem;}
+  .step-desc{font-size:.7rem;}
+  .step-detail{padding:20px 18px;}
+  .step-detail-desc{font-size:.82rem;}
 }
 </style>
 </head>
@@ -472,38 +497,53 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
     <h2 class="sec-h2 rv" data-i18n="proc.title">How It Works</h2>
   </div>
   <div id="process">
-    <div class="proc-info">
-      <div class="proc-big-num" id="proc-num">01</div>
-      <div class="proc-step-tag" data-i18n="proc.step">Step</div>
-      <div class="proc-title" id="proc-title">Planning</div>
-      <p class="proc-desc" id="proc-desc">Share your vision with our expert team.</p>
-      <div class="proc-dots" id="proc-dots">
-        <div class="p-dot active" onclick="goToCard(0)"></div>
-        <div class="p-dot" onclick="goToCard(1)"></div>
-        <div class="p-dot" onclick="goToCard(2)"></div>
-        <div class="p-dot" onclick="goToCard(3)"></div>
+    <div class="steps-grid" id="steps-grid">
+      <!-- Step items -->
+      <div class="step-item active rv" onclick="goToStep(0)">
+        <div class="step-circle">
+          <div class="step-circle-inner">🗺️</div>
+          <div class="step-num">01</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="proc.c0t">Planning</div>
+        </div>
       </div>
-    </div>
-    <div class="proc-deck" id="proc-deck">
-      <div class="p-card active" data-idx="0">
-        <div class="pc-body"><div class="pc-num-big">01</div><div class="pc-icon-big">🗺️</div><div class="pc-card-title" data-i18n="proc.c0t">Planning</div><div class="pc-card-desc" data-i18n="proc.c0d">Share your vision and travel preferences.</div></div>
-        <div class="pc-peek"><span class="pc-peek-badge">01</span><span class="pc-peek-name">Planning</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
-        <div class="pc-card-glow"></div>
+      <div class="step-item rv" onclick="goToStep(1)">
+        <div class="step-circle">
+          <div class="step-circle-inner">📋</div>
+          <div class="step-num">02</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="proc.c1t">Booking</div>
+        </div>
       </div>
-      <div class="p-card" data-idx="1">
-        <div class="pc-body"><div class="pc-num-big">02</div><div class="pc-icon-big">📋</div><div class="pc-card-title" data-i18n="proc.c1t">Booking</div><div class="pc-card-desc" data-i18n="proc.c1d">We secure the finest accommodations.</div></div>
-        <div class="pc-peek"><span class="pc-peek-badge">02</span><span class="pc-peek-name">Booking</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
-        <div class="pc-card-glow"></div>
+      <div class="step-item rv" onclick="goToStep(2)">
+        <div class="step-circle">
+          <div class="step-circle-inner">✨</div>
+          <div class="step-num">03</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="proc.c2t">Experience</div>
+        </div>
       </div>
-      <div class="p-card" data-idx="2">
-        <div class="pc-body"><div class="pc-num-big">03</div><div class="pc-icon-big">✨</div><div class="pc-card-title" data-i18n="proc.c2t">Experience</div><div class="pc-card-desc" data-i18n="proc.c2d">Enjoy a flawless luxury journey.</div></div>
-        <div class="pc-peek"><span class="pc-peek-badge">03</span><span class="pc-peek-name">Experience</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
-        <div class="pc-card-glow"></div>
+      <div class="step-item rv" onclick="goToStep(3)">
+        <div class="step-circle">
+          <div class="step-circle-inner">🏆</div>
+          <div class="step-num">04</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title" data-i18n="proc.c3t">Destination</div>
+        </div>
       </div>
-      <div class="p-card" data-idx="3">
-        <div class="pc-body"><div class="pc-num-big">04</div><div class="pc-icon-big">🏆</div><div class="pc-card-title" data-i18n="proc.c3t">Destination</div><div class="pc-card-desc" data-i18n="proc.c3d">Arrive at your dream destination.</div></div>
-        <div class="pc-peek"><span class="pc-peek-badge">04</span><span class="pc-peek-name">Destination</span><i class="fa-solid fa-chevron-down pc-peek-arr"></i></div>
-        <div class="pc-card-glow"></div>
+      <!-- Expanded detail card -->
+      <div class="step-detail rv" id="step-detail">
+        <div class="step-detail-num" id="step-detail-num">01</div>
+        <div class="step-detail-body">
+          <div class="step-detail-tag" data-i18n="proc.step">Step 01</div>
+          <div class="step-detail-title" id="step-detail-title">Planning</div>
+          <div class="step-detail-desc" id="step-detail-desc">Share your vision and travel preferences with our dedicated expert team.</div>
+        </div>
+        <div class="step-detail-glow"></div>
       </div>
     </div>
   </div>
@@ -941,27 +981,50 @@ function initLoaderCanvas(){
 ══════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', async function(){
   gsap.registerPlugin(ScrollTrigger);
+
+  var loader=document.getElementById('loader');
+  var stopPts=null;
+
+  // Start loader animation immediately
+  if(loader){
+    stopPts=initLoaderCanvas();
+    setTimeout(function(){document.getElementById('ldr-ring').classList.add('show');},200);
+    setTimeout(function(){document.getElementById('ldr-text').classList.add('show');},600);
+  }
+
+  // Animate progress bar while Firebase loads
+  var fill=document.getElementById('ldr-fill');
+  var pct=0;
+  var barInt=setInterval(function(){
+    // Slow down at 85% waiting for Firebase
+    var speed=pct<85?(Math.random()*3+2):(Math.random()*0.5+0.1);
+    pct=Math.min(pct+speed,99);
+    if(fill)fill.style.width=pct+'%';
+  },40);
+
+  // Load Firebase data in parallel with animation
   await loadSiteData();
   applyInfo();
   _applyHeroTypo(theme);
   buildMarquee();buildPkgs();buildSvc();buildGal();buildOffers();
+  if(!siteData.settings.wa)document.getElementById('wa-float').style.display='none';
 
-  if(!siteData.settings.wa) document.getElementById('wa-float').style.display='none';
+  // Complete the bar
+  clearInterval(barInt);
+  if(fill)fill.style.width='100%';
 
-  var loader=document.getElementById('loader');
-  if(!loader||!siteData.settings.intro){if(loader)loader.remove();animIn();return;}
+  // If no loader or intro disabled, go straight in
+  if(!loader||!siteData.settings.intro){
+    if(loader)loader.remove();
+    animIn();return;
+  }
 
-  var stopPts=initLoaderCanvas();
-  var fill=document.getElementById('ldr-fill');
-  var pct=0;
-  var barInt=setInterval(function(){pct=Math.min(pct+(Math.random()*2+1),100);fill.style.width=pct+'%';if(pct>=100)clearInterval(barInt);},42);
-  setTimeout(function(){document.getElementById('ldr-ring').classList.add('show');},380);
-  setTimeout(function(){document.getElementById('ldr-text').classList.add('show');},900);
+  // Short pause then fade out
   setTimeout(function(){
-    gsap.to(loader,{opacity:0,duration:.9,ease:'power2.in',onComplete:function(){
+    gsap.to(loader,{opacity:0,duration:.6,ease:'power2.in',onComplete:function(){
       loader.remove();if(stopPts)stopPts();animIn();
     }});
-  },3100);
+  },400);
 });
 
 function animIn(){
@@ -998,61 +1061,50 @@ function initScrollReveals(){
    PROCESS CARDS
 ══════════════════════════════════════ */
 var procData=[
-  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our dedicated expert team.'},
-  {num:'02',title:'Booking',desc:'We secure the finest accommodations and flights at the most competitive rates.'},
-  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 personal concierge support.'},
-  {num:'04',title:'Destination',desc:'Arrive at your dream destination — we are with you every step of the way.'}
+  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our dedicated expert team.',icon:'🗺️'},
+  {num:'02',title:'Booking',desc:'We secure the finest accommodations and flights at the most competitive rates.',icon:'📋'},
+  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 personal concierge support.',icon:'✨'},
+  {num:'04',title:'Destination',desc:'Arrive at your dream destination — we are with you every step of the way.',icon:'🏆'}
 ];
-var currentCard=0,procAnimating=false,procTimer=null;
-var STACK=[
-  {x:0,y:0,scale:1,opacity:1,zIndex:10,rotate:0},
-  {x:9,y:13,scale:.968,opacity:.68,zIndex:7,rotate:1.4},
-  {x:18,y:26,scale:.936,opacity:.4,zIndex:4,rotate:2.6},
-  {x:27,y:39,scale:.904,opacity:.2,zIndex:1,rotate:3.8}
-];
+var currentStep=0,stepTimer=null;
 
 function initProcessCards(){
-  var cards=[...document.querySelectorAll('.p-card')];
-  cards.forEach(function(c,i){var s=STACK[i]||STACK[3];gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotation:s.rotate});c.classList.toggle('active',i===0);});
-  _setInfoDirect(0);_startTimer();
-  document.querySelectorAll('.p-dot').forEach(function(dot,i){dot.addEventListener('click',function(){goToCard(i);});});
+  goToStep(0,true);
+  stepTimer=setInterval(function(){goToStep((currentStep+1)%4);},3000);
 }
-function _startTimer(){clearInterval(procTimer);procTimer=setInterval(nextCard,4200);}
-function _setInfoDirect(idx){
-  var d=procData[idx];if(!d)return;
-  document.getElementById('proc-num').textContent=d.num;
-  document.getElementById('proc-title').textContent=d.title;
-  document.getElementById('proc-desc').textContent=d.desc;
-  document.querySelectorAll('.p-dot').forEach(function(dot,i){dot.classList.toggle('active',i===idx);});
-}
-function updateProcInfo(idx){
-  var d=procData[idx];if(!d)return;
-  var els=[document.getElementById('proc-num'),document.getElementById('proc-title'),document.getElementById('proc-desc')];
-  gsap.to(els,{opacity:0,y:-6,duration:.22,ease:'power2.in',onComplete:function(){
-    document.getElementById('proc-num').textContent=d.num;
-    document.getElementById('proc-title').textContent=d.title;
-    document.getElementById('proc-desc').textContent=d.desc;
-    gsap.to(els,{opacity:1,y:0,duration:.38,ease:'power3.out'});
+
+window.goToStep=function(idx,instant){
+  currentStep=idx;
+  clearInterval(stepTimer);
+  if(!instant) stepTimer=setInterval(function(){goToStep((currentStep+1)%4);},3000);
+
+  var d=procData[idx];
+  // Update active state on step items
+  document.querySelectorAll('.step-item').forEach(function(el,i){
+    el.classList.toggle('active',i===idx);
+  });
+
+  // Update detail card
+  var detailNum=document.getElementById('step-detail-num');
+  var detailTitle=document.getElementById('step-detail-title');
+  var detailDesc=document.getElementById('step-detail-desc');
+  var detailTag=document.querySelector('.step-detail-tag');
+  var detail=document.getElementById('step-detail');
+
+  if(!detail)return;
+
+  // Animate out then in
+  gsap.to(detail,{opacity:0,y:10,duration:.2,ease:'power2.in',onComplete:function(){
+    if(detailNum)detailNum.textContent=d.num;
+    if(detailTitle)detailTitle.textContent=d.title;
+    if(detailDesc)detailDesc.textContent=d.desc;
+    if(detailTag)detailTag.textContent='Step '+d.num;
+    gsap.to(detail,{opacity:1,y:0,duration:.4,ease:'power3.out'});
   }});
-  document.querySelectorAll('.p-dot').forEach(function(dot,i){dot.classList.toggle('active',i===idx);});
-}
-function nextCard(){
-  if(procAnimating)return;procAnimating=true;
-  var cards=[...document.querySelectorAll('.p-card')];
-  var front=cards[currentCard];
-  gsap.to(front,{x:-80,y:-110,scale:.82,opacity:0,rotation:-6,duration:.55,ease:'power3.in',onComplete:function(){
-    currentCard=(currentCard+1)%cards.length;
-    var bs=STACK[3];gsap.set(front,{x:bs.x+10,y:bs.y+50,scale:bs.scale-.02,opacity:0,zIndex:0,rotation:bs.rotate+1});
-    cards.forEach(function(card,ci){var sp=(ci-currentCard+cards.length)%cards.length;var s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.65,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
-    updateProcInfo(currentCard);setTimeout(function(){procAnimating=false;},680);
-  }});
-}
-window.goToCard=function(idx){
-  if(idx===currentCard||procAnimating)return;procAnimating=true;_startTimer();
-  var cards=[...document.querySelectorAll('.p-card')];currentCard=idx;
-  cards.forEach(function(card,ci){var sp=(ci-currentCard+cards.length)%cards.length;var s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.6,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
-  updateProcInfo(idx);setTimeout(function(){procAnimating=false;},650);
 };
+
+// Also expose goToCard as alias for language switcher
+window.goToCard=window.goToStep;
 
 /* ══════════════════════════════════════
    NAV + HELPERS
