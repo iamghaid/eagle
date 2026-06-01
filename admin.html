@@ -802,12 +802,14 @@ window.addEventListener('DOMContentLoaded', async ()=>{
   const saved = getFbConfig() || HARDCODED_FB_CONFIG;
   setFbConfig(saved); // احفظه للـ settings page
   const ok = await initFirebase(saved);
-  document.getElementById('firebase-setup').style.display='none';
   showLogin(ok);
   if(ok){
-    document.getElementById('set-fb-url').value=saved.databaseURL||'';
-    document.getElementById('set-fb-apikey').value=saved.apiKey||'';
-    document.getElementById('set-fb-projectid').value=saved.projectId||'';
+    const urlEl=document.getElementById('set-fb-url');
+    const keyEl=document.getElementById('set-fb-apikey');
+    const pidEl=document.getElementById('set-fb-projectid');
+    if(urlEl)urlEl.value=saved.databaseURL||'';
+    if(keyEl)keyEl.value=saved.apiKey||'';
+    if(pidEl)pidEl.value=saved.projectId||'';
   }
 });
 
@@ -828,7 +830,6 @@ window.connectFirebase=async function(){
   const ok=await initFirebase(cfg);
   btn.textContent='🔥 Connect Firebase';btn.disabled=false;
   if(ok){
-    document.getElementById('firebase-setup').style.display='none';
     showLogin(true);
   }else{
     document.getElementById('fs-err').style.display='block';
@@ -837,7 +838,6 @@ window.connectFirebase=async function(){
 };
 
 window.skipFirebase=function(){
-  document.getElementById('firebase-setup').style.display='none';
   showLogin(false);
 };
 
