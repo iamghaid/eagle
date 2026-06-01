@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8"/>
@@ -697,12 +697,12 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
 <!-- TOAST -->
 <div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Saved!</span></div>
 
-<script type="module">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
 /* ══════════════════════════════════════
    FIREBASE + ADMIN LOGIC
 ══════════════════════════════════════ */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, get, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 /* ── Local Storage helpers ── */
 const LS = {
@@ -719,10 +719,10 @@ function setFbConfig(cfg){LS.set(FBKEY,cfg);}
 
 async function initFirebase(cfg){
   try{
-    const app=initializeApp(cfg, 'ge-admin-'+Date.now());
-    db=getDatabase(app);
+    const app=firebase.initializeApp(cfg, 'ge-admin-'+Date.now());
+    db=firebase.database(app);
     // test write
-    await set(ref(db,'__ping__'),Date.now());
+    await db.ref('__ping__').set(Date.now());
     firebaseMode=true;
     setFbConfig(cfg);
     updateSyncBadge(true);
@@ -747,7 +747,7 @@ function updateSyncBadge(on){
 /* ── Firebase R/W ── */
 async function fbSet(path, data){
   if(firebaseMode&&db){
-    try{await set(ref(db,path),data);}catch(e){console.warn('FB write fail:',e);}
+    try{await db.ref(path).set(data);}catch(e){console.warn('FB write fail:',e);}
   }
   // Always mirror to localStorage
   LS.set('ge_'+path.replace(/\//g,'_'), data);
@@ -756,7 +756,7 @@ async function fbSet(path, data){
 async function fbGet(path, def){
   if(firebaseMode&&db){
     try{
-      const snap=await get(ref(db,path));
+      const snap=await db.ref(path).once('value');
       if(snap.exists())return snap.val();
     }catch(e){console.warn('FB read fail:',e);}
   }
@@ -765,7 +765,7 @@ async function fbGet(path, def){
 
 async function fbRemove(path){
   if(firebaseMode&&db){
-    try{await remove(ref(db,path));}catch(e){}
+    try{await db.ref(path).remove();}catch(e){}
   }
   localStorage.removeItem('ge_'+path.replace(/\//g,'_'));
 }
@@ -910,7 +910,7 @@ function initApp(){
   if(info.logoImg){const li=document.getElementById('sb-logo-img');if(li){li.src=info.logoImg;}}
   // Real-time listener
   if(firebaseMode&&db){
-    onValue(ref(db,'packages'),snap=>{
+    db.ref('packages').on('value',snap=>{
       if(snap.exists()){const v=snap.val();packages=Array.isArray(v)?v:Object.values(v||{});document.getElementById('sb-pkg-cnt').textContent=packages.length;document.getElementById('d-pkg').textContent=packages.length;}
     });
   }
@@ -1217,7 +1217,11 @@ window.updateFirebaseConfig=async function(){
   const apiKey=document.getElementById('set-fb-apikey').value.trim();
   const projectId=document.getElementById('set-fb-projectid').value.trim();
   if(!url||!apiKey||!projectId){showToast('❌ Fill all fields');return;}
-  const cfg={apiKey,databaseURL:url,projectId,authDomain:`${projectId}.firebaseapp.com`,storageBucket:`${projectId}.appspot.com`,messagingSenderId:'000000000000',appId:'1:000000000000:web:000000000000000000000000'};
+  const cfg={apiKey,databaseURL:url,projectId,
+    authDomain:projectId+'.firebaseapp.com',
+    storageBucket:projectId+'.appspot.com',
+    messagingSenderId:'000000000000',
+    appId:'1:000000000000:web:000000000000000000000000'};
   const ok=await initFirebase(cfg);
   if(ok){showToast('✅ Firebase updated!');}else{showToast('❌ Could not connect');}
 };
