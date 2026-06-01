@@ -614,55 +614,176 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
 <!-- ══════════════════════════════════════
    FIREBASE + SITE LOGIC
 ══════════════════════════════════════ -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-gsap.registerPlugin(ScrollTrigger);
+<!-- Firebase CDN - يشتغل على GitHub Pages بدون مشاكل -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-/* ── Translations ── */
-const T={
-  en:{nav:{home:'Home',packages:'Packages',services:'Services',process:'Process',contact:'Contact',cta:'Inquire Now',tagline:'Travel & Tourism'},hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em>',desc:'Experience the world through the lens of pure luxury.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},stats:{dest:'Global Destinations',fleet:'Private Fleet',members:'Elite Members',years:'Years Excellence'},pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our expert team.',c1t:'Booking',c1d:'We secure the finest accommodations at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — with us every step.'},svc:{tag:'What We Offer',title:'Global Eagle Services',concierge:'From visa processing to private transfers.',explore:'Explore Services'},ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message'},ft:{desc:'Your trusted partner in premium travel & tourism.',ex:'Explore',co:'Company',nl:'Newsletter','nl-d':'Get exclusive deals and travel inspiration.','nl-b':'JOIN',copy:'© 2025 Global Eagle Travel.','wa-link':'WhatsApp Us'}},
-  ar:{nav:{home:'الرئيسية',packages:'الباقات',services:'خدماتنا',process:'كيف نعمل',contact:'تواصل معنا',cta:'استفسر الآن',tagline:'سفر وسياحة'},hero:{tag:'نرتقي بكل رحلة',h1:'وراء كل أفق<br/>تنتظرك<br/><em>رحلتك الاستثنائية</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},stats:{dest:'وجهة عالمية',fleet:'أسطول خاص',members:'عضو مميز',years:'سنوات التميز'},pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك مع فريقنا.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة مع رعاية شاملة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن معك دائماً.'},svc:{tag:'ما نقدمه',title:'خدمات النسر العالمي',concierge:'من تأشيرات السفر إلى النقل الخاص.',explore:'استكشف الخدمات'},ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك'},ft:{desc:'شريكك الموثوق في السفر والسياحة الفاخرة.',ex:'استكشف',co:'الشركة',nl:'النشرة البريدية','nl-d':'أفضل العروض وإلهام السفر.','nl-b':'اشتراك',copy:'© ٢٠٢٥ نسر عالمي للسفر.','wa-link':'تواصل عبر واتساب'}}
+<script>
+/* ══════════════════════════════════════
+   FIREBASE SETUP
+══════════════════════════════════════ */
+var db = null;
+var firebaseMode = false;
+var siteData = {packages:[],offers:[],services:[],gallery:[],info:null,settings:{intro:true,wa:true,maint:false}};
+
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+var FBKEY='ge_firebase_config';
+
+function initFirebaseApp(cfg){
+  try{
+    var app = firebase.initializeApp(cfg, 'ge-site-'+Math.random());
+    db = firebase.database(app);
+    firebaseMode = true;
+    return true;
+  }catch(e){
+    console.warn('Firebase init failed:',e);
+    firebaseMode = false;
+    db = null;
+    return false;
+  }
+}
+
+function loadFromLocalStorage(){
+  siteData.packages = lsGet('ge_packages',[]);
+  siteData.offers   = lsGet('ge_offers',[]);
+  siteData.services = lsGet('ge_services',defaultSvc());
+  siteData.gallery  = lsGet('ge_gallery',[]);
+  siteData.info     = lsGet('ge_info',null);
+  siteData.settings = lsGet('ge_settings',{intro:true,wa:true,maint:false});
+}
+
+function defaultSvc(){
+  return[
+    {name:'Tourist Visas 🌍',status:'active'},
+    {name:'Hotel Bookings 🏨',status:'active'},
+    {name:'Flight Tickets ✈️',status:'active'},
+    {name:'Student Visas 🎓',status:'active'},
+    {name:'International Licenses 🚗',status:'active'},
+    {name:'Travel Insurance 🛡',status:'active'}
+  ];
+}
+
+function toArr(v){
+  if(!v)return[];
+  if(Array.isArray(v))return v;
+  return Object.values(v);
+}
+
+async function loadSiteData(){
+  var fbCfg = lsGet(FBKEY, null);
+  if(fbCfg && fbCfg.databaseURL){
+    var ok = initFirebaseApp(fbCfg);
+    if(ok){
+      try{
+        var snap = await db.ref('/').once('value');
+        var data = snap.val()||{};
+        siteData.packages = toArr(data.packages);
+        siteData.offers   = toArr(data.offers);
+        siteData.services = toArr(data.services).length ? toArr(data.services) : defaultSvc();
+        siteData.gallery  = toArr(data.gallery);
+        siteData.info     = data.info || null;
+        siteData.settings = data.settings || {intro:true,wa:true,maint:false};
+
+        // Real-time listeners
+        db.ref('packages').on('value', function(s){
+          siteData.packages = toArr(s.val());
+          buildPkgs(); buildMarquee();
+        });
+        db.ref('info').on('value', function(s){
+          if(s.val()){siteData.info=s.val();applyInfo();_applyHeroTypo(theme);}
+        });
+        db.ref('offers').on('value', function(s){
+          siteData.offers=toArr(s.val());buildOffers();
+        });
+        db.ref('services').on('value', function(s){
+          siteData.services=toArr(s.val());buildSvc();buildMarquee();
+        });
+        return;
+      }catch(e){
+        console.warn('Firebase read failed, fallback to localStorage',e);
+      }
+    }
+  }
+  loadFromLocalStorage();
+}
+
+/* ══════════════════════════════════════
+   TRANSLATIONS
+══════════════════════════════════════ */
+var T={
+  en:{
+    nav:{home:'Home',packages:'Packages',services:'Services',process:'Process',contact:'Contact',cta:'Inquire Now',tagline:'Travel & Tourism'},
+    hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em>',desc:'Experience the world through the lens of pure luxury.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},
+    stats:{dest:'Global Destinations',fleet:'Private Fleet',members:'Elite Members',years:'Years Excellence'},
+    pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},
+    proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our expert team.',c1t:'Booking',c1d:'We secure the finest accommodations at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — we are with you every step.'},
+    svc:{tag:'What We Offer',title:'Global Eagle Services',concierge:'From visa processing to private transfers — seamless travel.',explore:'Explore Services'},
+    ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message'},
+    ft:{desc:'Your trusted partner in premium travel & tourism. Redefining high-end journeys since 1994.',ex:'Explore',co:'Company',nl:'Newsletter','nl-d':'Get exclusive deals and travel inspiration.','nl-b':'JOIN',copy:'© 2025 Global Eagle Travel. The Majesty of Flight.','wa-link':'WhatsApp Us'}
+  },
+  ar:{
+    nav:{home:'الرئيسية',packages:'الباقات',services:'خدماتنا',process:'كيف نعمل',contact:'تواصل معنا',cta:'استفسر الآن',tagline:'سفر وسياحة'},
+    hero:{tag:'نرتقي بكل رحلة',h1:'وراء كل أفق<br/>تنتظرك<br/><em>رحلتك الاستثنائية</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},
+    stats:{dest:'وجهة عالمية',fleet:'أسطول خاص',members:'عضو مميز',years:'سنوات التميز'},
+    pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},
+    proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك وتفضيلاتك السياحية مع فريقنا المتخصص.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات بأسعار تنافسية.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة لا تُنسى مع رعاية شاملة على مدار الساعة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن معك في كل لحظة.'},
+    svc:{tag:'ما نقدمه',title:'خدمات النسر العالمي',concierge:'من التأشيرات إلى النقل الخاص — رحلة متكاملة.',explore:'استكشف الخدمات'},
+    ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك'},
+    ft:{desc:'شريكك الموثوق في السفر والسياحة الفاخرة. نُعيد تعريف الرحلات الراقية منذ ١٩٩٤.',ex:'استكشف',co:'الشركة',nl:'النشرة البريدية','nl-d':'احصل على أفضل العروض وإلهام السفر.','nl-b':'اشتراك',copy:'© ٢٠٢٥ نسر عالمي للسفر. جلال الطيران.','wa-link':'تواصل عبر واتساب'}
+  }
 };
 
-let lang='en';
-function t(k){const p=k.split('.');let v=T[lang];for(const x of p){if(v&&v[x]!=null)v=v[x];else return k;}return v;}
+var lang='en';
+function t(k){var p=k.split('.');var v=T[lang];for(var i=0;i<p.length;i++){if(v&&v[p[i]]!=null)v=v[p[i]];else return k;}return v;}
 
 window.setLang=function(l){
-  lang=l;const html=document.documentElement;
-  html.lang=l;html.dir=l==='ar'?'rtl':'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;});
-  const h1=document.getElementById('h-h1');if(h1)h1.innerHTML=t('hero.h1');
+  lang=l;
+  var html=document.documentElement;
+  html.lang=l; html.dir=l==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;
+  });
+  var h1=document.getElementById('h-h1');
+  if(h1)h1.innerHTML=t('hero.h1');
   document.getElementById('btn-en').classList.toggle('active',l==='en');
   document.getElementById('btn-ar').classList.toggle('active',l==='ar');
-  procData.forEach((d,i)=>{d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
+  procData.forEach(function(d,i){d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
   updateProcInfo(currentCard);
-  requestAnimationFrame(()=>updateThemePill(theme));
+  requestAnimationFrame(function(){updateThemePill(theme);});
 };
 
-/* ── Theme ── */
-let theme=localStorage.getItem('ge_theme')||'dark';
-const HERO_DARK_DEFAULT='https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs';
+/* ══════════════════════════════════════
+   THEME
+══════════════════════════════════════ */
+var theme = localStorage.getItem('ge_theme')||'dark';
+var HERO_DARK_DEFAULT='https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs';
 
 function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
   localStorage.setItem('ge_theme',th);
-  const heroImg=document.getElementById('hero-img');
+  var heroImg=document.getElementById('hero-img');
   if(heroImg&&siteData.info){
-    const src=th==='light'&&siteData.info.heroImgLight?siteData.info.heroImgLight:(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
-    if(heroImg.src!==src){gsap.to(heroImg,{opacity:0,duration:.35,onComplete:()=>{heroImg.src=src;heroImg.onload=()=>gsap.to(heroImg,{opacity:1,duration:.55});}});}
+    var src=th==='light'&&siteData.info.heroImgLight?siteData.info.heroImgLight:(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
+    if(heroImg.src!==src){
+      gsap.to(heroImg,{opacity:0,duration:.35,onComplete:function(){
+        heroImg.src=src;
+        heroImg.onload=function(){gsap.to(heroImg,{opacity:1,duration:.55});};
+      }});
+    }
   }
   _applyHeroTypo(th);
-  requestAnimationFrame(()=>updateThemePill(th));
+  requestAnimationFrame(function(){updateThemePill(th);});
 }
+
 function _applyHeroTypo(th){
-  const info=siteData.info;if(!info)return;
-  const h1=document.getElementById('h-h1');
-  const hp=document.getElementById('h-p');
+  var info=siteData.info; if(!info)return;
+  var h1=document.getElementById('h-h1');
+  var hp=document.getElementById('h-p');
+  var ht=document.querySelector('.hero-ey-text');
   if(info.heroTitle&&h1)h1.innerHTML=info.heroTitle;
   if(info.heroSubtitle&&hp)hp.textContent=info.heroSubtitle;
-  if(info.heroTag)document.querySelector('.hero-ey-text').textContent=info.heroTag;
+  if(info.heroTag&&ht)ht.textContent=info.heroTag;
   if(h1){
     if(info.heroFont)h1.style.fontFamily=info.heroFont;
     if(info.heroFontSize)h1.style.fontSize=info.heroFontSize;
@@ -672,176 +793,169 @@ function _applyHeroTypo(th){
     if(info.heroTextAlign)h1.style.textAlign=info.heroTextAlign;
   }
 }
+
 function updateThemePill(th){
-  const moon=document.getElementById('tp-moon'),sun=document.getElementById('tp-sun'),ind=document.getElementById('tp-ind');
+  var moon=document.getElementById('tp-moon');
+  var sun=document.getElementById('tp-sun');
+  var ind=document.getElementById('tp-ind');
   if(!moon||!sun||!ind)return;
-  const active=th==='dark'?moon:sun;
-  const inactive=th==='dark'?sun:moon;
-  active.classList.add('active');inactive.classList.remove('active');
-  ind.style.left=active.offsetLeft+'px';ind.style.width=active.offsetWidth+'px';
+  var active=th==='dark'?moon:sun;
+  var inactive=th==='dark'?sun:moon;
+  active.classList.add('active'); inactive.classList.remove('active');
+  ind.style.left=active.offsetLeft+'px'; ind.style.width=active.offsetWidth+'px';
 }
 window.toggleTheme=function(){theme=theme==='dark'?'light':'dark';applyTheme(theme);};
 applyTheme(theme);
 
 /* ══════════════════════════════════════
-   FIREBASE DATA LOADING
+   APPLY INFO TO DOM
 ══════════════════════════════════════ */
-const FBKEY='ge_firebase_config';
-let siteData={packages:[],offers:[],services:[],gallery:[],info:null,settings:{intro:true,wa:true,maint:false}};
-let db=null;
-
-function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-
-async function loadSiteData(){
-  const fbCfg=lsGet(FBKEY,null);
-  if(fbCfg&&fbCfg.databaseURL){
-    try{
-      const app=initializeApp(fbCfg,'ge-site-'+Date.now());
-      db=getDatabase(app);
-      // Load all in parallel
-      const [pkSnap,offSnap,svcSnap,galSnap,infoSnap,setSnap]=await Promise.all([
-        get(ref(db,'packages')),get(ref(db,'offers')),get(ref(db,'services')),
-        get(ref(db,'gallery')),get(ref(db,'info')),get(ref(db,'settings'))
-      ]);
-      const arr=s=>s.exists()?(Array.isArray(s.val())?s.val():Object.values(s.val()||{})):[];
-      siteData.packages=arr(pkSnap);
-      siteData.offers=arr(offSnap);
-      siteData.services=arr(svcSnap);
-      siteData.gallery=arr(galSnap);
-      siteData.info=infoSnap.exists()?infoSnap.val():null;
-      siteData.settings=setSnap.exists()?setSnap.val():{intro:true,wa:true,maint:false};
-      // Real-time updates
-      onValue(ref(db,'packages'),s=>{siteData.packages=s.exists()?(Array.isArray(s.val())?s.val():Object.values(s.val()||{})):[];buildPkgs();buildMarquee();});
-      onValue(ref(db,'info'),s=>{if(s.exists()){siteData.info=s.val();applyInfo();_applyHeroTypo(theme);}});
-    }catch(e){
-      console.warn('Firebase load failed, using localStorage fallback',e);
-      _loadFromLocalStorage();
-    }
-  }else{
-    _loadFromLocalStorage();
-  }
-}
-
-function _loadFromLocalStorage(){
-  siteData.packages=lsGet('ge_packages',[]);
-  siteData.offers=lsGet('ge_offers',[]);
-  siteData.services=lsGet('ge_services',defaultSvc());
-  siteData.gallery=lsGet('ge_gallery',[]);
-  siteData.info=lsGet('ge_info',null);
-  siteData.settings=lsGet('ge_settings',{intro:true,wa:true,maint:false});
-}
-
-function defaultSvc(){return[{name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},{name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},{name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}];}
-
-/* ── Apply info to DOM ── */
 function applyInfo(){
-  const info=siteData.info;if(!info)return;
-  const wa='https://wa.me/'+(info.wa||'966501749914');
+  var info=siteData.info; if(!info)return;
+  var wa='https://wa.me/'+(info.wa||'966501749914');
   if(info.phone)document.getElementById('ct-phone').textContent=info.phone;
   if(info.email)document.getElementById('ct-email').textContent=info.email;
   if(info.location)document.getElementById('ct-loc').textContent=info.location;
-  ['ct-ig','ft-ig'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=info.instagram||'#';});
-  ['ct-sc','ft-sc'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=info.snapchat||'#';});
-  ['ct-tt','ft-tt'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=info.tiktok||'#';});
-  ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=wa;});
-  const heroEl=document.getElementById('hero-img');
-  if(heroEl){const src=theme==='light'&&info.heroImgLight?info.heroImgLight:(info.heroImgDark||info.heroImg||'');if(src)heroEl.src=src;}
-  if(info.introImg)document.getElementById('ldr-eagle-img').src=info.introImg;
-  if(info.logoImg){['nav-logo-img','ft-logo-img'].forEach(id=>{const el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});}
+  ['ct-ig','ft-ig'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.instagram||'#';});
+  ['ct-sc','ft-sc'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.snapchat||'#';});
+  ['ct-tt','ft-tt'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.tiktok||'#';});
+  ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=wa;});
+  var heroEl=document.getElementById('hero-img');
+  if(heroEl){var src=theme==='light'&&info.heroImgLight?info.heroImgLight:(info.heroImgDark||info.heroImg||'');if(src)heroEl.src=src;}
+  if(info.introImg&&info.introImg.trim())document.getElementById('ldr-eagle-img').src=info.introImg;
+  if(info.logoImg&&info.logoImg.trim()){
+    ['nav-logo-img','ft-logo-img'].forEach(function(id){var el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});
+  }
   if(info.seoTitle)document.title=info.seoTitle;
 }
 
 /* ══════════════════════════════════════
-   BUILD SITE CONTENT
+   BUILD CONTENT
 ══════════════════════════════════════ */
 function buildMarquee(){
-  const svcs=(siteData.services||[]).filter(s=>s.status!=='hidden').map(s=>s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim());
-  const items=[...svcs,...svcs].map(n=>`<div class="mq-item">${n}<span class="mq-dot"></span></div>`).join('');
+  var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){return s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();});
+  var items=svcs.concat(svcs).map(function(n){return '<div class="mq-item">'+n+'<span class="mq-dot"></span></div>';}).join('');
   document.getElementById('mq-track').innerHTML=items+items;
 }
 
 function buildPkgs(){
-  const grid=document.getElementById('pkg-grid');
-  const visible=(siteData.packages||[]).filter(p=>p.status!=='draft'&&p.homepage!==false);
-  const fallbacks=['https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY','https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY','https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k'];
-  const defaultCards=[{nameEn:'Swiss Peak Sanctuary',catEn:'Alpine Elite',price:'2500',duration:'7 Nights'},{nameEn:'Azure Maldives Villa',catEn:'Oceanic Escape',price:'3800',duration:'10 Nights'},{nameEn:'Golden Sands Safari',catEn:'Desert Majesty',price:'1900',duration:'5 Nights'}];
-  const cards=visible.length?visible:defaultCards;
-  grid.innerHTML=cards.map((p,i)=>`<div class="pkg-card rv">${p.featured?'<div class="pkg-feat">⭐ Featured</div>':''}<img src="${p.img||fallbacks[i%3]}" alt="${p.nameEn||''}" onerror="this.src='${fallbacks[i%3]}'"/><div class="pkg-ov"><div class="pkg-cat">${p.catEn||'—'}</div><div class="pkg-name">${p.nameEn||p.name||'—'}</div>${p.duration?`<div class="pkg-dur">${p.duration}</div>`:''} ${p.price?`<div class="pkg-prc">From ${p.price} SAR</div>`:''}<div class="pkg-line"></div><div class="pkg-cta" onclick="goTo('contact')">Inquire Now →</div></div></div>`).join('');
-  const c2=grid.querySelector('.pkg-card:nth-child(2)');
+  var grid=document.getElementById('pkg-grid');
+  var visible=(siteData.packages||[]).filter(function(p){return p.status!=='draft'&&p.homepage!==false;});
+  var fallbacks=[
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k'
+  ];
+  var defaultCards=[
+    {nameEn:'Swiss Peak Sanctuary',catEn:'Alpine Elite',price:'2500',duration:'7 Nights'},
+    {nameEn:'Azure Maldives Villa',catEn:'Oceanic Escape',price:'3800',duration:'10 Nights'},
+    {nameEn:'Golden Sands Safari',catEn:'Desert Majesty',price:'1900',duration:'5 Nights'}
+  ];
+  var cards=visible.length?visible:defaultCards;
+  grid.innerHTML=cards.map(function(p,i){
+    return '<div class="pkg-card rv">'+(p.featured?'<div class="pkg-feat">⭐ Featured</div>':'')+
+      '<img src="'+(p.img||fallbacks[i%3])+'" alt="'+(p.nameEn||'')+'" onerror="this.src=\''+fallbacks[i%3]+'\'"/>'+
+      '<div class="pkg-ov"><div class="pkg-cat">'+(p.catEn||'—')+'</div>'+
+      '<div class="pkg-name">'+(p.nameEn||p.name||'—')+'</div>'+
+      (p.duration?'<div class="pkg-dur">'+p.duration+'</div>':'')+
+      (p.price?'<div class="pkg-prc">From '+p.price+' SAR</div>':'')+
+      '<div class="pkg-line"></div>'+
+      '<div class="pkg-cta" onclick="goTo(\'contact\')">Inquire Now →</div></div></div>';
+  }).join('');
+  var c2=grid.querySelector('.pkg-card:nth-child(2)');
   if(c2&&cards.length>=2)c2.style.marginTop='50px';
 }
 
 function buildSvc(){
-  const active=(siteData.services||[]).filter(s=>s.status!=='hidden');
-  const bento=document.getElementById('svc-bento');
-  const getIcon=n=>n.match(/[\u{1F300}-\u{1FFFF}]/gu)?.[0]||'✦';
-  const getName=n=>n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
-  const descs=['All global destinations covered.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for international education.','Drive legally in most countries.','Complete medical & security coverage.'];
-  let html=`<div class="b-base b-big rv"><div class="b-big-wm">✈</div><div><span class="sec-tag" data-i18n="svc.tag">What We Offer</span><h3 style="font-family:var(--fdisplay);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;" data-i18n="svc.title">Global Eagle<br/>Concierge</h3><p class="b-desc" style="max-width:300px;" data-i18n="svc.concierge">From visa processing to private transfers.</p></div><button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo('contact')" data-i18n="svc.explore">Explore Services</button></div>`;
-  const types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
-  active.slice(0,6).forEach((s,i)=>{const ico=getIcon(s.name),name=getName(s.name),tp=types[i]||'b-cell';
-    if(tp==='b-wide')html+=`<div class="b-base b-wide rv"><div class="b-icon-ring">${ico}</div><div><div class="b-title">${name}</div><div class="b-desc">${descs[i]||''}</div></div></div>`;
-    else html+=`<div class="b-base b-cell rv"><div class="b-ico">${ico}</div><div class="b-title">${name}</div><div class="b-desc">${descs[i]||''}</div></div>`;
+  var active=(siteData.services||[]).filter(function(s){return s.status!=='hidden';});
+  var bento=document.getElementById('svc-bento');
+  function getIcon(n){var m=n.match(/[\u{1F300}-\u{1FFFF}]/gu);return m?m[0]:'✦';}
+  function getName(n){return n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();}
+  var descs=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
+  var html='<div class="b-base b-big rv"><div class="b-big-wm">✈</div><div>'+
+    '<span class="sec-tag" data-i18n="svc.tag">What We Offer</span>'+
+    '<h3 style="font-family:var(--fdisplay);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;" data-i18n="svc.title">Global Eagle<br/>Concierge</h3>'+
+    '<p class="b-desc" style="max-width:300px;" data-i18n="svc.concierge">From visa processing to private transfers.</p></div>'+
+    '<button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo(\'contact\')" data-i18n="svc.explore">Explore Services</button></div>';
+  var types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
+  active.slice(0,6).forEach(function(s,i){
+    var ico=getIcon(s.name),name=getName(s.name),tp=types[i]||'b-cell';
+    if(tp==='b-wide'){
+      html+='<div class="b-base b-wide rv"><div class="b-icon-ring">'+ico+'</div><div><div class="b-title">'+name+'</div><div class="b-desc">'+(descs[i]||'')+'</div></div></div>';
+    }else{
+      html+='<div class="b-base b-cell rv"><div class="b-ico">'+ico+'</div><div class="b-title">'+name+'</div><div class="b-desc">'+(descs[i]||'')+'</div></div>';
+    }
   });
   bento.innerHTML=html;
 }
 
 function buildGal(){
-  const valid=(siteData.gallery||[]).filter(u=>u&&u.trim());
+  var valid=(siteData.gallery||[]).filter(function(u){return u&&u.trim();});
   if(!valid.length)return;
   document.getElementById('gallery').style.display='block';
-  document.getElementById('gal-grid').innerHTML=valid.map(u=>`<img class="gal-img rv" src="${u}" loading="lazy" onerror="this.style.display='none'">`).join('');
+  document.getElementById('gal-grid').innerHTML=valid.map(function(u){
+    return '<img class="gal-img rv" src="'+u+'" loading="lazy" onerror="this.style.display=\'none\'">';
+  }).join('');
 }
 
 function buildOffers(){
-  const offers=siteData.offers||[];
+  var offers=siteData.offers||[];
   if(!offers.length)return;
-  const banner=document.getElementById('offers-banner');
-  document.getElementById('off-in').innerHTML=offers.map(o=>`<div class="off-chip"><i class="fa-solid fa-tag"></i>${o.title}<span>— ${o.discount}</span></div>`).join('');
-  banner.style.display='block';
+  document.getElementById('off-in').innerHTML=offers.map(function(o){
+    return '<div class="off-chip"><i class="fa-solid fa-tag"></i>'+o.title+'<span>— '+o.discount+'</span></div>';
+  }).join('');
+  document.getElementById('offers-banner').style.display='block';
 }
 
 /* ══════════════════════════════════════
    PARTICLES
 ══════════════════════════════════════ */
 function initParticles(canvasId){
-  const canvas=document.getElementById(canvasId);if(!canvas)return;
-  const ctx=canvas.getContext('2d');let W,H,pts;
+  var canvas=document.getElementById(canvasId);if(!canvas)return;
+  var ctx=canvas.getContext('2d');var W,H,pts;
   function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
-  function makePts(){pts=Array.from({length:90},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.12,r:Math.random()*1.4+.3,op:Math.random()*.55+.1,gold:Math.random()>.55}));}
-  resize();makePts();window.addEventListener('resize',()=>{resize();makePts();});
-  (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.35})`;ctx.fill();});requestAnimationFrame(loop);})();
+  function makePts(){pts=Array.from({length:90},function(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.12,r:Math.random()*1.4+.3,op:Math.random()*.55+.1,gold:Math.random()>.55};});}
+  resize();makePts();window.addEventListener('resize',function(){resize();makePts();});
+  (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?'rgba(201,162,39,'+p.op+')':'rgba(255,255,255,'+(p.op*.35)+')';ctx.fill();});requestAnimationFrame(loop);})();
 }
+
 function initLoaderCanvas(){
-  const canvas=document.getElementById('ldr-canvas');if(!canvas)return;
-  const ctx=canvas.getContext('2d');let W=canvas.width=innerWidth,H=canvas.height=innerHeight;
-  window.addEventListener('resize',()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;});
-  const pts=Array.from({length:160},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.15,r:Math.random()*1.8+.2,op:Math.random()*.65+.05,gold:Math.random()>.6}));
-  let running=true;
-  (function loop(){if(!running)return;ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.3})`;ctx.fill();});requestAnimationFrame(loop);})();
-  return()=>{running=false;};
+  var canvas=document.getElementById('ldr-canvas');if(!canvas)return;
+  var ctx=canvas.getContext('2d');var W=canvas.width=innerWidth,H=canvas.height=innerHeight;
+  window.addEventListener('resize',function(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;});
+  var pts=Array.from({length:160},function(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.15,r:Math.random()*1.8+.2,op:Math.random()*.65+.05,gold:Math.random()>.6};});
+  var running=true;
+  (function loop(){if(!running)return;ctx.clearRect(0,0,W,H);pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?'rgba(201,162,39,'+p.op+')':'rgba(255,255,255,'+(p.op*.3)+')';ctx.fill();});requestAnimationFrame(loop);})();
+  return function(){running=false;};
 }
 
 /* ══════════════════════════════════════
-   LOADER + INIT
+   LOADER + MAIN INIT
 ══════════════════════════════════════ */
-(async function init(){
+window.addEventListener('DOMContentLoaded', async function(){
+  gsap.registerPlugin(ScrollTrigger);
   await loadSiteData();
   applyInfo();
   _applyHeroTypo(theme);
   buildMarquee();buildPkgs();buildSvc();buildGal();buildOffers();
-  if(!siteData.settings.wa)document.getElementById('wa-float').style.display='none';
 
-  const loader=document.getElementById('loader');
-  if(!loader||!siteData.settings.intro){loader&&loader.remove();animIn();return;}
-  const stopPts=initLoaderCanvas();
-  const fill=document.getElementById('ldr-fill');
-  let pct=0;
-  const barInt=setInterval(()=>{pct=Math.min(pct+(Math.random()*2+1),100);fill.style.width=pct+'%';if(pct>=100)clearInterval(barInt);},42);
-  setTimeout(()=>document.getElementById('ldr-ring').classList.add('show'),380);
-  setTimeout(()=>document.getElementById('ldr-text').classList.add('show'),900);
-  setTimeout(()=>{gsap.to(loader,{opacity:0,duration:.9,ease:'power2.in',onComplete:()=>{loader.remove();stopPts&&stopPts();animIn();}});},3100);
-})();
+  if(!siteData.settings.wa) document.getElementById('wa-float').style.display='none';
+
+  var loader=document.getElementById('loader');
+  if(!loader||!siteData.settings.intro){if(loader)loader.remove();animIn();return;}
+
+  var stopPts=initLoaderCanvas();
+  var fill=document.getElementById('ldr-fill');
+  var pct=0;
+  var barInt=setInterval(function(){pct=Math.min(pct+(Math.random()*2+1),100);fill.style.width=pct+'%';if(pct>=100)clearInterval(barInt);},42);
+  setTimeout(function(){document.getElementById('ldr-ring').classList.add('show');},380);
+  setTimeout(function(){document.getElementById('ldr-text').classList.add('show');},900);
+  setTimeout(function(){
+    gsap.to(loader,{opacity:0,duration:.9,ease:'power2.in',onComplete:function(){
+      loader.remove();if(stopPts)stopPts();animIn();
+    }});
+  },3100);
+});
 
 function animIn(){
   updateThemePill(theme);
@@ -849,7 +963,7 @@ function animIn(){
   gsap.to('#h-h1',{opacity:1,y:0,duration:1.1,delay:.25,ease:'power3.out'});
   gsap.to('#h-p',{opacity:1,y:0,duration:1,delay:.4,ease:'power3.out'});
   gsap.to('#h-btns',{opacity:1,y:0,duration:.9,delay:.55,ease:'power3.out'});
-  const info=siteData.info||{};
+  var info=siteData.info||{};
   countUp('s1',info.statDest||150,'+');
   countUp('s2',info.statFleet||42,'+');
   countUp('s3',info.statMembers||12,'K+');
@@ -857,92 +971,111 @@ function animIn(){
   initParticles('hero-canvas');
   initScrollReveals();
   initProcessCards();
-  ScrollTrigger.create({trigger:'#hero',start:'top top',end:'bottom top',scrub:true,onUpdate(self){gsap.set('.hero-bg img',{y:self.progress*80});}});
+  ScrollTrigger.create({trigger:'#hero',start:'top top',end:'bottom top',scrub:true,
+    onUpdate:function(self){gsap.set('.hero-bg img',{y:self.progress*80});}});
 }
 
 function countUp(id,target,suffix){
-  const el=document.getElementById(id);if(!el)return;
-  let cur=0;const step=target/55;
-  const ti=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=Math.floor(cur)+suffix;if(cur>=target)clearInterval(ti);},28);
+  var el=document.getElementById(id);if(!el)return;
+  var cur=0;var step=target/55;
+  var ti=setInterval(function(){cur=Math.min(cur+step,target);el.textContent=Math.floor(cur)+suffix;if(cur>=target)clearInterval(ti);},28);
 }
+
 function initScrollReveals(){
-  document.querySelectorAll('.rv').forEach(el=>{ScrollTrigger.create({trigger:el,start:'top 88%',onEnter(){gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out'});}});});
+  document.querySelectorAll('.rv').forEach(function(el){
+    ScrollTrigger.create({trigger:el,start:'top 88%',onEnter:function(){gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out'});}});
+  });
 }
 
 /* ══════════════════════════════════════
    PROCESS CARDS
 ══════════════════════════════════════ */
-const procData=[
-  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our expert team.'},
-  {num:'02',title:'Booking',desc:'We secure the finest accommodations at the most competitive rates.'},
-  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 concierge support.'},
-  {num:'04',title:'Destination',desc:'Arrive at your dream destination — with us every step.'}
+var procData=[
+  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our dedicated expert team.'},
+  {num:'02',title:'Booking',desc:'We secure the finest accommodations and flights at the most competitive rates.'},
+  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 personal concierge support.'},
+  {num:'04',title:'Destination',desc:'Arrive at your dream destination — we are with you every step of the way.'}
 ];
-let currentCard=0,procAnimating=false,procTimer=null;
-const STACK=[{x:0,y:0,scale:1,opacity:1,zIndex:10,rotate:0},{x:9,y:13,scale:.968,opacity:.68,zIndex:7,rotate:1.4},{x:18,y:26,scale:.936,opacity:.4,zIndex:4,rotate:2.6},{x:27,y:39,scale:.904,opacity:.2,zIndex:1,rotate:3.8}];
+var currentCard=0,procAnimating=false,procTimer=null;
+var STACK=[
+  {x:0,y:0,scale:1,opacity:1,zIndex:10,rotate:0},
+  {x:9,y:13,scale:.968,opacity:.68,zIndex:7,rotate:1.4},
+  {x:18,y:26,scale:.936,opacity:.4,zIndex:4,rotate:2.6},
+  {x:27,y:39,scale:.904,opacity:.2,zIndex:1,rotate:3.8}
+];
 
 function initProcessCards(){
-  const cards=[...document.querySelectorAll('.p-card')];
-  cards.forEach((c,i)=>{const s=STACK[i]||STACK[3];gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotation:s.rotate});c.classList.toggle('active',i===0);});
+  var cards=[...document.querySelectorAll('.p-card')];
+  cards.forEach(function(c,i){var s=STACK[i]||STACK[3];gsap.set(c,{x:s.x,y:s.y,scale:s.scale,opacity:s.opacity,zIndex:s.zIndex,rotation:s.rotate});c.classList.toggle('active',i===0);});
   _setInfoDirect(0);_startTimer();
-  document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.addEventListener('click',()=>goToCard(i)));
+  document.querySelectorAll('.p-dot').forEach(function(dot,i){dot.addEventListener('click',function(){goToCard(i);});});
 }
 function _startTimer(){clearInterval(procTimer);procTimer=setInterval(nextCard,4200);}
 function _setInfoDirect(idx){
-  const d=procData[idx];if(!d)return;
+  var d=procData[idx];if(!d)return;
   document.getElementById('proc-num').textContent=d.num;
   document.getElementById('proc-title').textContent=d.title;
   document.getElementById('proc-desc').textContent=d.desc;
-  document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
+  document.querySelectorAll('.p-dot').forEach(function(dot,i){dot.classList.toggle('active',i===idx);});
 }
 function updateProcInfo(idx){
-  const d=procData[idx];if(!d)return;
-  const els=[document.getElementById('proc-num'),document.getElementById('proc-title'),document.getElementById('proc-desc')];
-  gsap.to(els,{opacity:0,y:-6,duration:.22,ease:'power2.in',onComplete:()=>{
+  var d=procData[idx];if(!d)return;
+  var els=[document.getElementById('proc-num'),document.getElementById('proc-title'),document.getElementById('proc-desc')];
+  gsap.to(els,{opacity:0,y:-6,duration:.22,ease:'power2.in',onComplete:function(){
     document.getElementById('proc-num').textContent=d.num;
     document.getElementById('proc-title').textContent=d.title;
     document.getElementById('proc-desc').textContent=d.desc;
     gsap.to(els,{opacity:1,y:0,duration:.38,ease:'power3.out'});
   }});
-  document.querySelectorAll('.p-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
+  document.querySelectorAll('.p-dot').forEach(function(dot,i){dot.classList.toggle('active',i===idx);});
 }
 function nextCard(){
   if(procAnimating)return;procAnimating=true;
-  const cards=[...document.querySelectorAll('.p-card')];
-  const front=cards[currentCard];
-  gsap.to(front,{x:-80,y:-110,scale:.82,opacity:0,rotation:-6,duration:.55,ease:'power3.in',onComplete:()=>{
+  var cards=[...document.querySelectorAll('.p-card')];
+  var front=cards[currentCard];
+  gsap.to(front,{x:-80,y:-110,scale:.82,opacity:0,rotation:-6,duration:.55,ease:'power3.in',onComplete:function(){
     currentCard=(currentCard+1)%cards.length;
-    const bs=STACK[3];gsap.set(front,{x:bs.x+10,y:bs.y+50,scale:bs.scale-.02,opacity:0,zIndex:0,rotation:bs.rotate+1});
-    cards.forEach((card,ci)=>{const sp=(ci-currentCard+cards.length)%cards.length;const s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.65,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
-    updateProcInfo(currentCard);setTimeout(()=>procAnimating=false,680);
+    var bs=STACK[3];gsap.set(front,{x:bs.x+10,y:bs.y+50,scale:bs.scale-.02,opacity:0,zIndex:0,rotation:bs.rotate+1});
+    cards.forEach(function(card,ci){var sp=(ci-currentCard+cards.length)%cards.length;var s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.65,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
+    updateProcInfo(currentCard);setTimeout(function(){procAnimating=false;},680);
   }});
 }
 window.goToCard=function(idx){
   if(idx===currentCard||procAnimating)return;procAnimating=true;_startTimer();
-  const cards=[...document.querySelectorAll('.p-card')];currentCard=idx;
-  cards.forEach((card,ci)=>{const sp=(ci-currentCard+cards.length)%cards.length;const s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.6,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
-  updateProcInfo(idx);setTimeout(()=>procAnimating=false,650);
+  var cards=[...document.querySelectorAll('.p-card')];currentCard=idx;
+  cards.forEach(function(card,ci){var sp=(ci-currentCard+cards.length)%cards.length;var s=STACK[sp]||STACK[3];gsap.to(card,{x:s.x,y:s.y,scale:s.scale,opacity:sp===0?1:s.opacity,zIndex:s.zIndex,rotation:s.rotate,duration:.6,ease:'power3.out'});card.classList.toggle('active',ci===currentCard);});
+  updateProcInfo(idx);setTimeout(function(){procAnimating=false;},650);
 };
 
 /* ══════════════════════════════════════
-   NAV + MISC
+   NAV + HELPERS
 ══════════════════════════════════════ */
-window.addEventListener('scroll',()=>{
+window.addEventListener('scroll',function(){
   document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
-  const sections=['hero','packages','services','process-section','contact'];
-  sections.forEach(id=>{const sec=document.getElementById(id);if(!sec)return;const r=sec.getBoundingClientRect();const link=document.querySelector(`.nav-links a[href="#${id}"]`);if(link)link.classList.toggle('active',r.top<=100&&r.bottom>0);});
+  var sections=['hero','packages','services','process-section','contact'];
+  sections.forEach(function(id){
+    var sec=document.getElementById(id);if(!sec)return;
+    var r=sec.getBoundingClientRect();
+    var link=document.querySelector('.nav-links a[href="#'+id+'"]');
+    if(link)link.classList.toggle('active',r.top<=100&&r.bottom>0);
+  });
 },{passive:true});
-document.addEventListener('mousemove',e=>{const mx=(e.clientX/innerWidth-.5)*18;const my=(e.clientY/innerHeight-.5)*10;gsap.to('.hero-bg img',{x:mx*.2,y:my*.15,duration:1.2,ease:'power2.out'});});
+
+document.addEventListener('mousemove',function(e){
+  var mx=(e.clientX/innerWidth-.5)*18;
+  var my=(e.clientY/innerHeight-.5)*10;
+  gsap.to('.hero-bg img',{x:mx*.2,y:my*.15,duration:1.2,ease:'power2.out'});
+});
 
 window.closeMob=function(){document.getElementById('mob-nav').classList.remove('open');};
-window.goTo=function(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});};
+window.goTo=function(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});};
 
 window.sendWA=function(){
-  const f1=document.getElementById('f1').value.trim();
-  const f4=document.getElementById('f4').value.trim();
+  var f1=document.getElementById('f1').value.trim();
+  var f4=document.getElementById('f4').value.trim();
   if(!f1||!f4){alert(lang==='ar'?'يرجى إدخال الاسم ورقم الهاتف':'Please fill in Name and Phone.');return;}
-  const waNum=(siteData.info&&siteData.info.wa)||'966501749914';
-  const msg=`✈ New Inquiry — Global Eagle Travel\n\nName: ${f1} ${document.getElementById('f2').value}\nPhone: ${f4}\nEmail: ${document.getElementById('f3').value}\nService: ${document.getElementById('f5').value}\nMessage: ${document.getElementById('f6').value}`;
+  var waNum=(siteData.info&&siteData.info.wa)||'966501749914';
+  var msg='✈ New Inquiry — Global Eagle Travel\n\nName: '+f1+' '+document.getElementById('f2').value+'\nPhone: '+f4+'\nEmail: '+document.getElementById('f3').value+'\nService: '+document.getElementById('f5').value+'\nMessage: '+document.getElementById('f6').value;
   window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
 };
 </script>
