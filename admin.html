@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8"/>
@@ -361,42 +361,6 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
 </head>
 <body>
 
-<!-- ═══ FIREBASE SETUP ═══ -->
-<div id="firebase-setup">
-  <div class="fs-box">
-    <div class="fs-logo">🔥 Firebase Setup</div>
-    <div class="fs-sub">Connect your database — one time only</div>
-    <div class="fs-steps">
-      <div class="fs-step">
-        <div class="fs-num">1</div>
-        <div class="fs-stxt">Go to <strong><a href="https://console.firebase.google.com" target="_blank" style="color:var(--gold);">console.firebase.google.com</a></strong> → Create project → <strong>Add Web App</strong></div>
-      </div>
-      <div class="fs-step">
-        <div class="fs-num">2</div>
-        <div class="fs-stxt">In <strong>Build → Realtime Database</strong> → Create database (Start in <strong>test mode</strong>)</div>
-      </div>
-      <div class="fs-step">
-        <div class="fs-num">3</div>
-        <div class="fs-stxt">Copy your <code>databaseURL</code> and <code>apiKey</code> from Project Settings → Your apps</div>
-      </div>
-    </div>
-    <div class="fs-field">
-      <label class="fs-label">Database URL</label>
-      <input class="fs-input" id="fs-url" type="url" placeholder="https://your-project-default-rtdb.firebaseio.com"/>
-    </div>
-    <div class="fs-field">
-      <label class="fs-label">API Key</label>
-      <input class="fs-input" id="fs-apikey" type="text" placeholder="AIzaSy..."/>
-    </div>
-    <div class="fs-field">
-      <label class="fs-label">Project ID</label>
-      <input class="fs-input" id="fs-projectid" type="text" placeholder="your-project-id"/>
-    </div>
-    <button class="fs-btn" onclick="connectFirebase()">🔥 Connect Firebase</button>
-    <div class="fs-err" id="fs-err">❌ Could not connect. Check your config.</div>
-    <div class="fs-skip"><a onclick="skipFirebase()">Skip — use localStorage only</a></div>
-  </div>
-</div>
 
 <!-- ═══ LOGIN ═══ -->
 <div id="login">
@@ -821,22 +785,29 @@ let CREDS={user:LS.get('ge_user','admin'), pass:LS.get('ge_pass','eagle2025')};
 /* ══════════════════════════════════════
    STARTUP FLOW
 ══════════════════════════════════════ */
+/* ══ Firebase Config مدمج ══ */
+const HARDCODED_FB_CONFIG = {
+  apiKey: "AIzaSyAE1yGGAtBb7_LMrLJuK5-UsKvL5uAIw4w",
+  authDomain: "eagle-b6d1c.firebaseapp.com",
+  databaseURL: "https://eagle-b6d1c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "eagle-b6d1c",
+  storageBucket: "eagle-b6d1c.firebasestorage.app",
+  messagingSenderId: "756161808889",
+  appId: "1:756161808889:web:3605212055ea921a0a5528"
+};
+
 window.addEventListener('DOMContentLoaded', async ()=>{
   initLoginCanvas();
-  const saved=getFbConfig();
-  if(saved){
-    // Auto-connect
-    const ok=await initFirebase(saved);
-    document.getElementById('firebase-setup').style.display='none';
-    showLogin(ok);
-    if(ok){
-      // Load Firebase config into settings fields
-      document.getElementById('set-fb-url').value=saved.databaseURL||'';
-      document.getElementById('set-fb-apikey').value=saved.apiKey||'';
-      document.getElementById('set-fb-projectid').value=saved.projectId||'';
-    }
-  }else{
-    document.getElementById('firebase-setup').style.display='flex';
+  // استخدم الـ config المدمج مباشرة
+  const saved = getFbConfig() || HARDCODED_FB_CONFIG;
+  setFbConfig(saved); // احفظه للـ settings page
+  const ok = await initFirebase(saved);
+  document.getElementById('firebase-setup').style.display='none';
+  showLogin(ok);
+  if(ok){
+    document.getElementById('set-fb-url').value=saved.databaseURL||'';
+    document.getElementById('set-fb-apikey').value=saved.apiKey||'';
+    document.getElementById('set-fb-projectid').value=saved.projectId||'';
   }
 });
 
