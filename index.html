@@ -981,10 +981,23 @@ function applyInfo(){
    BUILD CONTENT
 ══════════════════════════════════════ */
 function buildMarquee(){
-  var nameMapArMq={'Tourist Visas':'تأشيرات سياحية','Hotel Bookings':'حجوزات فندقية','Flight Tickets':'تذاكر طيران','Student Visas':'تأشيرات طلابية','International Licenses':'رخص دولية','Travel Insurance':'تأمين سفر'};
+  var nameMapArMq={
+    'Tourist Visas':'تأشيرات سياحية','Tourist Visa':'تأشيرة سياحية',
+    'Hotel Bookings':'حجوزات فندقية','Hotel Booking':'حجز فندقي',
+    'Flight Tickets':'تذاكر طيران','Flight Ticket':'تذكرة طيران',
+    'Student Visas':'تأشيرات طلابية','Student Visa':'تأشيرة طلابية',
+    'International Licenses':'رخص دولية','International License':'رخصة دولية',
+    'International Licences':'رخص دولية',
+    'Travel Insurance':'تأمين سفر','Travel Insurances':'تأمين سفر'
+  };
   var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){
     var clean=s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
-    if(lang==='ar'&&nameMapArMq[clean])return nameMapArMq[clean];
+    if(lang==='ar'){
+      // Try exact match first, then case-insensitive
+      if(nameMapArMq[clean])return nameMapArMq[clean];
+      var lower=clean.toLowerCase();
+      for(var k in nameMapArMq){if(k.toLowerCase()===lower)return nameMapArMq[k];}
+    }
     return clean;
   });
   var items=svcs.concat(svcs).map(function(n){return '<div class="mq-item">'+n+'<span class="mq-dot"></span></div>';}).join('');
@@ -1015,7 +1028,7 @@ function buildPkgs(){
       '<img src="'+(p.img||fallbacks[i%3])+'" alt="'+pName+'" onerror="this.src=\''+fallbacks[i%3]+'\'" />'+
       '<div class="pkg-ov"><div class="pkg-cat">'+pCat+'</div>'+
       '<div class="pkg-name">'+pName+'</div>'+
-      (p.duration?'<div class="pkg-dur">'+p.duration+'</div>':'')+
+      (p.duration?'<div class="pkg-dur">'+(lang==='ar'?p.duration.replace(/Nights?/gi,'ليالٍ').replace(/Days?/gi,'أيام').replace(/Night/gi,'ليلة').replace(/Day/gi,'يوم'):p.duration)+'</div>':'')+ 
       (p.price?'<div class="pkg-prc">'+pFrom+p.price+' SAR</div>':'')+
       '<div class="pkg-line"></div>'+
       '<div class="pkg-cta" onclick="goTo(\'contact\')">'+pInquire+'</div></div></div>';
@@ -1031,16 +1044,21 @@ function buildSvc(){
   function getName(n){return n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();}
   // Arabic name map for default services
   var nameMapAr={
-    'Tourist Visas':'تأشيرات سياحية',
-    'Hotel Bookings':'حجوزات فندقية',
-    'Flight Tickets':'تذاكر طيران',
-    'Student Visas':'تأشيرات طلابية',
-    'International Licenses':'رخص دولية',
+    'Tourist Visas':'تأشيرات سياحية','Tourist Visa':'تأشيرة سياحية',
+    'Hotel Bookings':'حجوزات فندقية','Hotel Booking':'حجز فندقي',
+    'Flight Tickets':'تذاكر طيران','Flight Ticket':'تذكرة طيران',
+    'Student Visas':'تأشيرات طلابية','Student Visa':'تأشيرة طلابية',
+    'International Licenses':'رخص دولية','International License':'رخصة دولية',
+    'International Licences':'رخص دولية',
     'Travel Insurance':'تأمين سفر'
   };
   function getNameLang(n){
     var clean=getName(n);
-    if(lang==='ar'&&nameMapAr[clean])return nameMapAr[clean];
+    if(lang==='ar'){
+      if(nameMapAr[clean])return nameMapAr[clean];
+      var lower=clean.toLowerCase();
+      for(var k in nameMapAr){if(k.toLowerCase()===lower)return nameMapAr[k];}
+    }
     return clean;
   }
   var descsEn=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
