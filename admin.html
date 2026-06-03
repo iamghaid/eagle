@@ -949,12 +949,7 @@ function applyInfo(){
    BUILD CONTENT
 ══════════════════════════════════════ */
 function buildMarquee(){
-  var nameMapArMq={'Tourist Visas':'تأشيرات سياحية','Hotel Bookings':'حجوزات فندقية','Flight Tickets':'تذاكر طيران','Student Visas':'تأشيرات طلابية','International Licenses':'رخص دولية','Travel Insurance':'تأمين سفر'};
-  var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){
-    var clean=s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
-    if(lang==='ar'&&nameMapArMq[clean])return nameMapArMq[clean];
-    return clean;
-  });
+  var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){return s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();});
   var items=svcs.concat(svcs).map(function(n){return '<div class="mq-item">'+n+'<span class="mq-dot"></span></div>';}).join('');
   document.getElementById('mq-track').innerHTML=items+items;
 }
@@ -992,20 +987,6 @@ function buildSvc(){
   var bento=document.getElementById('svc-bento');
   function getIcon(n){var m=n.match(/[\u{1F300}-\u{1FFFF}]/gu);return m?m[0]:'✦';}
   function getName(n){return n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();}
-  // Arabic name map for default services
-  var nameMapAr={
-    'Tourist Visas':'تأشيرات سياحية',
-    'Hotel Bookings':'حجوزات فندقية',
-    'Flight Tickets':'تذاكر طيران',
-    'Student Visas':'تأشيرات طلابية',
-    'International Licenses':'رخص دولية',
-    'Travel Insurance':'تأمين سفر'
-  };
-  function getNameLang(n){
-    var clean=getName(n);
-    if(lang==='ar'&&nameMapAr[clean])return nameMapAr[clean];
-    return clean;
-  }
   var descsEn=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
   var descsAr=['نغطي جميع الوجهات العالمية بمعالجة احترافية.','شركاء فنادق فاخرة موثوقة حول العالم.','أفضل الأسعار عبر جميع شركات الطيران.','دعم متكامل لرحلتك التعليمية الدولية.','قُد بشكل قانوني في معظم دول العالم.','تغطية طبية وأمنية شاملة.'];
   var descs=lang==='ar'?descsAr:descsEn;
@@ -1016,7 +997,7 @@ function buildSvc(){
     '<button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo(\'contact\')" data-i18n="svc.explore">Explore Services</button></div>';
   var types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
   active.slice(0,6).forEach(function(s,i){
-    var ico=getIcon(s.name),name=getNameLang(s.name),tp=types[i]||'b-cell';
+    var ico=getIcon(s.name),name=getName(s.name),tp=types[i]||'b-cell';
     if(tp==='b-wide'){
       html+='<div class="b-base b-wide rv"><div class="b-icon-ring">'+ico+'</div><div><div class="b-title">'+name+'</div><div class="b-desc">'+(descs[i]||'')+'</div></div></div>';
     }else{
