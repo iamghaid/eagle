@@ -849,9 +849,30 @@ window.setLang=function(l){
   if(h1)h1.innerHTML=t('hero.h1');
   document.getElementById('btn-en').classList.toggle('active',l==='en');
   document.getElementById('btn-ar').classList.toggle('active',l==='ar');
-  procData.forEach(function(d,i){d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
-  updateProcInfo(currentCard);
-  requestAnimationFrame(function(){updateThemePill(theme);});
+  // Rebuild dynamic sections with new language
+  requestAnimationFrame(function(){
+    buildSvc();
+    buildPkgs();
+    buildMarquee();
+    // Re-apply i18n to ALL elements including newly built
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;
+    });
+    // Update process step circle titles directly
+    var stepTitles=document.querySelectorAll('.step-title');
+    var stepKeys=['proc.c0t','proc.c1t','proc.c2t','proc.c3t'];
+    stepTitles.forEach(function(el,i){
+      if(stepKeys[i])el.textContent=t(stepKeys[i]);
+    });
+    // Update procData and detail card
+    procData.forEach(function(d,i){d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
+    goToStep(currentStep,true);
+    updateThemePill(theme);
+    // Show all rv elements
+    document.querySelectorAll('.rv:not(.on)').forEach(function(el){
+      el.classList.add('on');
+    });
+  });
 };
 
 /* ══════════════════════════════════════
@@ -934,7 +955,12 @@ function applyInfo(){
    BUILD CONTENT
 ══════════════════════════════════════ */
 function buildMarquee(){
-  var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){return s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();});
+  var nameMapArMq={'Tourist Visas':'تأشيرات سياحية','Hotel Bookings':'حجوزات فندقية','Flight Tickets':'تذاكر طيران','Student Visas':'تأشيرات طلابية','International Licenses':'رخص دولية','Travel Insurance':'تأمين سفر'};
+  var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){
+    var clean=s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
+    if(lang==='ar'&&nameMapArMq[clean])return nameMapArMq[clean];
+    return clean;
+  });
   var items=svcs.concat(svcs).map(function(n){return '<div class="mq-item">'+n+'<span class="mq-dot"></span></div>';}).join('');
   document.getElementById('mq-track').innerHTML=items+items;
 }
@@ -954,14 +980,19 @@ function buildPkgs(){
   ];
   var cards=visible.length?visible:defaultCards;
   grid.innerHTML=cards.map(function(p,i){
-    return '<div class="pkg-card rv">'+(p.featured?'<div class="pkg-feat">⭐ Featured</div>':'')+
-      '<img src="'+(p.img||fallbacks[i%3])+'" alt="'+(p.nameEn||'')+'" onerror="this.src=\''+fallbacks[i%3]+'\'"/>'+
-      '<div class="pkg-ov"><div class="pkg-cat">'+(p.catEn||'—')+'</div>'+
-      '<div class="pkg-name">'+(p.nameEn||p.name||'—')+'</div>'+
+    var pName=lang==='ar'&&p.nameAr?p.nameAr:(p.nameEn||p.name||'—');
+    var pCat=lang==='ar'&&p.catAr?p.catAr:(p.catEn||'—');
+    var pFrom=lang==='ar'?'من ':'From ';
+    var pInquire=lang==='ar'?'← استفسر الآن':'Inquire Now →';
+    var pFeat=lang==='ar'?'⭐ مميز':'⭐ Featured';
+    return '<div class="pkg-card rv">'+(p.featured?'<div class="pkg-feat">'+pFeat+'</div>':'')+
+      '<img src="'+(p.img||fallbacks[i%3])+'" alt="'+pName+'" onerror="this.src=\''+fallbacks[i%3]+'\'" />'+
+      '<div class="pkg-ov"><div class="pkg-cat">'+pCat+'</div>'+
+      '<div class="pkg-name">'+pName+'</div>'+
       (p.duration?'<div class="pkg-dur">'+p.duration+'</div>':'')+
-      (p.price?'<div class="pkg-prc">From '+p.price+' SAR</div>':'')+
+      (p.price?'<div class="pkg-prc">'+pFrom+p.price+' SAR</div>':'')+
       '<div class="pkg-line"></div>'+
-      '<div class="pkg-cta" onclick="goTo(\'contact\')">Inquire Now →</div></div></div>';
+      '<div class="pkg-cta" onclick="goTo(\'contact\')">'+pInquire+'</div></div></div>';
   }).join('');
   var c2=grid.querySelector('.pkg-card:nth-child(2)');
   if(c2&&cards.length>=2)c2.style.marginTop='50px';
@@ -972,7 +1003,23 @@ function buildSvc(){
   var bento=document.getElementById('svc-bento');
   function getIcon(n){var m=n.match(/[\u{1F300}-\u{1FFFF}]/gu);return m?m[0]:'✦';}
   function getName(n){return n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();}
-  var descs=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
+  // Arabic name map for default services
+  var nameMapAr={
+    'Tourist Visas':'تأشيرات سياحية',
+    'Hotel Bookings':'حجوزات فندقية',
+    'Flight Tickets':'تذاكر طيران',
+    'Student Visas':'تأشيرات طلابية',
+    'International Licenses':'رخص دولية',
+    'Travel Insurance':'تأمين سفر'
+  };
+  function getNameLang(n){
+    var clean=getName(n);
+    if(lang==='ar'&&nameMapAr[clean])return nameMapAr[clean];
+    return clean;
+  }
+  var descsEn=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
+  var descsAr=['نغطي جميع الوجهات العالمية بمعالجة احترافية.','شركاء فنادق فاخرة موثوقة حول العالم.','أفضل الأسعار عبر جميع شركات الطيران.','دعم متكامل لرحلتك التعليمية الدولية.','قُد بشكل قانوني في معظم دول العالم.','تغطية طبية وأمنية شاملة.'];
+  var descs=lang==='ar'?descsAr:descsEn;
   var html='<div class="b-base b-big rv"><div class="b-big-wm">✈</div><div>'+
     '<span class="sec-tag" data-i18n="svc.tag">What We Offer</span>'+
     '<h3 style="font-family:var(--fdisplay);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;" data-i18n="svc.title">Global Eagle<br/>Concierge</h3>'+
@@ -980,7 +1027,7 @@ function buildSvc(){
     '<button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo(\'contact\')" data-i18n="svc.explore">Explore Services</button></div>';
   var types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
   active.slice(0,6).forEach(function(s,i){
-    var ico=getIcon(s.name),name=getName(s.name),tp=types[i]||'b-cell';
+    var ico=getIcon(s.name),name=getNameLang(s.name),tp=types[i]||'b-cell';
     if(tp==='b-wide'){
       html+='<div class="b-base b-wide rv"><div class="b-icon-ring">'+ico+'</div><div><div class="b-title">'+name+'</div><div class="b-desc">'+(descs[i]||'')+'</div></div></div>';
     }else{
