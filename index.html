@@ -6,6 +6,8 @@
 <title>Global Eagle Travel | Rise Above. Aim High.</title>
 <meta name="description" content="Global Eagle Travel — Your trusted partner for luxury travel in Saudi Arabia."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap"/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -25,7 +27,7 @@
   --px:clamp(16px,5vw,100px);--py:clamp(60px,10vw,150px);
   --ease1:cubic-bezier(.25,.46,.45,.94);--ease2:cubic-bezier(.65,0,.35,1);
   --fdisplay:'Cinzel',serif;--fbody:'Poppins',sans-serif;
-  transition:background .5s,color .5s;
+  transition:background .3s,color .3s;
 }
 [data-theme="light"]{
   --bg0:#F0EAD6;--bg1:#EAE3CC;--bg2:#E2DAC0;--bg3:#D8CEAE;
@@ -39,7 +41,7 @@
 [dir="rtl"]{--fdisplay:'Amiri',serif;--fbody:'IBM Plex Sans Arabic',sans-serif;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg0);color:var(--txt);font-family:var(--fbody);overflow-x:hidden;line-height:1.65;transition:background .5s,color .5s;}
+body{background:var(--bg0);color:var(--txt);font-family:var(--fbody);overflow-x:hidden;line-height:1.65;transition:background .3s,color .3s;}
 img{display:block;max-width:100%;}a{text-decoration:none;color:inherit;}
 button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
 ::-webkit-scrollbar{width:3px;}
@@ -638,13 +640,20 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
       </div>
       <div class="cf-wrap rv">
         <div class="cf-row2">
-          <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.fn">First Name</label><input class="cf-inp" id="f1" type="text" placeholder="John"/></div>
-          <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ln">Last Name</label><input class="cf-inp" id="f2" type="text" placeholder="Doe"/></div>
+          <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.fn">First Name</label><input class="cf-inp" id="f1" type="text" placeholder="John" data-i18n-ph="ct.ph1"/></div>
+          <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ln">Last Name</label><input class="cf-inp" id="f2" type="text" placeholder="Doe" data-i18n-ph="ct.ph2"/></div>
         </div>
         <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.em2">Email</label><input class="cf-inp" id="f3" type="email" placeholder="john@example.com"/></div>
         <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ph">Phone</label><input class="cf-inp" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.svc">Service</label><select class="cf-inp" id="f5"><option>Tourist Visa</option><option>Hotel Booking</option><option>Flight Tickets</option><option>Student Visa</option><option>International License</option><option>Travel Insurance</option></select></div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.msg">Message</label><textarea class="cf-inp" id="f6" rows="3" placeholder="Tell us about your journey..." style="resize:none;"></textarea></div>
+        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.svc">Service</label><select class="cf-inp" id="f5">
+  <option data-en="Tourist Visa" data-ar="تأشيرة سياحية">Tourist Visa</option>
+  <option data-en="Hotel Booking" data-ar="حجز فندق">Hotel Booking</option>
+  <option data-en="Flight Tickets" data-ar="تذاكر طيران">Flight Tickets</option>
+  <option data-en="Student Visa" data-ar="تأشيرة طلابية">Student Visa</option>
+  <option data-en="International License" data-ar="رخصة دولية">International License</option>
+  <option data-en="Travel Insurance" data-ar="تأمين سفر">Travel Insurance</option>
+</select></div>
+        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.msg">Message</label><textarea class="cf-inp" id="f6" rows="3" placeholder="Tell us about your journey..." data-i18n-ph="ct.ph6" style="resize:none;"></textarea></div>
         <button class="btn-submit" onclick="sendWA()" data-i18n="ct.btn">Send Inquiry ✈</button>
       </div>
     </div>
@@ -820,7 +829,7 @@ var T={
     pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},
     proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our expert team.',c1t:'Booking',c1d:'We secure the finest accommodations at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — we are with you every step.'},
     svc:{tag:'What We Offer',title:'Global Eagle Services',concierge:'From visa processing to private transfers — seamless travel.',explore:'Explore Services'},
-    ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message'},
+    ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message',ph1:'John',ph2:'Doe',ph6:'Tell us about your journey...'},
     ft:{desc:'Your trusted partner in premium travel & tourism. Redefining high-end journeys since 1994.',ex:'Explore',co:'Company',nl:'Newsletter','nl-d':'Get exclusive deals and travel inspiration.','nl-b':'JOIN',copy:'© 2025 Global Eagle Travel. The Majesty of Flight.','wa-link':'WhatsApp Us'}
   },
   ar:{
@@ -830,7 +839,7 @@ var T={
     pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},
     proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك وتفضيلاتك السياحية مع فريقنا المتخصص.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات بأسعار تنافسية.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة لا تُنسى مع رعاية شاملة على مدار الساعة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن معك في كل لحظة.'},
     svc:{tag:'ما نقدمه',title:'خدمات النسر العالمي',concierge:'من التأشيرات إلى النقل الخاص — رحلة متكاملة.',explore:'استكشف الخدمات'},
-    ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك'},
+    ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك',ph1:'محمد',ph2:'العمري',ph6:'أخبرنا عن رحلتك...'},
     ft:{desc:'شريكك الموثوق في السفر والسياحة الفاخرة. نُعيد تعريف الرحلات الراقية منذ ١٩٩٤.',ex:'استكشف',co:'الشركة',nl:'النشرة البريدية','nl-d':'احصل على أفضل العروض وإلهام السفر.','nl-b':'اشتراك',copy:'© ٢٠٢٥ نسر عالمي للسفر. جلال الطيران.','wa-link':'تواصل عبر واتساب'}
   }
 };
@@ -841,7 +850,16 @@ function t(k){var p=k.split('.');var v=T[lang];for(var i=0;i<p.length;i++){if(v&
 window.setLang=function(l){
   lang=l;
   var html=document.documentElement;
-  html.lang=l; html.dir=l==='ar'?'rtl':'ltr';
+  // Apply direction + font IMMEDIATELY before anything else
+  html.lang=l;
+  html.dir=l==='ar'?'rtl':'ltr';
+  // Force font change instantly - no transition
+  var fontBody=l==='ar'?"'IBM Plex Sans Arabic',sans-serif":"'Poppins',sans-serif";
+  var fontDisplay=l==='ar'?"'Amiri',serif":"'Cinzel',serif";
+  document.body.style.fontFamily=fontBody;
+  document.documentElement.style.setProperty('--fbody',fontBody);
+  document.documentElement.style.setProperty('--fdisplay',fontDisplay);
+  // Translate static elements
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;
   });
@@ -857,6 +875,14 @@ window.setLang=function(l){
     // Re-apply i18n to ALL elements including newly built
     document.querySelectorAll('[data-i18n]').forEach(function(el){
       var v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;
+    });
+    // Translate select options
+    document.querySelectorAll('option[data-en]').forEach(function(opt){
+      opt.textContent=l==='ar'?(opt.getAttribute('data-ar')||opt.getAttribute('data-en')):opt.getAttribute('data-en');
+    });
+    // Translate placeholder inputs
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+      var v=t(el.getAttribute('data-i18n-ph'));if(v)el.placeholder=v;
     });
     // Update process step circle titles directly
     var stepTitles=document.querySelectorAll('.step-title');
@@ -974,9 +1000,9 @@ function buildPkgs(){
     'https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k'
   ];
   var defaultCards=[
-    {nameEn:'Swiss Peak Sanctuary',catEn:'Alpine Elite',price:'2500',duration:'7 Nights'},
-    {nameEn:'Azure Maldives Villa',catEn:'Oceanic Escape',price:'3800',duration:'10 Nights'},
-    {nameEn:'Golden Sands Safari',catEn:'Desert Majesty',price:'1900',duration:'5 Nights'}
+    {nameEn:'Swiss Peak Sanctuary',nameAr:'ملاذ قمم سويسرا',catEn:'Alpine Elite',catAr:'النخبة الجبلية',price:'2500',duration:'7 Nights'},
+    {nameEn:'Azure Maldives Villa',nameAr:'فيلا المالديف الأزرق',catEn:'Oceanic Escape',catAr:'هروب المحيط',price:'3800',duration:'10 Nights'},
+    {nameEn:'Golden Sands Safari',nameAr:'سفاري الرمال الذهبية',catEn:'Desert Majesty',catAr:'جلال الصحراء',price:'1900',duration:'5 Nights'}
   ];
   var cards=visible.length?visible:defaultCards;
   grid.innerHTML=cards.map(function(p,i){
