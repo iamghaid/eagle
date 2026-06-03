@@ -1,723 +1,833 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-theme="dark">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Global Eagle Travel | Rise Above. Aim High.</title>
-<meta name="description" content="Global Eagle Travel — Your trusted partner for luxury travel in Saudi Arabia."/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Global Eagle — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
-/* ══════════════════════════════════════
-   VARIABLES & RESET
-══════════════════════════════════════ */
-:root {
-  --bg0:#040201;--bg1:#09070304;--bg2:#100d08;--bg3:#1a150f;
-  --txt:#EDE0C4;--txt2:rgba(237,224,196,.6);--txt3:rgba(237,224,196,.28);
-  --gold:#C9A227;--gold2:#E8C252;--gold3:#8B6914;
-  --glow:rgba(201,162,39,.22);--glow2:rgba(201,162,39,.08);
-  --border:rgba(201,162,39,.13);--border2:rgba(201,162,39,.32);
-  --glass:rgba(255,255,255,.032);--glass2:rgba(255,255,255,.06);
-  --shadow:0 32px 100px rgba(0,0,0,.72);
-  --px:clamp(16px,5vw,100px);--py:clamp(60px,10vw,150px);
-  --ease1:cubic-bezier(.25,.46,.45,.94);--ease2:cubic-bezier(.65,0,.35,1);
-  --fdisplay:'Cinzel',serif;--fbody:'Poppins',sans-serif;
-  transition:background .5s,color .5s;
-}
-[data-theme="light"]{
-  --bg0:#F0EAD6;--bg1:#EAE3CC;--bg2:#E2DAC0;--bg3:#D8CEAE;
-  --txt:#1C1205;--txt2:rgba(28,18,5,.6);--txt3:rgba(28,18,5,.32);
-  --gold:#A07820;--gold2:#C9A227;--gold3:#6B5210;
-  --glow:rgba(160,120,32,.18);--glow2:rgba(160,120,32,.07);
-  --border:rgba(160,120,32,.18);--border2:rgba(160,120,32,.38);
-  --glass:rgba(255,255,255,.5);--glass2:rgba(255,255,255,.7);
-  --shadow:0 32px 100px rgba(28,18,5,.18);
-}
-[dir="rtl"]{--fdisplay:'Amiri',serif;--fbody:'IBM Plex Sans Arabic',sans-serif;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg0);color:var(--txt);font-family:var(--fbody);overflow-x:hidden;line-height:1.65;transition:background .5s,color .5s;}
-img{display:block;max-width:100%;}a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:var(--fbody);border:none;background:none;}
-::-webkit-scrollbar{width:3px;}
-::-webkit-scrollbar-track{background:var(--bg2);}
-::-webkit-scrollbar-thumb{background:var(--gold3);}
+:root{
+  --bg0:#06050300;--bg0s:#060503;--bg1:#0e0c08;--bg2:#161209;--bg3:#1f1a0e;--bg4:#28210f;
+  --gold:#C9A227;--gold2:#E8C252;--gold3:#8B6914;--goldf:rgba(201,162,39,.12);
+  --txt:#EDE0C4;--txt2:rgba(237,224,196,.62);--txt3:rgba(237,224,196,.28);
+  --border:rgba(201,162,39,.13);--border2:rgba(201,162,39,.32);
+  --glass:rgba(255,255,255,.028);--glass2:rgba(255,255,255,.055);
+  --red:#e74c3c;--green:#2ecc71;--blue:#3498db;
+  --ease:cubic-bezier(.25,.46,.45,.94);
+  --ff:'Poppins',sans-serif;--fd:'Cinzel',serif;
+  --sb:240px;
+}
+html,body{height:100%;-webkit-text-size-adjust:100%;}
+body{background:var(--bg0s);color:var(--txt);font-family:var(--ff);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--bg1);}::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:2px;}
+img{display:block;max-width:100%;}button{cursor:pointer;font-family:var(--ff);}
+a{color:inherit;text-decoration:none;}
 
-/* ══════════════════════════════════════
-   LOADER
-══════════════════════════════════════ */
-#loader{
-  position:fixed;inset:0;background:#000;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  overflow:hidden;
+/* ═══ FIREBASE SETUP BANNER ═══ */
+#firebase-setup{
+  position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.96);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(10px);
 }
-#ldr-canvas{position:absolute;inset:0;width:100%;height:100%;}
-.ldr-ring{
-  position:relative;z-index:2;width:min(260px,72vw);height:min(260px,72vw);
-  opacity:0;transform:scale(.8);transition:opacity 1.4s ease,transform 1.4s ease;
+.fs-box{
+  background:var(--bg2);border:1px solid var(--gold);border-radius:12px;
+  padding:clamp(24px,5vw,44px);max-width:600px;width:100%;
+  box-shadow:0 0 80px rgba(201,162,39,.12);
 }
-.ldr-ring.show{opacity:1;transform:scale(1);}
-.ldr-ring-border{
-  position:absolute;inset:-3px;border-radius:50%;
-  background:conic-gradient(from 0deg,var(--gold),transparent 60%,var(--gold) 100%);
-  animation:spinRing 4s linear infinite;opacity:.55;
-}
-@keyframes spinRing{to{transform:rotate(360deg);}}
-.ldr-img-wrap{position:absolute;inset:3px;border-radius:50%;overflow:hidden;background:#0a0806;}
-.ldr-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;}
-.ldr-glow{
-  position:absolute;inset:-20px;border-radius:50%;
-  background:radial-gradient(circle,var(--glow) 0%,transparent 70%);
-  animation:glowBreath 2.5s ease-in-out infinite;
-}
-@keyframes glowBreath{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
-.ldr-text{
-  position:relative;z-index:2;margin-top:32px;text-align:center;
-  opacity:0;transform:translateY(20px);transition:opacity .9s ease .5s,transform .9s ease .5s;
-}
-.ldr-text.show{opacity:1;transform:translateY(0);}
-.ldr-name{font-family:var(--fdisplay);font-size:clamp(1.2rem,4vw,1.9rem);color:var(--gold);letter-spacing:.25em;}
-.ldr-sub{font-size:.58rem;letter-spacing:.4em;color:rgba(201,162,39,.45);margin-top:8px;text-transform:uppercase;}
-.ldr-bar{position:relative;z-index:2;width:180px;height:1px;background:rgba(255,255,255,.07);margin-top:32px;overflow:hidden;}
-.ldr-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold2));box-shadow:0 0 16px var(--glow);}
+.fs-logo{font-family:var(--fd);font-size:clamp(1.1rem,4vw,1.6rem);color:var(--gold);margin-bottom:6px;letter-spacing:.2em;}
+.fs-sub{font-size:.65rem;letter-spacing:.22em;color:var(--txt3);text-transform:uppercase;margin-bottom:28px;}
+.fs-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:28px;}
+.fs-step{display:flex;gap:12px;align-items:flex-start;}
+.fs-num{width:26px;height:26px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.fs-stxt{font-size:.8rem;color:var(--txt2);line-height:1.6;}
+.fs-stxt strong{color:var(--gold);}
+.fs-stxt code{background:rgba(201,162,39,.1);border:1px solid var(--border);padding:1px 6px;border-radius:3px;font-size:.75rem;color:var(--gold2);font-family:monospace;}
+.fs-field{border-bottom:1px solid var(--border);padding:11px 0;margin-bottom:14px;transition:border-color .3s;}
+.fs-field:focus-within{border-color:var(--gold);}
+.fs-label{font-size:.55rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:7px;font-weight:600;}
+.fs-input{background:transparent;border:none;color:#fff;font-family:monospace;font-size:.8rem;outline:none;width:100%;}
+.fs-input::placeholder{color:rgba(255,255,255,.18);font-family:var(--ff);font-size:.8rem;}
+.fs-btn{width:100%;padding:14px;background:var(--gold);color:#000;border:none;border-radius:4px;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:4px;}
+.fs-btn:hover{box-shadow:0 0 30px rgba(201,162,39,.3);}
+.fs-skip{text-align:center;margin-top:12px;font-size:.72rem;color:var(--txt3);}
+.fs-skip a{color:var(--gold);cursor:pointer;text-decoration:underline;}
+.fs-err{color:var(--red);font-size:.73rem;margin-top:8px;display:none;}
 
-/* ══════════════════════════════════════
-   NAVBAR
-══════════════════════════════════════ */
-#nav{
-  position:fixed;top:0;left:0;width:100%;z-index:500;
+/* ═══ LOGIN ═══ */
+#login{
+  position:fixed;inset:0;z-index:9999;background:#000;
+  display:none;align-items:center;justify-content:center;overflow:hidden;padding:20px;
+}
+#login-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.login-box{
+  position:relative;z-index:2;width:min(420px,100%);
+  background:rgba(20,16,8,.92);border:1px solid var(--border);border-radius:8px;
+  padding:clamp(28px,6vw,52px) clamp(20px,6vw,44px);text-align:center;
+  backdrop-filter:blur(40px);box-shadow:0 40px 120px rgba(0,0,0,.85);
+}
+.lb-logo{font-family:var(--fd);font-size:clamp(1.2rem,4vw,1.5rem);color:var(--gold);letter-spacing:.22em;margin-bottom:6px;}
+.lb-sub{font-size:.58rem;letter-spacing:.32em;color:var(--txt3);text-transform:uppercase;margin-bottom:36px;}
+.lb-field{border-bottom:1px solid rgba(255,255,255,.1);padding:12px 0;margin-bottom:18px;text-align:left;transition:border-color .3s;}
+.lb-field:focus-within{border-color:var(--gold);}
+.lb-label{font-size:.55rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:7px;}
+.lb-input{background:transparent;border:none;color:#fff;font-family:var(--ff);font-size:.92rem;outline:none;width:100%;}
+.lb-input::placeholder{color:rgba(255,255,255,.18);}
+.lb-btn{width:100%;padding:14px;margin-top:8px;background:var(--gold);color:#000;border:none;border-radius:2px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .35s;}
+.lb-btn:hover{box-shadow:0 0 40px rgba(201,162,39,.35);}
+.lb-err{color:var(--red);font-size:.74rem;margin-top:12px;display:none;}
+.lb-firebase-badge{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:16px;font-size:.65rem;color:var(--txt3);}
+.lb-firebase-badge i{color:#FFA000;}
+
+/* ═══ LAYOUT ═══ */
+#app{display:none;min-height:100vh;}
+
+/* Sidebar */
+#sidebar{
+  position:fixed;top:0;left:0;width:var(--sb);height:100vh;
+  background:var(--bg1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:200;
+  transition:transform .35s var(--ease);overflow-y:auto;
+}
+#sidebar-overlay{
+  position:fixed;inset:0;z-index:199;background:rgba(0,0,0,.6);
+  display:none;backdrop-filter:blur(2px);
+}
+#main{margin-left:var(--sb);min-height:100vh;display:flex;flex-direction:column;}
+
+/* Sidebar internals */
+.sb-head{padding:22px 18px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.sb-logo{display:flex;align-items:center;gap:10px;}
+.sb-logo-ring{width:34px;height:34px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+.sb-logo-ring img{width:100%;height:100%;object-fit:cover;}
+.sb-brand{font-family:var(--fd);font-size:.85rem;color:var(--gold);letter-spacing:.14em;}
+.sb-sub{font-size:.5rem;letter-spacing:.18em;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.sb-sync-badge{margin:10px 18px 0;display:flex;align-items:center;gap:6px;font-size:.6rem;color:var(--green);background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);padding:5px 10px;border-radius:99px;}
+.sb-sync-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.sb-offline-badge{margin:10px 18px 0;display:flex;align-items:center;gap:6px;font-size:.6rem;color:var(--red);background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.2);padding:5px 10px;border-radius:99px;}
+
+.sb-nav{flex:1;padding:14px 10px;overflow-y:auto;}
+.sb-sec{font-size:.5rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;padding:12px 12px 6px;}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:6px;cursor:pointer;margin-bottom:2px;
+  font-size:.75rem;font-weight:500;color:var(--txt2);
+  transition:all .25s var(--ease);position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
+.sb-item:hover,.sb-item:active{background:var(--goldf);color:var(--gold);}
+.sb-item.active{background:rgba(201,162,39,.14);color:var(--gold);}
+.sb-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--gold);border-radius:0 2px 2px 0;}
+.sb-item i{width:15px;text-align:center;font-size:.85rem;flex-shrink:0;}
+.sb-badge{margin-left:auto;background:var(--gold);color:#000;font-size:.5rem;font-weight:700;padding:2px 6px;border-radius:99px;}
+
+.sb-foot{padding:14px 10px;border-top:1px solid var(--border);flex-shrink:0;}
+.sb-user{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:8px;}
+.sb-avatar{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold3));border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.75rem;flex-shrink:0;}
+.sb-uname{font-size:.74rem;font-weight:600;}
+.sb-urole{font-size:.56rem;color:var(--txt3);}
+.sb-logout{width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--txt3);font-family:var(--ff);font-size:.66rem;border-radius:4px;transition:all .3s;}
+.sb-logout:hover{border-color:var(--red);color:var(--red);}
+
+/* Topbar */
+#topbar{
+  position:sticky;top:0;z-index:50;
   display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:14px var(--px);
-  transition:padding .4s var(--ease1),background .4s,backdrop-filter .4s;
+  padding:14px clamp(16px,4vw,36px);
+  background:rgba(6,5,3,.92);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);flex-shrink:0;
 }
-#nav.scrolled{
-  padding:12px var(--px);
-  background:rgba(4,2,1,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
+.tb-left{display:flex;align-items:center;gap:12px;min-width:0;}
+.tb-title{font-family:var(--fd);font-size:clamp(.85rem,3vw,1.1rem);color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.tb-btn{border:1px solid var(--border);color:var(--txt2);background:var(--glass);padding:8px 14px;font-size:.65rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;transition:all .3s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.tb-btn:hover{border-color:var(--gold);color:var(--gold);}
+.tb-btn.primary{background:var(--gold);color:#000;border-color:var(--gold);}
+.tb-btn.primary:hover{background:var(--gold2);box-shadow:0 0 30px rgba(201,162,39,.3);}
+.tb-btn span{display:none;}
+#mob-toggle{background:none;border:none;color:var(--gold);font-size:1.2rem;padding:6px;-webkit-tap-highlight-color:transparent;}
+
+/* Content */
+.content{padding:clamp(16px,4vw,36px);flex:1;}
+.page{display:none;}.page.active{display:block;}
+
+/* Stat cards */
+.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px;}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:clamp(16px,3vw,24px);transition:border-color .35s;position:relative;overflow:hidden;
 }
-[data-theme="light"] #nav.scrolled{background:rgba(240,234,214,.88);}
-.nav-logo{display:flex;align-items:center;gap:10px;}
-.nav-logo-ring{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1px solid var(--border);flex-shrink:0;transition:border-color .4s,box-shadow .4s;background:var(--bg2);}
-.nav-logo-ring img{width:100%;height:100%;object-fit:cover;}
-.nav-logo:hover .nav-logo-ring{border-color:var(--gold);box-shadow:0 0 22px var(--glow);}
-.nav-logo-wordmark{line-height:1;}
-.nav-logo-name{font-family:var(--fdisplay);font-size:.88rem;color:var(--gold);letter-spacing:.16em;display:block;}
-.nav-logo-tagline{font-size:.48rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;}
-.nav-links{display:flex;gap:36px;list-style:none;}
-.nav-links a{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--txt2);position:relative;transition:color .3s;}
-.nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:1px;background:var(--gold);transition:width .35s var(--ease1);}
-.nav-links a:hover,.nav-links a.active{color:var(--gold);}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-.nav-ctrl{display:flex;align-items:center;gap:12px;}
-.lang-toggle{display:flex;align-items:center;gap:0;background:var(--glass);border:1px solid var(--border);border-radius:30px;padding:5px 10px;backdrop-filter:blur(14px);}
-.lt-btn{background:none;border:none;padding:0 7px;font-size:.62rem;font-weight:600;letter-spacing:.04em;color:var(--txt3);transition:color .32s var(--ease1);cursor:pointer;font-family:var(--fbody);line-height:1;white-space:nowrap;}
-.lt-btn.active{color:var(--gold);}
-.lt-btn[data-lang="ar"]{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.72rem;}
-.lt-sep{color:var(--border2);font-size:.78rem;user-select:none;opacity:.6;}
-.theme-pill{display:flex;align-items:center;background:var(--glass);border:1px solid var(--border);border-radius:30px;padding:4px;backdrop-filter:blur(14px);cursor:pointer;position:relative;transition:border-color .35s,box-shadow .35s;}
-.theme-pill:hover{border-color:var(--gold);box-shadow:0 0 20px var(--glow);}
-.tp-track{display:flex;align-items:center;gap:2px;position:relative;}
-.tp-ind{position:absolute;top:0;bottom:0;left:0;background:var(--gold);border-radius:24px;transition:left .4s cubic-bezier(.34,1.56,.64,1),width .4s cubic-bezier(.34,1.56,.64,1);z-index:0;pointer-events:none;}
-.tp-opt{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:24px;font-size:.8rem;position:relative;z-index:1;transition:color .35s;color:var(--txt3);user-select:none;}
-.tp-opt.active{color:#000;}
-.nav-cta{padding:9px 22px;border:1px solid var(--gold);color:var(--gold);font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;transition:all .35s;}
-.nav-cta:hover{background:var(--gold);color:#000;box-shadow:0 0 30px var(--glow);}
-#ham{display:none;flex-direction:column;gap:5px;padding:5px;}
-#ham span{display:block;width:22px;height:1.5px;background:var(--gold);transition:.3s;}
-#mob-nav{position:fixed;inset:0;z-index:600;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(101%);transition:transform .55s var(--ease2);}
-#mob-nav.open{transform:translateX(0);}
-#mob-close{position:absolute;top:24px;right:24px;font-size:1.6rem;color:var(--gold);}
-#mob-nav a{font-family:var(--fdisplay);font-size:clamp(1.6rem,5vw,2.6rem);color:var(--txt2);transition:color .3s;}
-#mob-nav a:hover{color:var(--gold);}
+.stat-card:hover{border-color:var(--border2);}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--goldf),transparent);opacity:0;transition:opacity .35s;}
+.stat-card:hover::before{opacity:1;}
+.sc-ico{float:right;font-size:1.3rem;color:rgba(201,162,39,.25);}
+.sc-lbl{font-size:.56rem;letter-spacing:.18em;color:var(--txt3);text-transform:uppercase;margin-bottom:8px;}
+.sc-val{font-family:var(--fd);font-size:clamp(1.6rem,4vw,2.1rem);color:var(--gold);line-height:1;position:relative;}
+.sc-sub{font-size:.62rem;color:var(--txt3);margin-top:6px;}
 
-/* ══════════════════════════════════════
-   HERO
-══════════════════════════════════════ */
-#hero{position:relative;width:100%;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;z-index:0;}
-.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transform-origin:center;}
-.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(125deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.48) 55%,rgba(0,0,0,.1) 100%);}
-.hero-bg::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,var(--bg0) 0%,transparent 45%);}
-#hero-canvas{position:absolute;inset:0;z-index:1;pointer-events:none;}
-.hero-inner{position:relative;z-index:2;max-width:1300px;width:100%;margin:0 auto;padding:clamp(120px,22vw,170px) var(--px) clamp(160px,20vw,220px);}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:14px;margin-bottom:22px;opacity:0;transform:translateY(24px);}
-.hero-ey-line{width:30px;height:1px;background:var(--gold);}
-.hero-ey-text{font-size:.62rem;letter-spacing:.38em;color:var(--gold);text-transform:uppercase;font-weight:600;}
-.hero-h1{font-family:var(--fdisplay);font-size:clamp(2.8rem,7.5vw,6.4rem);line-height:1.04;letter-spacing:-.01em;margin-bottom:26px;opacity:0;transform:translateY(32px);}
-.hero-h1 em{color:var(--gold);font-style:italic;display:block;}
-.hero-p{max-width:480px;color:var(--txt2);font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.95;font-weight:300;margin-bottom:50px;opacity:0;transform:translateY(28px);}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;opacity:0;transform:translateY(24px);}
-.btn-gold{padding:14px 32px;background:var(--gold);color:#000;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border-radius:2px;transition:all .4s;position:relative;overflow:hidden;}
-.btn-gold::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);transform:translateX(-110%);transition:transform .45s var(--ease1);}
-.btn-gold:hover::before{transform:translateX(0);}
-.btn-gold:hover{box-shadow:0 0 45px var(--glow);}
-.btn-ghost{padding:16px 38px;border:1px solid rgba(201,162,39,.38);color:var(--gold);font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-radius:2px;backdrop-filter:blur(8px);background:var(--glass);transition:all .4s;}
-.btn-ghost:hover{border-color:var(--gold);background:var(--glow2);box-shadow:0 0 30px rgba(201,162,39,.14);}
-.hero-stats{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:clamp(20px,4vw,36px) var(--px);background:linear-gradient(to top,var(--bg0) 0%,transparent 100%);display:flex;flex-wrap:wrap;gap:clamp(16px,4vw,44px);align-items:flex-end;}
-.stat-val{font-family:var(--fdisplay);font-size:clamp(1.7rem,3.2vw,2.7rem);color:var(--gold);line-height:1;font-weight:600;}
-.stat-lbl{font-size:.58rem;letter-spacing:.2em;color:var(--txt3);text-transform:uppercase;margin-top:5px;}
-.stat-sep{width:1px;height:38px;background:var(--border);align-self:center;flex-shrink:0;}
-.scroll-cue{position:absolute;bottom:145px;right:var(--px);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;}
-.scroll-cue span{font-size:.55rem;letter-spacing:.28em;color:var(--txt3);text-transform:uppercase;}
-.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scl 2.2s ease-in-out infinite;}
-@keyframes scl{0%,100%{opacity:.35}50%{opacity:1}}
+/* Section card */
+.s-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:clamp(18px,4vw,30px);margin-bottom:18px;}
+.s-title{font-family:var(--fd);font-size:.98rem;color:var(--txt);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.s-title i{color:var(--gold);}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+.fg-full{grid-column:1/-1;}
 
-/* ══════════════════════════════════════
-   MARQUEE
-══════════════════════════════════════ */
-.marquee-wrap{overflow:hidden;padding:18px 0;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.marquee-track{display:flex;width:max-content;animation:mq 32s linear infinite;gap:56px;align-items:center;}
-[dir="rtl"] .marquee-track{animation-direction:reverse;}
-@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.mq-item{display:flex;align-items:center;gap:18px;font-size:.62rem;letter-spacing:.28em;color:rgba(201,162,39,.5);text-transform:uppercase;font-weight:600;white-space:nowrap;}
-.mq-dot{width:3px;height:3px;background:var(--gold);border-radius:50%;opacity:.4;}
-
-/* ══════════════════════════════════════
-   SECTION COMMON
-══════════════════════════════════════ */
-.sec{padding:clamp(50px,8vw,130px) var(--px);}
-.sec-in{max-width:1300px;margin:0 auto;}
-.sec-tag{font-size:.62rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;font-weight:600;display:block;margin-bottom:14px;}
-.sec-h2{font-family:var(--fdisplay);font-size:clamp(2rem,4.5vw,3.4rem);color:var(--txt);font-weight:600;line-height:1.15;}
-.sec-h2 em{color:var(--gold);font-style:italic;}
-
-/* ══════════════════════════════════════
-   PACKAGES
-══════════════════════════════════════ */
-#packages{background:var(--bg1);}
-.pkg-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:58px;flex-wrap:wrap;gap:18px;}
-.pkg-all{font-size:.66rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:8px;transition:gap .3s;}
-.pkg-all:hover{gap:14px;}
-.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.pkg-card{position:relative;overflow:hidden;border-radius:3px;cursor:pointer;background:var(--bg3);}
-.pkg-card img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .85s var(--ease1),opacity .5s;opacity:.78;display:block;}
-.pkg-card:hover img{transform:scale(1.08);opacity:1;}
-.pkg-ov{position:absolute;inset:0;padding:26px;background:linear-gradient(to top,rgba(0,0,0,.93) 0%,rgba(0,0,0,.18) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;}
-.pkg-cat{font-size:.58rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
-.pkg-name{font-family:var(--fdisplay);font-size:1.35rem;color:#fff;line-height:1.2;}
-.pkg-dur{font-size:.7rem;color:rgba(255,255,255,.45);margin-top:5px;}
-.pkg-prc{font-size:.78rem;color:var(--gold);margin-top:3px;font-weight:600;}
-.pkg-line{height:1px;width:0;background:var(--gold);margin:14px 0;transition:width .6s var(--ease1);}
-.pkg-card:hover .pkg-line{width:100%;}
-.pkg-cta{font-size:.63rem;letter-spacing:.15em;color:#fff;text-transform:uppercase;font-weight:600;opacity:0;transform:translateY(7px);transition:all .4s;}
-.pkg-card:hover .pkg-cta{opacity:1;transform:translateY(0);}
-.pkg-card:nth-child(2){margin-top:clamp(0px,4vw,50px);}
-.pkg-feat{position:absolute;top:18px;left:18px;background:var(--gold);color:#000;font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;}
-
-/* ══════════════════════════════════════
-   PROCESS
-══════════════════════════════════════ */
-/* ══ PROCESS — STEPS GRID ══ */
-#process-section{background:var(--bg0);}
-#process{padding:60px var(--px) var(--py);max-width:1300px;margin:0 auto;}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:64px;}
-/* connecting line */
-.steps-grid::before{content:'';position:absolute;top:38px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold),var(--gold),transparent);opacity:.3;z-index:0;}
-.step-item{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px;position:relative;cursor:pointer;transition:transform .3s;}
-.step-item:hover{transform:translateY(-4px);}
-/* circle */
-.step-circle{width:76px;height:76px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:all .45s;flex-shrink:0;margin-bottom:24px;}
-.step-circle-inner{width:54px;height:54px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:all .45s;}
-.step-item.active .step-circle{border-color:var(--gold);box-shadow:0 0 32px var(--glow);}
-.step-item.active .step-circle-inner{background:rgba(201,162,39,.12);}
-/* number badge */
-.step-num{position:absolute;top:-6px;right:-6px;width:22px;height:22px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#000;font-family:var(--fdisplay);}
-/* content */
-.step-content{flex:1;}
-.step-title{font-family:var(--fdisplay);font-size:1rem;color:var(--txt);margin-bottom:10px;transition:color .3s;}
-.step-item.active .step-title{color:var(--gold);}
-.step-desc{font-size:.78rem;color:var(--txt3);line-height:1.75;font-weight:300;transition:color .3s;}
-.step-item.active .step-desc{color:var(--txt2);}
-/* expanded card below */
-.step-detail{
-  grid-column:1/-1;
-  background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  border:1px solid var(--border2);border-radius:16px;
-  padding:36px 44px;margin-top:40px;
-  display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;
-  position:relative;overflow:hidden;
+/* Form elements */
+.f-grp{margin-bottom:4px;}
+.f-lbl{display:block;font-size:.55rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:600;}
+.f-inp{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--txt);font-family:var(--ff);font-size:.86rem;
+  padding:11px 14px;width:100%;outline:none;border-radius:5px;
+  transition:border-color .3s;-webkit-appearance:none;
 }
-.step-detail::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,var(--glow2),transparent 60%);pointer-events:none;}
-.step-detail-num{font-family:var(--fdisplay);font-size:clamp(5rem,10vw,8rem);color:rgba(201,162,39,.07);line-height:1;font-weight:700;user-select:none;}
-.step-detail-body{}
-.step-detail-tag{font-size:.56rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:10px;}
-.step-detail-title{font-family:var(--fdisplay);font-size:clamp(1.4rem,3vw,2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;}
-.step-detail-desc{font-size:.9rem;color:var(--txt2);line-height:1.9;font-weight:300;max-width:500px;}
-.step-detail-glow{position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);filter:blur(40px);opacity:.6;pointer-events:none;}
-/* dots */
-.proc-dots{display:flex;gap:10px;margin-top:32px;justify-content:center;}
-.p-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .45s;cursor:pointer;}
-.p-dot.active{background:var(--gold);transform:scale(1.5);}
+.f-inp:focus{border-color:var(--gold);}
+.f-inp::placeholder{color:rgba(255,255,255,.18);}
+.f-ta{min-height:80px;resize:vertical;}
+.f-sel{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='rgba(201,162,39,.5)' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;background-color:rgba(255,255,255,.04);}
+.f-hint{font-size:.64rem;color:var(--txt3);margin-top:6px;line-height:1.5;}
 
-/* ══════════════════════════════════════
-   SERVICES — BENTO
-══════════════════════════════════════ */
-#services{background:var(--bg1);}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:60px;}
-.b-base{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:14px;transition:border-color .4s,transform .4s,box-shadow .4s;overflow:hidden;position:relative;}
-.b-base:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
-.b-big{grid-column:span 2;grid-row:span 2;padding:50px 44px;display:flex;flex-direction:column;justify-content:space-between;min-height:400px;}
-.b-big-wm{position:absolute;right:-20px;top:-16px;font-size:170px;opacity:.025;pointer-events:none;line-height:1;}
-.b-cell{padding:34px 26px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;min-height:180px;justify-content:center;}
-.b-cell::after{content:'';position:absolute;inset:0;background:linear-gradient(130deg,var(--glow2),transparent);opacity:0;transition:opacity .4s;border-radius:inherit;}
-.b-cell:hover::after{opacity:1;}
-.b-wide{grid-column:span 2;padding:30px 34px;display:flex;align-items:center;gap:22px;min-height:155px;}
-.b-icon-ring{width:58px;height:58px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.45rem;flex-shrink:0;transition:all .4s;}
-.b-wide:hover .b-icon-ring{border-color:var(--gold);box-shadow:0 0 22px var(--glow);}
-.b-ico{font-size:2.1rem;transition:transform .4s;position:relative;z-index:1;}
-.b-cell:hover .b-ico{transform:scale(1.14);}
-.b-title{font-family:var(--fdisplay);font-size:1rem;color:var(--txt);position:relative;z-index:1;}
-.b-desc{font-size:.77rem;color:var(--txt3);line-height:1.65;position:relative;z-index:1;}
-
-/* ══════════════════════════════════════
-   GALLERY
-══════════════════════════════════════ */
-#gallery{background:var(--bg0);display:none;}
-.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(140px,30vw,240px),1fr));gap:10px;margin-top:48px;}
-.gal-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;transition:transform .55s var(--ease1),filter .5s;filter:brightness(.82);}
-.gal-img:hover{transform:scale(1.04);filter:brightness(1);}
-
-/* ══════════════════════════════════════
-   CONTACT
-══════════════════════════════════════ */
-#contact{background:var(--bg1);border-top:1px solid var(--border);}
-.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
-.ct-item{display:flex;align-items:center;gap:18px;margin-bottom:26px;}
-.ct-ico{width:44px;height:44px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.88rem;flex-shrink:0;}
-.ct-item p{font-size:.92rem;color:var(--txt2);}
-.soc-row{display:flex;gap:10px;margin-top:38px;}
-.soc-btn{width:44px;height:44px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.88rem;transition:all .35s;}
-.soc-btn:hover{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 24px var(--glow);}
-.cf-wrap{background:var(--glass);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:16px;padding:46px;}
-.cf-row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-.cf-grp{border-bottom:1px solid var(--border);padding:12px 0;margin-bottom:4px;transition:border-color .35s;}
-.cf-grp:focus-within{border-color:var(--gold);}
-.cf-lbl{display:block;font-size:.57rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:600;}
-.cf-inp{background:transparent;border:none;width:100%;color:var(--txt);font-family:var(--fbody);font-size:.88rem;outline:none;}
-.cf-inp::placeholder{color:var(--txt3);}
-.cf-inp option{background:var(--bg3);}
-.btn-submit{width:100%;padding:17px;margin-top:26px;background:var(--gold);color:#000;font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border-radius:2px;transition:all .4s;position:relative;overflow:hidden;}
-.btn-submit::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);transform:translateX(-110%);transition:.45s;}
-.btn-submit:hover::before{transform:translateX(0);}
-.btn-submit:hover{box-shadow:0 0 40px var(--glow);}
-
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
-footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid var(--border);}
-.ft-in{max-width:1300px;margin:0 auto;}
-.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.5fr;gap:56px;margin-bottom:56px;}
-.ft-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.ft-logo-ring{width:34px;height:34px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--bg2);}
-.ft-logo-ring img{width:100%;height:100%;object-fit:cover;}
-.ft-logo-name{font-family:var(--fdisplay);font-size:.95rem;color:var(--gold);letter-spacing:.15em;}
-.ft-desc{font-size:.8rem;color:var(--txt3);line-height:1.85;margin-bottom:22px;}
-.ft-socs{display:flex;gap:11px;}
-.ft-soc{color:rgba(201,162,39,.48);transition:color .25s;font-size:.88rem;}
-.ft-soc:hover{color:var(--gold);}
-.ft-h{font-size:.63rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:20px;}
-.ft-links{list-style:none;display:flex;flex-direction:column;gap:13px;}
-.ft-links a{font-size:.82rem;color:var(--txt3);transition:color .25s;}
-.ft-links a:hover{color:var(--gold);}
-.nl-row{display:flex;border-bottom:1px solid var(--border);padding-bottom:11px;margin-top:16px;}
-.nl-inp{flex:1;background:transparent;border:none;color:var(--txt);font-family:var(--fbody);font-size:.84rem;outline:none;}
-.nl-inp::placeholder{color:var(--txt3);}
-.nl-btn{background:none;border:none;color:var(--gold);font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;}
-.ft-bottom{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.ft-copy{font-size:.66rem;letter-spacing:.1em;color:var(--txt3);}
-
-/* WA Float */
-#wa-float{position:fixed;bottom:28px;right:28px;z-index:400;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 22px rgba(37,211,102,.4);animation:waPulse 3s ease-in-out infinite;transition:transform .3s;}
-#wa-float:hover{transform:scale(1.12);}
-@keyframes waPulse{0%,100%{box-shadow:0 4px 22px rgba(37,211,102,.4)}50%{box-shadow:0 4px 44px rgba(37,211,102,.7)}}
-#wa-float svg{width:26px;height:26px;fill:#fff;}
-
-/* REVEAL */
-.rv{opacity:0;transform:translateY(36px);}
-.rv.on{opacity:1;transform:none;transition:opacity .8s var(--ease1),transform .8s var(--ease1);}
-
-/* OFFERS BANNER */
-#offers-banner{display:none;padding:14px var(--px);background:linear-gradient(90deg,var(--glow2),transparent);border-bottom:1px solid var(--border);}
-.off-in{max-width:1300px;margin:0 auto;display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
-.off-chip{display:inline-flex;align-items:center;gap:10px;background:rgba(201,162,39,.1);border:1px solid var(--border);padding:7px 16px;font-size:.7rem;font-weight:700;color:var(--gold);letter-spacing:.08em;border-radius:2px;}
-.off-chip span{color:var(--txt2);font-weight:300;}
-
-/* RESPONSIVE */
-@media(max-width:1100px){
-  .pkg-grid{grid-template-columns:1fr 1fr;}
-  .pkg-card:nth-child(2){margin-top:0;}
-  .pkg-card:nth-child(3){grid-column:span 2;}
-  .bento{grid-template-columns:1fr 1fr;}
-  .b-big,.b-wide{grid-column:span 2;}
-  .ft-grid{grid-template-columns:1fr 1fr;}
-  .step-detail{padding:28px 32px;gap:20px;}
-  .ct-grid{gap:48px;}
-  #process{padding:50px var(--px) var(--py);}
+/* Image upload */
+.img-upload-wrap{display:flex;flex-direction:column;gap:12px;}
+.img-drop{
+  border:2px dashed rgba(201,162,39,.22);border-radius:8px;
+  padding:clamp(20px,4vw,32px) 20px;text-align:center;cursor:pointer;
+  background:rgba(201,162,39,.02);transition:all .3s;position:relative;
 }
-@media(max-width:768px){
-  .steps-grid{grid-template-columns:repeat(2,1fr);}
-  .steps-grid::before{display:none;}
-  .step-detail{grid-column:1/-1;padding:24px;grid-template-columns:1fr;}
-  .step-detail-num{display:none;}
-  .pkg-grid{grid-template-columns:1fr;}
-  .pkg-card:nth-child(2){margin-top:0;}
-  .pkg-card:nth-child(3){grid-column:span 1;}
-  .ft-grid{grid-template-columns:1fr 1fr;}
-  .hero-stats{gap:28px;}
-  .cf-wrap{padding:32px 24px;}
+.img-drop:hover,.img-drop.drag{border-color:var(--gold);background:rgba(201,162,39,.06);}
+.img-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.img-drop-ico{font-size:1.8rem;color:rgba(201,162,39,.35);margin-bottom:8px;}
+.img-drop-txt{font-size:.78rem;color:var(--txt2);margin-bottom:4px;}
+.img-drop-sub{font-size:.66rem;color:var(--txt3);}
+.img-preview-box{
+  width:100%;aspect-ratio:16/7;border-radius:6px;overflow:hidden;
+  border:1px solid var(--border);background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--txt3);font-size:.8rem;position:relative;
 }
+.img-preview-box img{width:100%;height:100%;object-fit:cover;display:none;}
+.img-preview-box img.loaded{display:block;}
+.img-preview-box .img-clear{
+  position:absolute;top:8px;right:8px;
+  background:rgba(0,0,0,.75);border:none;color:#fff;
+  width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.75rem;
+  display:none;align-items:center;justify-content:center;
+}
+.img-preview-box:hover .img-clear{display:flex;}
+.img-sq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:8px;}
+.img-sq{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;border:1px solid var(--border);background:var(--bg3);}
+.img-sq img{width:100%;height:100%;object-fit:cover;}
+.img-sq-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.8);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;}
+.img-add-btn{aspect-ratio:1;border:2px dashed rgba(201,162,39,.18);border-radius:6px;background:transparent;color:rgba(201,162,39,.35);font-size:1.8rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;position:relative;}
+.img-add-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.img-add-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Table — mobile scrollable */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.tbl-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.tbl-title{font-family:var(--fd);font-size:.92rem;}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.s-input{background:var(--bg1);border:1px solid var(--border);color:var(--txt);padding:8px 14px 8px 32px;font-family:var(--ff);font-size:.76rem;outline:none;width:clamp(130px,30vw,190px);border-radius:4px;transition:border-color .3s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='rgba(201,162,39,.45)' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;}
+.s-input:focus{border-color:var(--gold);}
+table{width:100%;border-collapse:collapse;min-width:480px;}
+th{padding:10px 14px;font-size:.58rem;letter-spacing:.14em;color:var(--txt3);text-transform:uppercase;text-align:left;background:rgba(0,0,0,.25);white-space:nowrap;}
+td{padding:11px 14px;font-size:.78rem;color:var(--txt2);border-top:1px solid rgba(255,255,255,.04);}
+tr:hover td{background:rgba(201,162,39,.03);}
+.badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:.58rem;font-weight:700;white-space:nowrap;}
+.badge-gold{background:rgba(201,162,39,.14);color:var(--gold);}
+.badge-green{background:rgba(46,204,113,.14);color:var(--green);}
+.badge-red{background:rgba(231,76,60,.14);color:var(--red);}
+.badge-blue{background:rgba(52,152,219,.14);color:var(--blue);}
+.t-btn{background:none;border:1px solid var(--border);color:var(--txt3);padding:5px 10px;font-size:.6rem;border-radius:3px;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.t-btn:hover{border-color:var(--gold);color:var(--gold);}
+.t-btn.danger:hover{border-color:var(--red);color:var(--red);}
+.td-actions{display:flex;gap:5px;flex-wrap:nowrap;}
+
+/* Row items */
+.row-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:10px 12px;border-radius:6px;margin-bottom:8px;flex-wrap:wrap;}
+.ri-main{flex:1;min-width:120px;}
+.ri-sub{width:clamp(100px,30%,150px);}
+.ri-rm{background:none;border:none;color:rgba(255,80,80,.45);cursor:pointer;font-size:.88rem;transition:color .25s;padding:4px;flex-shrink:0;}
+.ri-rm:hover{color:var(--red);}
+.add-row-btn{width:100%;padding:10px;background:transparent;border:1px dashed rgba(201,162,39,.18);color:rgba(201,162,39,.45);font-family:var(--ff);font-size:.7rem;border-radius:5px;cursor:pointer;transition:all .3s;margin-top:8px;}
+.add-row-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.tg-info{flex:1;min-width:0;}
+.tg-lbl{font-size:.82rem;color:var(--txt2);}
+.tg-hint{font-size:.64rem;color:var(--txt3);margin-top:2px;line-height:1.4;}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.tg-sl{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:99px;cursor:pointer;transition:.3s;}
+.tg-sl::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#555;border-radius:50%;transition:.3s;}
+input:checked+.tg-sl{background:var(--gold);}
+input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
+
+/* Pkg form */
+#pkg-form{display:none;}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:4px;}
+.form-actions .tb-btn{padding:10px 18px;}
+
+/* Hero settings preview */
+#hs-preview{
+  min-height:140px;display:flex;align-items:flex-end;padding:clamp(16px,4vw,28px);
+  background:linear-gradient(125deg,rgba(0,0,0,.88),rgba(0,0,0,.38)),
+    url('https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs') center/cover;
+  border-radius:10px 10px 0 0;position:relative;
+}
+
+/* Info banner */
+.info-banner{
+  background:rgba(201,162,39,.06);border:1px solid rgba(201,162,39,.18);
+  border-radius:10px;padding:16px 20px;margin-bottom:22px;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.info-banner i{color:var(--gold);font-size:1.1rem;flex-shrink:0;margin-top:2px;}
+.info-banner-txt{font-size:.78rem;color:var(--txt2);line-height:1.65;}
+.info-banner-txt strong{color:var(--gold);}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:20px;right:20px;z-index:9999;
+  background:var(--bg2);border:1px solid var(--gold);
+  color:var(--txt);padding:12px 18px;border-radius:8px;
+  font-size:.78rem;display:flex;align-items:center;gap:10px;
+  transform:translateY(80px);opacity:0;transition:all .35s;
+  max-width:min(300px,90vw);backdrop-filter:blur(20px);
+  left:auto;
+}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast i{color:var(--gold);}
+
+/* Confirm modal */
+#confirm-modal{
+  position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);padding:20px;
+}
+#confirm-modal.open{display:flex;}
+.cm-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:clamp(24px,5vw,36px);max-width:340px;width:100%;text-align:center;}
+.cm-ico{font-size:2.2rem;margin-bottom:12px;}
+.cm-title{font-family:var(--fd);font-size:1.05rem;margin-bottom:10px;}
+.cm-msg{font-size:.8rem;color:var(--txt2);margin-bottom:24px;line-height:1.7;}
+.cm-btns{display:flex;gap:10px;justify-content:center;}
+.cm-cancel{padding:10px 22px;border:1px solid var(--border);color:var(--txt2);background:transparent;border-radius:4px;font-family:var(--ff);font-size:.72rem;cursor:pointer;transition:.3s;}
+.cm-ok{padding:10px 22px;background:var(--red);color:#fff;border:none;border-radius:4px;font-family:var(--ff);font-size:.72rem;cursor:pointer;}
+
+/* Firebase status indicator */
+.fb-status{display:flex;align-items:center;gap:6px;font-size:.62rem;padding:4px 10px;border-radius:99px;font-weight:500;}
+.fb-status.connected{color:var(--green);background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.2);}
+.fb-status.offline{color:var(--red);background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.2);}
+.fb-dot{width:5px;height:5px;border-radius:50%;animation:blink 2s infinite;}
+.fb-status.connected .fb-dot{background:var(--green);}
+.fb-status.offline .fb-dot{background:var(--red);}
+
+/* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
-  .nav-links,.nav-cta{display:none;}
-  #ham{display:flex;}
-  .ct-grid{grid-template-columns:1fr;gap:36px;}
-  .cf-row2{grid-template-columns:1fr;}
-  #nav{padding:12px var(--px);}
-  .nav-logo-ring{width:34px;height:34px;}
-  .bento{grid-template-columns:1fr 1fr;}
-  .b-big,.b-wide{grid-column:span 2;}
+  :root{--sb:260px;}
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #sidebar-overlay.open{display:block;}
+  #main{margin-left:0;}
+  .tb-btn.hide-mobile{display:none;}
+  .tb-btn span{display:none;}
 }
-@media(max-width:580px){
-  /* Nav */
-  #nav{padding:10px 16px;gap:8px;}
-  .nav-logo-ring{width:30px;height:30px;}
-  .nav-logo-name{font-size:.78rem;letter-spacing:.12em;}
-  .nav-logo-tagline{display:none;}
-  .lang-toggle{padding:4px 8px;}
-  .lt-btn{font-size:.58rem;padding:0 5px;}
-  .lt-sep{font-size:.65rem;}
-  .theme-pill{padding:3px;}
-  .tp-opt{width:26px;height:26px;font-size:.72rem;}
-  /* Hero */
-  .hero-h1{font-size:clamp(2.2rem,9vw,3.2rem);}
-  .hero-p{font-size:.84rem;margin-bottom:28px;max-width:100%;}
-  .hero-btns{flex-direction:column;align-items:stretch;gap:10px;}
-  .btn-gold,.btn-ghost{padding:14px 24px;font-size:.65rem;text-align:center;justify-content:center;width:100%;}
-  .scroll-cue{display:none;}
-  .stat-sep{display:none;}
-  .hero-stats{gap:16px;padding:20px 16px;}
-  .stat-val{font-size:1.4rem;}
-  .stat-lbl{font-size:.5rem;}
-  /* Packages */
-  .pkg-grid{grid-template-columns:1fr;}
-  .pkg-card:nth-child(3){grid-column:span 1;}
-  /* Services bento */
-  .bento{grid-template-columns:1fr;}
-  .b-big,.b-wide,.b-cell{grid-column:span 1;}
-  .b-big{min-height:auto;padding:32px 24px;}
-  /* Steps */
-  .steps-grid{grid-template-columns:1fr 1fr;}
-  .steps-grid::before{display:none;}
-  .step-circle{width:56px;height:56px;}
-  .step-circle-inner{width:38px;height:38px;font-size:1rem;}
-  .step-title{font-size:.8rem;}
-  .step-detail{padding:18px 16px;gap:12px;}
-  .step-detail-title{font-size:1.1rem;}
-  .step-detail-desc{font-size:.8rem;}
-  /* Contact */
-  .cf-wrap{padding:22px 16px;}
-  /* Footer */
-  .ft-grid{grid-template-columns:1fr;}
-  .ft-bottom{flex-direction:column;gap:8px;text-align:center;}
-  .ft-grid{gap:32px;}
-  /* Marquee */
-  .mq-item{font-size:.56rem;letter-spacing:.2em;}
+@media(min-width:901px){
+  #mob-toggle{display:none;}
+  #topbar .tb-btn span{display:inline;}
 }
-@media(max-width:390px){
-  #nav{padding:8px 12px;}
-  .nav-logo-name{font-size:.72rem;}
-  .nav-logo-ring{width:28px;height:28px;}
-  .hero-h1{font-size:clamp(1.9rem,8vw,2.6rem);}
-  .hero-p{font-size:.8rem;}
-  .stat-val{font-size:1.2rem;}
-  .step-circle{width:48px;height:48px;}
-  .step-circle-inner{width:32px;height:32px;font-size:.9rem;}
-  .step-num{width:18px;height:18px;font-size:.5rem;}
-  .step-title{font-size:.75rem;}
+@media(max-width:600px){
+  /* Layout */
+  .content{padding:14px;}
+  #topbar{padding:12px 14px;}
+  .tb-title{font-size:.82rem;}
+
+  /* Stats */
+  .stat-row{grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-card{padding:16px 14px;}
+  .sc-val{font-size:1.5rem;}
+  .sc-lbl{font-size:.52rem;}
+
+  /* Forms */
+  .form-grid{grid-template-columns:1fr;}
+  .fg-full{grid-column:1;}
+  .s-card{padding:16px;}
+  .s-title{font-size:.88rem;}
+  .f-inp{font-size:.82rem;padding:9px 12px;}
+  .f-lbl{font-size:.52rem;}
+
+  /* Rows */
+  .row-item{flex-direction:column;align-items:stretch;padding:10px;}
+  .ri-sub{width:100%;}
+  .ri-rm{align-self:flex-end;margin-top:4px;}
+
+  /* Table */
+  .tbl-hd{flex-direction:column;align-items:stretch;gap:8px;padding:12px;}
+  .s-input{width:100%;}
+  th{font-size:.54rem;padding:8px 10px;}
+  td{font-size:.74rem;padding:9px 10px;}
+
+  /* Buttons */
+  .form-actions{flex-direction:column;}
+  .form-actions .tb-btn{width:100%;justify-content:center;}
+  .tb-btn{padding:8px 12px;font-size:.62rem;}
+
+  /* Sidebar */
+  .sb-head{padding:16px 14px;}
+  .sb-item{padding:10px 12px;font-size:.72rem;}
+  .sb-brand{font-size:.8rem;}
+
+  /* Modal */
+  #toast{left:12px;right:12px;bottom:12px;font-size:.74rem;}
+  .cm-box{padding:22px 18px;}
+  .cm-btns{flex-direction:column;}
+  .cm-cancel,.cm-ok{width:100%;}
+
+  /* Package form image */
+  .img-preview-box{aspect-ratio:16/9;}
+  .img-sq-grid{grid-template-columns:repeat(auto-fill,minmax(85px,1fr));}
+
+  /* Hero settings preview */
+  #hs-preview{min-height:110px;padding:16px;}
+  #prev-title{font-size:1.2rem !important;}
+}
+@media(max-width:380px){
+  .stat-row{grid-template-columns:1fr;}
+  .sc-val{font-size:1.3rem;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <canvas id="ldr-canvas"></canvas>
-  <div class="ldr-ring" id="ldr-ring">
-    <div class="ldr-ring-border"></div>
-    <div class="ldr-img-wrap"><img id="ldr-eagle-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPn7M078qCN6BJDrOjxLr2RHA2Xk39HpPWbrjCveXXtLEoEel9V-H1UQ0WuX4ywzUDutleFM8fE5l2UNd3WVQ4dvRijQIUcZ_Ufa_FBK5h2ZD75AAedPbjVQzz3ZQEQhS6iVtNZ86SnpP3V1lgoM_TW43I7cq-Ni5PdnmHMzIQdwoFzD5KtxyUf5NY9cCzdw6h96GDeTOcoEjUnN4yJEHjH0tSf8etwd5Ptg7wTnykFvMiG2yj4OmSjooZhiLDFZlECkUONpG8wo4" alt="Eagle"/></div>
-    <div class="ldr-glow"></div>
-  </div>
-  <div class="ldr-text" id="ldr-text">
-    <div class="ldr-name">Global Eagle</div>
-    <div class="ldr-sub">Rise Above · Aim High</div>
-  </div>
-  <div class="ldr-bar"><div class="ldr-fill" id="ldr-fill"></div></div>
-</div>
 
-<!-- MOBILE NAV -->
-<div id="mob-nav">
-  <button id="mob-close" onclick="closeMob()">✕</button>
-  <a href="#hero" onclick="closeMob()" data-i18n="nav.home">Home</a>
-  <a href="#packages" onclick="closeMob()" data-i18n="nav.packages">Packages</a>
-  <a href="#services" onclick="closeMob()" data-i18n="nav.services">Services</a>
-  <a href="#process-section" onclick="closeMob()" data-i18n="nav.process">Process</a>
-  <a href="#contact" onclick="closeMob()" data-i18n="nav.contact">Contact</a>
-</div>
-
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-ring"><img id="nav-logo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/></div>
-    <div class="nav-logo-wordmark">
-      <span class="nav-logo-name">Global Eagle</span>
-      <span class="nav-logo-tagline" data-i18n="nav.tagline">Travel &amp; Tourism</span>
+<!-- ═══ LOGIN ═══ -->
+<div id="login">
+  <canvas id="login-canvas"></canvas>
+  <div class="login-box">
+    <div class="lb-logo">Global Eagle</div>
+    <div class="lb-sub">Admin Dashboard</div>
+    <div class="lb-field">
+      <label class="lb-label">Username</label>
+      <input class="lb-input" id="l-user" type="text" placeholder="admin" autocomplete="off"/>
     </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#hero" class="active" data-i18n="nav.home">Home</a></li>
-    <li><a href="#packages" data-i18n="nav.packages">Packages</a></li>
-    <li><a href="#services" data-i18n="nav.services">Services</a></li>
-    <li><a href="#process-section" data-i18n="nav.process">Process</a></li>
-    <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
-  </ul>
-  <div class="nav-ctrl">
-    <div class="lang-toggle">
-      <button class="lt-btn active" id="btn-en" data-lang="en" onclick="setLang('en')">English</button>
-      <span class="lt-sep">|</span>
-      <button class="lt-btn" id="btn-ar" data-lang="ar" onclick="setLang('ar')">العربية</button>
+    <div class="lb-field">
+      <label class="lb-label">Password</label>
+      <input class="lb-input" id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <div class="theme-pill" id="theme-pill" onclick="toggleTheme()" title="Toggle theme">
-      <div class="tp-track" id="tp-track">
-        <div class="tp-ind" id="tp-ind"></div>
-        <div class="tp-opt" id="tp-moon"><i class="fa-solid fa-moon"></i></div>
-        <div class="tp-opt" id="tp-sun"><i class="fa-solid fa-sun"></i></div>
-      </div>
-    </div>
-    <button class="nav-cta" onclick="goTo('contact')" data-i18n="nav.cta">Inquire Now</button>
-    <button id="ham" onclick="document.getElementById('mob-nav').classList.add('open')">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<!-- OFFERS BANNER -->
-<div id="offers-banner"><div class="off-in" id="off-in"></div></div>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg"><img id="hero-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs" alt="Hero"/></div>
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-inner">
-    <div class="hero-eyebrow" id="h-eyebrow"><div class="hero-ey-line"></div><div class="hero-ey-text" data-i18n="hero.tag">ELEVATING EVERY JOURNEY</div></div>
-    <h1 class="hero-h1" id="h-h1">Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em></h1>
-    <p class="hero-p" id="h-p" data-i18n="hero.desc">Experience the world through the lens of pure luxury.</p>
-    <div class="hero-btns" id="h-btns">
-      <button class="btn-gold" onclick="goTo('packages')" data-i18n="hero.btn1">Explore Packages</button>
-      <button class="btn-ghost" onclick="goTo('services')" data-i18n="hero.btn2">Our Services</button>
-    </div>
-  </div>
-  <div class="scroll-cue"><span data-i18n="hero.scroll">Scroll</span><div class="scroll-line"></div></div>
-  <div class="hero-stats">
-    <div class="stat-item"><div class="stat-val" id="s1">0+</div><div class="stat-lbl" data-i18n="stats.dest">Destinations</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-item"><div class="stat-val" id="s2">0+</div><div class="stat-lbl" data-i18n="stats.fleet">Private Fleet</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-item"><div class="stat-val" id="s3">0K+</div><div class="stat-lbl" data-i18n="stats.members">Elite Members</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-item"><div class="stat-val" id="s4">0+</div><div class="stat-lbl" data-i18n="stats.years">Years Excellence</div></div>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee-wrap"><div class="marquee-track" id="mq-track"></div></div>
-
-<!-- PACKAGES -->
-<section id="packages" class="sec">
-  <div class="sec-in">
-    <div class="pkg-hd rv">
-      <div><span class="sec-tag" data-i18n="pkgs.tag">Curated Collections</span><h2 class="sec-h2" data-i18n="pkgs.title">Signature Experiences</h2></div>
-      <a href="#contact" class="pkg-all" data-i18n="pkgs.link">View All Voyages →</a>
-    </div>
-    <div class="pkg-grid" id="pkg-grid"></div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<div id="process-section" style="background:var(--bg0);">
-  <div class="sec-in" style="text-align:center;padding:var(--py) var(--px) 0;">
-    <span class="sec-tag rv" data-i18n="proc.tag">The Journey</span>
-    <h2 class="sec-h2 rv" data-i18n="proc.title">How It Works</h2>
-  </div>
-  <div id="process">
-    <div class="steps-grid" id="steps-grid">
-      <!-- Step items -->
-      <div class="step-item active rv" onclick="goToStep(0)">
-        <div class="step-circle">
-          <div class="step-circle-inner">🗺️</div>
-          <div class="step-num">01</div>
-        </div>
-        <div class="step-content">
-          <div class="step-title" data-i18n="proc.c0t">Planning</div>
-        </div>
-      </div>
-      <div class="step-item rv" onclick="goToStep(1)">
-        <div class="step-circle">
-          <div class="step-circle-inner">📋</div>
-          <div class="step-num">02</div>
-        </div>
-        <div class="step-content">
-          <div class="step-title" data-i18n="proc.c1t">Booking</div>
-        </div>
-      </div>
-      <div class="step-item rv" onclick="goToStep(2)">
-        <div class="step-circle">
-          <div class="step-circle-inner">✨</div>
-          <div class="step-num">03</div>
-        </div>
-        <div class="step-content">
-          <div class="step-title" data-i18n="proc.c2t">Experience</div>
-        </div>
-      </div>
-      <div class="step-item rv" onclick="goToStep(3)">
-        <div class="step-circle">
-          <div class="step-circle-inner">🏆</div>
-          <div class="step-num">04</div>
-        </div>
-        <div class="step-content">
-          <div class="step-title" data-i18n="proc.c3t">Destination</div>
-        </div>
-      </div>
-      <!-- Expanded detail card -->
-      <div class="step-detail rv" id="step-detail">
-        <div class="step-detail-num" id="step-detail-num">01</div>
-        <div class="step-detail-body">
-          <div class="step-detail-tag" data-i18n="proc.step">Step 01</div>
-          <div class="step-detail-title" id="step-detail-title">Planning</div>
-          <div class="step-detail-desc" id="step-detail-desc">Share your vision and travel preferences with our dedicated expert team.</div>
-        </div>
-        <div class="step-detail-glow"></div>
-      </div>
-    </div>
+    <button class="lb-btn" onclick="doLogin()">Enter Dashboard</button>
+    <div class="lb-err" id="l-err">❌ Invalid credentials</div>
+    <div class="lb-firebase-badge"><i class="fa-solid fa-fire"></i> <span id="lb-fb-mode">Connected to Firebase</span></div>
   </div>
 </div>
 
-<!-- SERVICES -->
-<section id="services" class="sec">
-  <div class="sec-in">
-    <div class="rv"><span class="sec-tag" data-i18n="svc.tag">What We Offer</span><h2 class="sec-h2" data-i18n="svc.title">Global Eagle Services</h2></div>
-    <div class="bento" id="svc-bento"></div>
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section id="gallery" class="sec">
-  <div class="sec-in">
-    <div class="rv"><span class="sec-tag">Our World</span><h2 class="sec-h2">Visual Journey</h2></div>
-    <div class="gal-grid" id="gal-grid"></div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="sec">
-  <div class="sec-in">
-    <div class="ct-grid">
-      <div class="rv">
-        <span class="sec-tag" data-i18n="ct.tag">Inquiries</span>
-        <h2 class="sec-h2" style="margin-bottom:42px;"><span data-i18n="ct.title">Begin Your Next</span><br/><em data-i18n="ct.em">Great Adventure</em></h2>
-        <div class="ct-item"><div class="ct-ico"><i class="fa-solid fa-phone"></i></div><p id="ct-phone">+966 50 174 9914</p></div>
-        <div class="ct-item"><div class="ct-ico"><i class="fa-solid fa-envelope"></i></div><p id="ct-email">info@globaleagletrv.com</p></div>
-        <div class="ct-item"><div class="ct-ico"><i class="fa-solid fa-location-dot"></i></div><p id="ct-loc">Saudi Arabia</p></div>
-        <div class="soc-row">
-          <a id="ct-ig" href="#" target="_blank" class="soc-btn"><i class="fa-brands fa-instagram"></i></a>
-          <a id="ct-sc" href="#" target="_blank" class="soc-btn"><i class="fa-brands fa-snapchat"></i></a>
-          <a id="ct-tt" href="#" target="_blank" class="soc-btn"><i class="fa-brands fa-tiktok"></i></a>
-          <a id="ct-wa" href="#" target="_blank" class="soc-btn"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
+<!-- ═══ APP ═══ -->
+<div id="app">
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div id="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo">
+        <div class="sb-logo-ring"><img id="sb-logo-img" src="" alt="" onerror="this.style.display='none'"/></div>
+        <div><div class="sb-brand">Global Eagle</div><div class="sb-sub">Admin Panel</div></div>
       </div>
-      <div class="cf-wrap rv">
-        <div class="cf-row2">
-          <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.fn">First Name</label><input class="cf-inp" id="f1" type="text" placeholder="John"/></div>
-          <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ln">Last Name</label><input class="cf-inp" id="f2" type="text" placeholder="Doe"/></div>
-        </div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.em2">Email</label><input class="cf-inp" id="f3" type="email" placeholder="john@example.com"/></div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.ph">Phone</label><input class="cf-inp" id="f4" type="tel" placeholder="+966 5x xxx xxxx" dir="ltr"/></div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.svc">Service</label><select class="cf-inp" id="f5"><option>Tourist Visa</option><option>Hotel Booking</option><option>Flight Tickets</option><option>Student Visa</option><option>International License</option><option>Travel Insurance</option></select></div>
-        <div class="cf-grp"><label class="cf-lbl" data-i18n="ct.msg">Message</label><textarea class="cf-inp" id="f6" rows="3" placeholder="Tell us about your journey..." style="resize:none;"></textarea></div>
-        <button class="btn-submit" onclick="sendWA()" data-i18n="ct.btn">Send Inquiry ✈</button>
+      <div id="sb-sync-badge" class="sb-sync-badge"><span class="sb-sync-dot"></span> Firebase Sync</div>
+      <div id="sb-offline-badge" class="sb-offline-badge" style="display:none;"><i class="fa-solid fa-wifi" style="font-size:.7rem;"></i> Offline Mode</div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-sec">Main</div>
+      <div class="sb-item active" onclick="showPage('dashboard')"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+      <div class="sb-item" onclick="showPage('packages')"><i class="fa-solid fa-suitcase"></i> Packages <span class="sb-badge" id="sb-pkg-cnt">0</span></div>
+      <div class="sb-item" onclick="showPage('offers')"><i class="fa-solid fa-tags"></i> Offers</div>
+      <div class="sb-item" onclick="showPage('services')"><i class="fa-solid fa-star"></i> Services</div>
+      <div class="sb-sec">Content</div>
+      <div class="sb-item" onclick="showPage('hero-settings')"><i class="fa-solid fa-wand-sparkles"></i> Hero Settings</div>
+      <div class="sb-item" onclick="showPage('hero')"><i class="fa-solid fa-image"></i> Images</div>
+      <div class="sb-item" onclick="showPage('gallery')"><i class="fa-solid fa-images"></i> Gallery</div>
+      <div class="sb-item" onclick="showPage('seo')"><i class="fa-solid fa-globe"></i> Info & SEO</div>
+      <div class="sb-sec">System</div>
+      <div class="sb-item" onclick="showPage('settings')"><i class="fa-solid fa-sliders"></i> Settings</div>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-avatar">A</div>
+        <div><div class="sb-uname">Admin</div><div class="sb-urole">Super Admin</div></div>
       </div>
+      <button class="sb-logout" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="ft-in">
-    <div class="ft-grid">
-      <div>
-        <div class="ft-logo">
-          <div class="ft-logo-ring"><img id="ft-logo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/></div>
-          <span class="ft-logo-name">Global Eagle</span>
-        </div>
-        <p class="ft-desc" data-i18n="ft.desc">Your trusted partner in premium travel & tourism.</p>
-        <div class="ft-socs">
-          <a id="ft-ig" href="#" target="_blank" class="ft-soc"><i class="fa-brands fa-instagram"></i></a>
-          <a id="ft-sc" href="#" target="_blank" class="ft-soc"><i class="fa-brands fa-snapchat"></i></a>
-          <a id="ft-tt" href="#" target="_blank" class="ft-soc"><i class="fa-brands fa-tiktok"></i></a>
-          <a id="ft-wa" href="#" target="_blank" class="ft-soc"><i class="fa-brands fa-whatsapp"></i></a>
-        </div>
+  <div id="main">
+    <div id="topbar">
+      <div class="tb-left">
+        <button id="mob-toggle" onclick="openSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <div class="tb-title" id="tb-title">Dashboard</div>
       </div>
-      <div>
-        <div class="ft-h" data-i18n="ft.ex">Explore</div>
-        <ul class="ft-links">
-          <li><a href="#packages" data-i18n="nav.packages">Packages</a></li>
-          <li><a href="#services" data-i18n="nav.services">Services</a></li>
-          <li><a href="#process-section" data-i18n="nav.process">Process</a></li>
-          <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="ft-h" data-i18n="ft.co">Company</div>
-        <ul class="ft-links">
-          <li><a href="#">About Us</a></li><li><a href="#">Careers</a></li>
-          <li><a href="#">Privacy Policy</a></li><li><a href="#">Terms</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="ft-h" data-i18n="ft.nl">Newsletter</div>
-        <p class="ft-desc" data-i18n="ft.nl-d">Exclusive deals and travel inspiration.</p>
-        <div class="nl-row">
-          <input class="nl-inp" type="email" placeholder="Your email"/>
-          <button class="nl-btn" onclick="alert('Subscribed! ✈')" data-i18n="ft.nl-b">JOIN</button>
-        </div>
+      <div class="tb-right">
+        <div class="fb-status connected" id="fb-status-badge"><span class="fb-dot"></span> Firebase</div>
+        <a href="index.html" target="_blank" class="tb-btn hide-mobile"><i class="fa-solid fa-eye"></i> <span>View Site</span></a>
+        <button class="tb-btn primary" onclick="saveAll()"><i class="fa-solid fa-floppy-disk"></i> <span>Save All</span></button>
       </div>
     </div>
-    <div class="ft-bottom">
-      <span class="ft-copy" data-i18n="ft.copy">© 2025 Global Eagle Travel. The Majesty of Flight.</span>
-      <a id="ft-wa-link" href="#" target="_blank" style="font-size:.68rem;color:var(--txt3);display:flex;align-items:center;gap:6px;transition:color .25s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--txt3)'"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="ft.wa-link">WhatsApp Us</span></a>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="info-banner">
+          <i class="fa-solid fa-fire"></i>
+          <div class="info-banner-txt"><strong>Firebase Active</strong> — Any save syncs instantly across all devices. Open index.html anywhere to see live changes.</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-suitcase"></i></div><div class="sc-lbl">Packages</div><div class="sc-val" id="d-pkg">0</div><div class="sc-sub">Active listings</div></div>
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-tags"></i></div><div class="sc-lbl">Offers</div><div class="sc-val" id="d-off">0</div><div class="sc-sub">Promotions</div></div>
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-images"></i></div><div class="sc-lbl">Gallery</div><div class="sc-val" id="d-gal">0</div><div class="sc-sub">Images</div></div>
+          <div class="stat-card"><div class="sc-ico"><i class="fa-solid fa-star"></i></div><div class="sc-lbl">Services</div><div class="sc-val" id="d-svc">0</div><div class="sc-sub">Active</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-hd">
+            <div class="tbl-title">Recent Packages</div>
+            <button class="tb-btn primary" style="padding:7px 14px;font-size:.64rem;" onclick="showPage('packages');showPkgForm(null)"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+          <div class="tbl-scroll">
+            <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="d-tbl"><tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:32px;">No packages yet.</td></tr></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACKAGES -->
+      <div class="page" id="page-packages">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:18px;">
+          <button class="tb-btn primary" onclick="showPkgForm(null)"><i class="fa-solid fa-plus"></i> New Package</button>
+        </div>
+        <div id="pkg-list">
+          <div class="tbl-wrap">
+            <div class="tbl-hd">
+              <div class="tbl-title">All Packages</div>
+              <input class="s-input" placeholder="Search..." oninput="filterPkgs(this.value)"/>
+            </div>
+            <div class="tbl-scroll">
+              <table><thead><tr><th>Image</th><th>Name (EN)</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="pkg-tbl"></tbody></table>
+            </div>
+          </div>
+        </div>
+        <div id="pkg-form">
+          <button onclick="cancelPkg()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:.8rem;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding:0;"><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-box"></i> Package Details</div>
+            <div class="form-grid">
+              <div class="f-grp"><label class="f-lbl">Name (English)</label><input class="f-inp" id="pk-name-en" type="text" placeholder="Swiss Peak Sanctuary"/></div>
+              <div class="f-grp"><label class="f-lbl">Name (Arabic)</label><input class="f-inp" id="pk-name-ar" type="text" placeholder="ملاذ قمم سويسرا" dir="rtl"/></div>
+              <div class="f-grp"><label class="f-lbl">Category (EN)</label><input class="f-inp" id="pk-cat-en" type="text" placeholder="Alpine Elite"/></div>
+              <div class="f-grp"><label class="f-lbl">Category (AR)</label><input class="f-inp" id="pk-cat-ar" type="text" placeholder="النخبة الجبلية" dir="rtl"/></div>
+              <div class="f-grp"><label class="f-lbl">Price (SAR)</label><input class="f-inp" id="pk-price" type="number" placeholder="2500"/></div>
+              <div class="f-grp"><label class="f-lbl">Duration</label><input class="f-inp" id="pk-dur" type="text" placeholder="7 Nights"/></div>
+              <div class="f-grp fg-full"><label class="f-lbl">Description (EN)</label><textarea class="f-inp f-ta" id="pk-desc-en"></textarea></div>
+              <div class="f-grp fg-full"><label class="f-lbl">Description (AR)</label><textarea class="f-inp f-ta" id="pk-desc-ar" dir="rtl"></textarea></div>
+              <div class="f-grp"><label class="f-lbl">Status</label><select class="f-inp f-sel" id="pk-status"><option value="active">Active</option><option value="featured">Featured ⭐</option><option value="draft">Draft</option></select></div>
+            </div>
+          </div>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-image"></i> Package Image</div>
+            <div class="img-upload-wrap">
+              <div class="img-drop" id="pk-img-drop"><input type="file" accept="image/*" onchange="handlePkgImg(this)"/><div class="img-drop-ico"><i class="fa-solid fa-cloud-arrow-up"></i></div><div class="img-drop-txt">Click or drag to upload</div><div class="img-drop-sub">JPG, PNG, WebP — max 4MB</div></div>
+              <div class="img-preview-box" id="pk-img-preview"><span>No image</span><img id="pk-img-el" alt=""/><button class="img-clear" onclick="clearPkgImg()">&times;</button></div>
+            </div>
+          </div>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-list-check"></i> What's Included</div>
+            <div id="pk-inc-list"></div>
+            <button class="add-row-btn" onclick="addInc()"><i class="fa-solid fa-plus"></i> Add Item</button>
+          </div>
+          <div class="s-card">
+            <div class="s-title"><i class="fa-solid fa-sliders"></i> Options</div>
+            <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">Show on Homepage</div></div><label class="toggle"><input type="checkbox" id="pk-hp" checked/><span class="tg-sl"></span></label></div>
+            <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">Featured Badge</div></div><label class="toggle"><input type="checkbox" id="pk-ft"/><span class="tg-sl"></span></label></div>
+            <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">Available for Booking</div></div><label class="toggle"><input type="checkbox" id="pk-bk" checked/><span class="tg-sl"></span></label></div>
+          </div>
+          <div class="form-actions">
+            <button class="tb-btn" onclick="cancelPkg()">Cancel</button>
+            <button class="tb-btn primary" onclick="savePkg()"><i class="fa-solid fa-floppy-disk"></i> Save Package</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- OFFERS -->
+      <div class="page" id="page-offers">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-tag"></i> Special Offers</div>
+          <div id="offers-list"></div>
+          <button class="add-row-btn" onclick="addOffer()"><i class="fa-solid fa-plus"></i> Add Offer</button>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-dollar-sign"></i> Service Pricing</div>
+          <div id="pricing-list"></div>
+          <button class="add-row-btn" onclick="addPriceRow()"><i class="fa-solid fa-plus"></i> Add Service</button>
+        </div>
+        <div class="form-actions"><button class="tb-btn primary" onclick="saveOffers()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+      </div>
+
+      <!-- SERVICES -->
+      <div class="page" id="page-services">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-star"></i> Services</div>
+          <p class="f-hint" style="margin-bottom:16px;">Hidden services won't appear on the site</p>
+          <div id="svc-list"></div>
+          <button class="add-row-btn" onclick="addSvc()"><i class="fa-solid fa-plus"></i> Add Service</button>
+        </div>
+        <div class="form-actions"><button class="tb-btn primary" onclick="saveServices()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+      </div>
+
+      <!-- HERO SETTINGS -->
+      <div class="page" id="page-hero-settings">
+        <div class="s-card" style="padding:0;overflow:hidden;">
+          <div id="hs-preview">
+            <div>
+              <div style="font-size:.52rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:5px;" id="prev-tag">ELEVATING EVERY JOURNEY</div>
+              <div id="prev-title" style="font-family:'Cinzel',serif;font-size:clamp(1.4rem,4vw,2rem);color:#fff;line-height:1.1;margin-bottom:7px;">Beyond Every Horizon<br/><em style="color:var(--gold);">Your Journey</em></div>
+              <div id="prev-sub" style="font-size:.8rem;color:rgba(255,255,255,.6);font-weight:300;max-width:340px;">Experience the world through the lens of pure luxury.</div>
+            </div>
+            <div style="position:absolute;top:12px;right:14px;font-size:.55rem;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;">Live Preview</div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-heading"></i> Hero Text</div>
+          <div class="form-grid">
+            <div class="f-grp fg-full"><label class="f-lbl">Main Title <span style="color:var(--txt3);font-weight:300;text-transform:none;letter-spacing:0;">(use &lt;br/&gt; and &lt;em&gt;word&lt;/em&gt;)</span></label><textarea class="f-inp f-ta" id="hs-title" style="min-height:65px;" oninput="previewTitle()" placeholder="Beyond Every Horizon&lt;br/&gt;&lt;em&gt;Your Journey&lt;/em&gt;"></textarea></div>
+            <div class="f-grp fg-full"><label class="f-lbl">Subtitle</label><textarea class="f-inp f-ta" id="hs-subtitle" style="min-height:55px;" oninput="previewSub()"></textarea></div>
+            <div class="f-grp"><label class="f-lbl">Eyebrow Tag</label><input class="f-inp" id="hs-tag" type="text" oninput="document.getElementById('prev-tag').textContent=this.value" placeholder="ELEVATING EVERY JOURNEY"/></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-font"></i> Typography</div>
+          <div class="form-grid">
+            <div class="f-grp"><label class="f-lbl">Font Family</label><select class="f-inp f-sel" id="hs-font" onchange="previewTypo()"><option value="">Default (Cinzel)</option><option value="'Cinzel',serif">Cinzel</option><option value="'Poppins',sans-serif">Poppins</option><option value="'Amiri',serif">Amiri</option><option value="'IBM Plex Sans Arabic',sans-serif">IBM Plex Arabic</option></select></div>
+            <div class="f-grp"><label class="f-lbl">Font Size</label><select class="f-inp f-sel" id="hs-size" onchange="previewTypo()"><option value="">Default</option><option value="3rem">Small</option><option value="4rem">Medium</option><option value="5rem">Large</option><option value="6rem">Extra Large</option></select></div>
+            <div class="f-grp"><label class="f-lbl">Font Weight</label><select class="f-inp f-sel" id="hs-weight" onchange="previewTypo()"><option value="">Default</option><option value="300">Light</option><option value="400">Regular</option><option value="600">Semi Bold</option><option value="700">Bold</option><option value="900">Black</option></select></div>
+            <div class="f-grp"><label class="f-lbl">Text Color</label><div style="display:flex;gap:8px;align-items:center;"><input class="f-inp" id="hs-color" type="color" value="#FFFFFF" style="padding:5px;width:54px;height:40px;flex-shrink:0;" onchange="previewTypo()"/><input class="f-inp" id="hs-color-hex" type="text" placeholder="#FFFFFF" style="flex:1;" oninput="document.getElementById('hs-color').value=this.value;previewTypo()"/></div></div>
+            <div class="f-grp"><label class="f-lbl">Letter Spacing</label><select class="f-inp f-sel" id="hs-ls" onchange="previewTypo()"><option value="">Default</option><option value="-.03em">Tight</option><option value="-.01em">Normal</option><option value=".04em">Airy</option><option value=".1em">Wide</option></select></div>
+            <div class="f-grp"><label class="f-lbl">Alignment</label><select class="f-inp f-sel" id="hs-align" onchange="previewTypo()"><option value="">Default (left)</option><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-circle-half-stroke"></i> Background Images by Theme</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+            <div><label class="f-lbl" style="margin-bottom:10px;">🌙 Dark Theme</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" onchange="uploadImg(this,'heroImgDark','hdark-img','hdark-box')"/><div class="img-drop-ico" style="font-size:1.4rem;"><i class="fa-solid fa-moon"></i></div><div class="img-drop-txt" style="font-size:.72rem;">Upload Dark Hero</div></div><div class="img-preview-box" id="hdark-box" style="margin-top:8px;aspect-ratio:16/9;"><span>No image</span><img id="hdark-img" alt=""/><button class="img-clear" onclick="clearImg('heroImgDark','hdark-img','hdark-box')">&times;</button></div></div>
+            <div><label class="f-lbl" style="margin-bottom:10px;">☀️ Light Theme</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" onchange="uploadImg(this,'heroImgLight','hlight-img','hlight-box')"/><div class="img-drop-ico" style="font-size:1.4rem;"><i class="fa-solid fa-sun"></i></div><div class="img-drop-txt" style="font-size:.72rem;">Upload Light Hero</div></div><div class="img-preview-box" id="hlight-box" style="margin-top:8px;aspect-ratio:16/9;"><span>No image</span><img id="hlight-img" alt=""/><button class="img-clear" onclick="clearImg('heroImgLight','hlight-img','hlight-box')">&times;</button></div></div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="tb-btn" onclick="resetHeroSettings()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          <button class="tb-btn primary" onclick="saveHeroSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Hero</button>
+        </div>
+      </div>
+
+      <!-- HERO IMAGES -->
+      <div class="page" id="page-hero">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-feather"></i> Loader Eagle Image</div>
+          <div class="img-upload-wrap"><div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'introImg','intro-preview-img','intro-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-kiwi-bird"></i></div><div class="img-drop-txt">Upload Intro Eagle</div><div class="img-drop-sub">Circular crop</div></div><div class="img-preview-box" id="intro-preview-box" style="aspect-ratio:1;max-width:200px;border-radius:50%;"><span>No image</span><img id="intro-preview-img" alt=""/><button class="img-clear" onclick="clearImg('introImg','intro-preview-img','intro-preview-box')">&times;</button></div></div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-shield-halved"></i> Logo</div>
+          <div class="img-upload-wrap"><div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'logoImg','logo-preview-img','logo-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-shield-halved"></i></div><div class="img-drop-txt">Upload Logo</div><div class="img-drop-sub">Square image</div></div><div class="img-preview-box" id="logo-preview-box" style="aspect-ratio:1;max-width:160px;border-radius:50%;"><span>No logo</span><img id="logo-preview-img" alt=""/><button class="img-clear" onclick="clearImg('logoImg','logo-preview-img','logo-preview-box')">&times;</button></div></div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-chart-bar"></i> Hero Stats</div>
+          <div class="form-grid">
+            <div class="f-grp"><label class="f-lbl">Destinations</label><input class="f-inp" id="s-dest" type="number" placeholder="150"/></div>
+            <div class="f-grp"><label class="f-lbl">Private Fleet</label><input class="f-inp" id="s-fleet" type="number" placeholder="42"/></div>
+            <div class="f-grp"><label class="f-lbl">Members (K)</label><input class="f-inp" id="s-mem" type="number" placeholder="12"/></div>
+            <div class="f-grp"><label class="f-lbl">Years Excellence</label><input class="f-inp" id="s-years" type="number" placeholder="30"/></div>
+          </div>
+        </div>
+        <div class="form-actions"><button class="tb-btn primary" onclick="saveHero()"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+      </div>
+
+      <!-- GALLERY -->
+      <div class="page" id="page-gallery">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-images"></i> Gallery</div>
+          <p class="f-hint" style="margin-bottom:14px;">Gallery section appears on site only when images exist</p>
+          <div class="img-sq-grid" id="gal-grid">
+            <button class="img-add-btn"><span style="pointer-events:none;">+</span><input type="file" accept="image/*" multiple onchange="addGalleryImgs(this)"/></button>
+          </div>
+        </div>
+        <div class="form-actions"><button class="tb-btn primary" onclick="saveGallery()"><i class="fa-solid fa-floppy-disk"></i> Save Gallery</button></div>
+      </div>
+
+      <!-- SEO & INFO -->
+      <div class="page" id="page-seo">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-address-card"></i> Company Info</div>
+          <div class="form-grid">
+            <div class="f-grp"><label class="f-lbl">Phone</label><input class="f-inp" id="i-phone" type="tel" dir="ltr"/></div>
+            <div class="f-grp"><label class="f-lbl">WhatsApp (no + or spaces)</label><input class="f-inp" id="i-wa" type="tel" dir="ltr" placeholder="966501749914"/></div>
+            <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="i-email" type="email"/></div>
+            <div class="f-grp"><label class="f-lbl">Location</label><input class="f-inp" id="i-loc" type="text"/></div>
+            <div class="f-grp"><label class="f-lbl">Instagram URL</label><input class="f-inp" id="i-ig" type="url"/></div>
+            <div class="f-grp"><label class="f-lbl">Snapchat URL</label><input class="f-inp" id="i-sc" type="url"/></div>
+            <div class="f-grp"><label class="f-lbl">TikTok URL</label><input class="f-inp" id="i-tt" type="url"/></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-search"></i> SEO</div>
+          <div class="form-grid">
+            <div class="f-grp fg-full"><label class="f-lbl">Page Title</label><input class="f-inp" id="i-title" type="text"/></div>
+            <div class="f-grp fg-full"><label class="f-lbl">Meta Description</label><textarea class="f-inp f-ta" id="i-meta"></textarea></div>
+          </div>
+        </div>
+        <div class="form-actions"><button class="tb-btn primary" onclick="saveInfo()"><i class="fa-solid fa-floppy-disk"></i> Save Info</button></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page" id="page-settings">
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-fire"></i> Firebase Config</div>
+          <p class="f-hint" style="margin-bottom:14px;">Update Firebase credentials</p>
+          <div class="form-grid">
+            <div class="f-grp fg-full"><label class="f-lbl">Database URL</label><input class="f-inp" id="set-fb-url" type="url" style="font-family:monospace;font-size:.78rem;"/></div>
+            <div class="f-grp"><label class="f-lbl">API Key</label><input class="f-inp" id="set-fb-apikey" type="text" style="font-family:monospace;font-size:.78rem;"/></div>
+            <div class="f-grp"><label class="f-lbl">Project ID</label><input class="f-inp" id="set-fb-projectid" type="text" style="font-family:monospace;font-size:.78rem;"/></div>
+          </div>
+          <div class="form-actions" style="margin-top:14px;"><button class="tb-btn primary" onclick="updateFirebaseConfig()"><i class="fa-solid fa-fire"></i> Update Firebase</button></div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-lock"></i> Change Password</div>
+          <div class="form-grid">
+            <div class="f-grp"><label class="f-lbl">Current Password</label><input class="f-inp" type="password" id="cp-cur"/></div>
+            <div class="f-grp"><label class="f-lbl">New Password</label><input class="f-inp" type="password" id="cp-new"/></div>
+            <div class="f-grp"><label class="f-lbl">Confirm</label><input class="f-inp" type="password" id="cp-conf"/></div>
+          </div>
+          <div class="form-actions" style="margin-top:14px;"><button class="tb-btn primary" onclick="changePass()">Update Password</button></div>
+        </div>
+        <div class="s-card">
+          <div class="s-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Website Settings</div>
+          <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">Intro Animation</div><div class="tg-hint">Cinematic eagle loader</div></div><label class="toggle"><input type="checkbox" id="set-intro" checked/><span class="tg-sl"></span></label></div>
+          <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">WhatsApp Float Button</div></div><label class="toggle"><input type="checkbox" id="set-wa" checked/><span class="tg-sl"></span></label></div>
+          <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">Maintenance Mode</div></div><label class="toggle"><input type="checkbox" id="set-maint"/><span class="tg-sl"></span></label></div>
+          <div class="form-actions" style="margin-top:14px;"><button class="tb-btn primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button></div>
+        </div>
+        <div class="s-card" style="border-color:rgba(231,76,60,.2);">
+          <div class="s-title" style="color:var(--red);"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
+          <p class="f-hint" style="margin-bottom:14px;">Permanently delete all data from Firebase</p>
+          <button class="tb-btn" style="border-color:rgba(231,76,60,.35);color:var(--red);" onclick="confirmReset()"><i class="fa-solid fa-trash"></i> Reset All Data</button>
+        </div>
+      </div>
+
     </div>
   </div>
-</footer>
+</div>
 
-<!-- WA Float -->
-<a id="wa-float" href="#" target="_blank">
-  <svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.46.66 4.77 1.8 6.77L2 30l7.47-1.77A13.94 13.94 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.5a11.44 11.44 0 01-5.84-1.6l-.42-.25-4.33 1.03 1.05-4.2-.28-.44A11.45 11.45 0 014.5 16C4.5 9.6 9.6 4.5 16 4.5S27.5 9.6 27.5 16 22.4 27.5 16 27.5zm6.27-8.57c-.34-.17-2.02-.99-2.33-1.1-.31-.12-.54-.17-.77.17-.23.34-.88 1.1-1.08 1.33-.2.23-.4.26-.74.09-.34-.17-1.44-.53-2.74-1.68-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.12-.23.06-.43-.03-.6-.09-.17-.77-1.85-1.05-2.53-.28-.67-.56-.58-.77-.59h-.65c-.23 0-.6.09-.91.43-.31.34-1.2 1.17-1.2 2.85s1.22 3.3 1.4 3.53c.17.23 2.42 3.69 5.86 5.17.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2.02-.82 2.31-1.62.28-.8.28-1.48.2-1.62-.09-.14-.31-.23-.65-.4z"/></svg>
-</a>
+<!-- CONFIRM MODAL -->
+<div id="confirm-modal">
+  <div class="cm-box">
+    <div class="cm-ico">⚠️</div>
+    <div class="cm-title" id="cm-title">Are you sure?</div>
+    <div class="cm-msg" id="cm-msg">This cannot be undone.</div>
+    <div class="cm-btns">
+      <button class="cm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="cm-ok" id="cm-ok">Delete</button>
+    </div>
+  </div>
+</div>
 
-<!-- ══════════════════════════════════════
-   FIREBASE + SITE LOGIC
-══════════════════════════════════════ -->
-
-<!-- Firebase CDN - يشتغل على GitHub Pages بدون مشاكل -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<!-- TOAST -->
+<div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Saved!</span></div>
 
 <script>
 /* ══════════════════════════════════════
-   FIREBASE CONFIG — مدمج مباشرة
+   FIREBASE + ADMIN LOGIC
 ══════════════════════════════════════ */
-var FIREBASE_CONFIG = {
+
+/* ── Local Storage helpers ── */
+const LS = {
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},
+  set:(k,v)=>{localStorage.setItem(k,JSON.stringify(v));}
+};
+
+/* ── Firebase config ── */
+let db=null, firebaseMode=false;
+const FBKEY='ge_firebase_config';
+
+function getFbConfig(){return LS.get(FBKEY,null);}
+function setFbConfig(cfg){LS.set(FBKEY,cfg);}
+
+async function initFirebase(cfg){
+  try{
+    const app=firebase.initializeApp(cfg, 'ge-admin-'+Date.now());
+    db=firebase.database(app);
+    // test write
+    await db.ref('__ping__').set(Date.now());
+    firebaseMode=true;
+    setFbConfig(cfg);
+    updateSyncBadge(true);
+    return true;
+  }catch(e){
+    console.error('Firebase init error:',e);
+    firebaseMode=false;
+    db=null;
+    updateSyncBadge(false);
+    return false;
+  }
+}
+
+function updateSyncBadge(on){
+  document.getElementById('sb-sync-badge').style.display=on?'flex':'none';
+  document.getElementById('sb-offline-badge').style.display=on?'none':'flex';
+  const badge=document.getElementById('fb-status-badge');
+  badge.className='fb-status '+(on?'connected':'offline');
+  badge.innerHTML=`<span class="fb-dot"></span> ${on?'Firebase':'Offline'}`;
+}
+
+/* ── Firebase R/W ── */
+async function fbSet(path, data){
+  if(firebaseMode&&db){
+    try{await db.ref(path).set(data);}catch(e){console.warn('FB write fail:',e);}
+  }
+  // Always mirror to localStorage
+  LS.set('ge_'+path.replace(/\//g,'_'), data);
+}
+
+async function fbGet(path, def){
+  if(firebaseMode&&db){
+    try{
+      const snap=await db.ref(path).once('value');
+      if(snap.exists())return snap.val();
+    }catch(e){console.warn('FB read fail:',e);}
+  }
+  return LS.get('ge_'+path.replace(/\//g,'_'), def);
+}
+
+async function fbRemove(path){
+  if(firebaseMode&&db){
+    try{await db.ref(path).remove();}catch(e){}
+  }
+  localStorage.removeItem('ge_'+path.replace(/\//g,'_'));
+}
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let packages=[], offers=[], pricing=[], services=[], gallery=[], info={}, settings={};
+let editPkgIdx=null, pkgImgData='';
+
+const defInfo=()=>({phone:'+966 50 174 9914',wa:'966501749914',email:'info@globaleagletrv.com',location:'Saudi Arabia',instagram:'https://instagram.com',snapchat:'https://snapchat.com',tiktok:'https://tiktok.com',heroTag:'ELEVATING EVERY JOURNEY',heroDesc:'',heroTitle:'',heroSubtitle:'',heroImgDark:'',heroImgLight:'',introImg:'',logoImg:'',heroFont:'',heroFontSize:'',heroFontWeight:'',heroColor:'',heroLetterSpacing:'',heroTextAlign:'',statDest:150,statFleet:42,statMembers:12,statYears:30,seoTitle:'Global Eagle Travel | Rise Above. Aim High.',seoMeta:''});
+const defSvc=()=>[{name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},{name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},{name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}];
+const defPricing=()=>[{name:'Tourist Visa',price:'500 SAR'},{name:'Hotel Booking',price:'From 200/night'},{name:'Flight Tickets',price:'From 800 SAR'},{name:'Student Visa',price:'1200 SAR'},{name:'Int. License',price:'350 SAR'},{name:'Travel Insurance',price:'From 150 SAR'}];
+
+let CREDS={user:LS.get('ge_user','admin'), pass:LS.get('ge_pass','eagle2025')};
+
+/* ══════════════════════════════════════
+   STARTUP FLOW
+══════════════════════════════════════ */
+/* ══ Firebase Config مدمج ══ */
+const HARDCODED_FB_CONFIG = {
   apiKey: "AIzaSyAE1yGGAtBb7_LMrLJuK5-UsKvL5uAIw4w",
   authDomain: "eagle-b6d1c.firebaseapp.com",
   databaseURL: "https://eagle-b6d1c-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -727,487 +837,484 @@ var FIREBASE_CONFIG = {
   appId: "1:756161808889:web:3605212055ea921a0a5528"
 };
 
-var db = null;
-var firebaseMode = false;
-var siteData = {packages:[],offers:[],services:[],gallery:[],info:null,settings:{intro:true,wa:true,maint:false}};
-
-function lsGet(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-
-function initFirebaseApp(cfg){
-  try{
-    var app = firebase.initializeApp(cfg, 'ge-site-'+Math.random());
-    db = firebase.database(app);
-    firebaseMode = true;
-    return true;
-  }catch(e){
-    console.warn('Firebase init failed:',e);
-    firebaseMode = false;
-    db = null;
-    return false;
-  }
-}
-
-function loadFromLocalStorage(){
-  siteData.packages = lsGet('ge_packages',[]);
-  siteData.offers   = lsGet('ge_offers',[]);
-  siteData.services = lsGet('ge_services',defaultSvc());
-  siteData.gallery  = lsGet('ge_gallery',[]);
-  siteData.info     = lsGet('ge_info',null);
-  siteData.settings = lsGet('ge_settings',{intro:true,wa:true,maint:false});
-}
-
-function defaultSvc(){
-  return[
-    {name:'Tourist Visas 🌍',status:'active'},
-    {name:'Hotel Bookings 🏨',status:'active'},
-    {name:'Flight Tickets ✈️',status:'active'},
-    {name:'Student Visas 🎓',status:'active'},
-    {name:'International Licenses 🚗',status:'active'},
-    {name:'Travel Insurance 🛡',status:'active'}
-  ];
-}
-
-function toArr(v){
-  if(!v)return[];
-  if(Array.isArray(v))return v;
-  return Object.values(v);
-}
-
-async function loadSiteData(){
-  // استخدم الـ config المدمج مباشرة — يشتغل على كل الأجهزة
-  var ok = initFirebaseApp(FIREBASE_CONFIG);
+window.addEventListener('DOMContentLoaded', async ()=>{
+  initLoginCanvas();
+  // استخدم الـ config المدمج مباشرة
+  const saved = getFbConfig() || HARDCODED_FB_CONFIG;
+  setFbConfig(saved); // احفظه للـ settings page
+  const ok = await initFirebase(saved);
+  showLogin(ok);
   if(ok){
-      try{
-        var snap = await db.ref('/').once('value');
-        var data = snap.val()||{};
-        siteData.packages = toArr(data.packages);
-        siteData.offers   = toArr(data.offers);
-        siteData.services = toArr(data.services).length ? toArr(data.services) : defaultSvc();
-        siteData.gallery  = toArr(data.gallery);
-        siteData.info     = data.info || null;
-        siteData.settings = data.settings || {intro:true,wa:true,maint:false};
-
-        // Real-time listeners
-        db.ref('packages').on('value', function(s){
-          siteData.packages = toArr(s.val());
-          buildPkgs(); buildMarquee();
-        });
-        db.ref('info').on('value', function(s){
-          if(s.val()){siteData.info=s.val();applyInfo();_applyHeroTypo(theme);}
-        });
-        db.ref('offers').on('value', function(s){
-          siteData.offers=toArr(s.val());buildOffers();
-        });
-        db.ref('services').on('value', function(s){
-          siteData.services=toArr(s.val());buildSvc();buildMarquee();
-        });
-        return;
-      }catch(e){
-        console.warn('Firebase read failed, fallback to localStorage',e);
-      }
+    const urlEl=document.getElementById('set-fb-url');
+    const keyEl=document.getElementById('set-fb-apikey');
+    const pidEl=document.getElementById('set-fb-projectid');
+    if(urlEl)urlEl.value=saved.databaseURL||'';
+    if(keyEl)keyEl.value=saved.apiKey||'';
+    if(pidEl)pidEl.value=saved.projectId||'';
   }
-  loadFromLocalStorage();
-}
-
-/* ══════════════════════════════════════
-   TRANSLATIONS
-══════════════════════════════════════ */
-var T={
-  en:{
-    nav:{home:'Home',packages:'Packages',services:'Services',process:'Process',contact:'Contact',cta:'Inquire Now',tagline:'Travel & Tourism'},
-    hero:{tag:'ELEVATING EVERY JOURNEY',h1:'Beyond Every<br/>Horizon Lies<br/><em>Your Journey</em>',desc:'Experience the world through the lens of pure luxury.',btn1:'Explore Packages',btn2:'Our Services',scroll:'Scroll'},
-    stats:{dest:'Global Destinations',fleet:'Private Fleet',members:'Elite Members',years:'Years Excellence'},
-    pkgs:{tag:'Curated Collections',title:'Signature Experiences',link:'View All Voyages →'},
-    proc:{tag:'The Journey',title:'How It Works',step:'Step',c0t:'Planning',c0d:'Share your vision and travel preferences with our expert team.',c1t:'Booking',c1d:'We secure the finest accommodations at the most competitive rates.',c2t:'Experience',c2d:'Enjoy a flawless luxury journey with 24/7 concierge support.',c3t:'Destination',c3d:'Arrive at your dream destination — we are with you every step.'},
-    svc:{tag:'What We Offer',title:'Global Eagle Services',concierge:'From visa processing to private transfers — seamless travel.',explore:'Explore Services'},
-    ct:{tag:'Inquiries',title:'Begin Your Next',em:'Great Adventure',btn:'Send Inquiry ✈',fn:'First Name',ln:'Last Name',em2:'Email Address',ph:'Phone Number',svc:'Service',msg:'Message'},
-    ft:{desc:'Your trusted partner in premium travel & tourism. Redefining high-end journeys since 1994.',ex:'Explore',co:'Company',nl:'Newsletter','nl-d':'Get exclusive deals and travel inspiration.','nl-b':'JOIN',copy:'© 2025 Global Eagle Travel. The Majesty of Flight.','wa-link':'WhatsApp Us'}
-  },
-  ar:{
-    nav:{home:'الرئيسية',packages:'الباقات',services:'خدماتنا',process:'كيف نعمل',contact:'تواصل معنا',cta:'استفسر الآن',tagline:'سفر وسياحة'},
-    hero:{tag:'نرتقي بكل رحلة',h1:'وراء كل أفق<br/>تنتظرك<br/><em>رحلتك الاستثنائية</em>',desc:'اكتشف العالم من خلال منظور الفخامة الحقيقية.',btn1:'استكشف الباقات',btn2:'خدماتنا',scroll:'مرر'},
-    stats:{dest:'وجهة عالمية',fleet:'أسطول خاص',members:'عضو مميز',years:'سنوات التميز'},
-    pkgs:{tag:'مجموعات مختارة',title:'تجارب استثنائية',link:'← عرض الكل'},
-    proc:{tag:'رحلتك معنا',title:'كيف نعمل',step:'خطوة',c0t:'التخطيط',c0d:'شارك رؤيتك وتفضيلاتك السياحية مع فريقنا المتخصص.',c1t:'الحجز',c1d:'نحجز لك أفضل الفنادق والرحلات بأسعار تنافسية.',c2t:'التجربة',c2d:'استمتع برحلة فاخرة لا تُنسى مع رعاية شاملة على مدار الساعة.',c3t:'الوجهة',c3d:'وجهتك تنتظرك — نحن معك في كل لحظة.'},
-    svc:{tag:'ما نقدمه',title:'خدمات النسر العالمي',concierge:'من التأشيرات إلى النقل الخاص — رحلة متكاملة.',explore:'استكشف الخدمات'},
-    ct:{tag:'للاستفسار',title:'ابدأ مغامرتك',em:'القادمة الكبرى',btn:'أرسل استفساراً ✈',fn:'الاسم الأول',ln:'اسم العائلة',em2:'البريد الإلكتروني',ph:'رقم الهاتف',svc:'الخدمة',msg:'رسالتك'},
-    ft:{desc:'شريكك الموثوق في السفر والسياحة الفاخرة. نُعيد تعريف الرحلات الراقية منذ ١٩٩٤.',ex:'استكشف',co:'الشركة',nl:'النشرة البريدية','nl-d':'احصل على أفضل العروض وإلهام السفر.','nl-b':'اشتراك',copy:'© ٢٠٢٥ نسر عالمي للسفر. جلال الطيران.','wa-link':'تواصل عبر واتساب'}
-  }
-};
-
-var lang='en';
-function t(k){var p=k.split('.');var v=T[lang];for(var i=0;i<p.length;i++){if(v&&v[p[i]]!=null)v=v[p[i]];else return k;}return v;}
-
-window.setLang=function(l){
-  lang=l;
-  var html=document.documentElement;
-  html.lang=l; html.dir=l==='ar'?'rtl':'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;
-  });
-  var h1=document.getElementById('h-h1');
-  if(h1)h1.innerHTML=t('hero.h1');
-  document.getElementById('btn-en').classList.toggle('active',l==='en');
-  document.getElementById('btn-ar').classList.toggle('active',l==='ar');
-  // Rebuild dynamic sections with new language
-  requestAnimationFrame(function(){
-    buildSvc();
-    buildPkgs();
-    buildMarquee();
-    // Re-apply i18n to newly built elements
-    document.querySelectorAll('[data-i18n]').forEach(function(el){
-      var v=t(el.dataset.i18n);if(typeof v==='string')el.textContent=v;
-    });
-    // Update process steps
-    procData.forEach(function(d,i){d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
-    goToStep(currentStep,true);
-    updateThemePill(theme);
-    // Re-init scroll reveals for new elements
-    document.querySelectorAll('.rv:not(.on)').forEach(function(el){
-      el.classList.add('on');
-    });
-  });
-};
-
-/* ══════════════════════════════════════
-   THEME
-══════════════════════════════════════ */
-var theme = localStorage.getItem('ge_theme')||'dark';
-var HERO_DARK_DEFAULT='https://lh3.googleusercontent.com/aida-public/AB6AXuBC2s9zVDV8XoNtjFKDlkR4bveMc56nMqtUnRsBviE_6gHAVsYPkf2ysgwrpcgLfXjD3zev8h9ZaDKSeyBW8cpEOmm2AyiytORWrSF9L9yEliHwda_gDGPh5iqrqTJfbIHPj8YN5KgXcIi5xgqsjpjw9AiVxHxmd65t-jylm2xaS70x0hI6_-hAYmK3Mx-cKhFyMtrizP4ki2c9CjdvjVwY9HVCjKq4fH2VVm9n5G6tV4o6RQ7ytKl9jPy4ixrAQwvBXPaCtgEHQbs';
-
-function applyTheme(th){
-  document.documentElement.setAttribute('data-theme',th);
-  localStorage.setItem('ge_theme',th);
-  var heroImg=document.getElementById('hero-img');
-  if(heroImg&&siteData.info){
-    var src=th==='light'&&siteData.info.heroImgLight?siteData.info.heroImgLight:(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
-    if(heroImg.src!==src){
-      gsap.to(heroImg,{opacity:0,duration:.35,onComplete:function(){
-        heroImg.src=src;
-        heroImg.onload=function(){gsap.to(heroImg,{opacity:1,duration:.55});};
-      }});
-    }
-  }
-  _applyHeroTypo(th);
-  requestAnimationFrame(function(){updateThemePill(th);});
-}
-
-function _applyHeroTypo(th){
-  var info=siteData.info; if(!info)return;
-  var h1=document.getElementById('h-h1');
-  var hp=document.getElementById('h-p');
-  var ht=document.querySelector('.hero-ey-text');
-  if(info.heroTitle&&h1)h1.innerHTML=info.heroTitle;
-  if(info.heroSubtitle&&hp)hp.textContent=info.heroSubtitle;
-  if(info.heroTag&&ht)ht.textContent=info.heroTag;
-  if(h1){
-    if(info.heroFont)h1.style.fontFamily=info.heroFont;
-    if(info.heroFontSize)h1.style.fontSize=info.heroFontSize;
-    if(info.heroFontWeight)h1.style.fontWeight=info.heroFontWeight;
-    if(info.heroColor)h1.style.color=info.heroColor;
-    if(info.heroLetterSpacing)h1.style.letterSpacing=info.heroLetterSpacing;
-    if(info.heroTextAlign)h1.style.textAlign=info.heroTextAlign;
-  }
-}
-
-function updateThemePill(th){
-  var moon=document.getElementById('tp-moon');
-  var sun=document.getElementById('tp-sun');
-  var ind=document.getElementById('tp-ind');
-  if(!moon||!sun||!ind)return;
-  var active=th==='dark'?moon:sun;
-  var inactive=th==='dark'?sun:moon;
-  active.classList.add('active'); inactive.classList.remove('active');
-  ind.style.left=active.offsetLeft+'px'; ind.style.width=active.offsetWidth+'px';
-}
-window.toggleTheme=function(){theme=theme==='dark'?'light':'dark';applyTheme(theme);};
-applyTheme(theme);
-
-/* ══════════════════════════════════════
-   APPLY INFO TO DOM
-══════════════════════════════════════ */
-function applyInfo(){
-  var info=siteData.info; if(!info)return;
-  var wa='https://wa.me/'+(info.wa||'966501749914');
-  if(info.phone)document.getElementById('ct-phone').textContent=info.phone;
-  if(info.email)document.getElementById('ct-email').textContent=info.email;
-  if(info.location)document.getElementById('ct-loc').textContent=info.location;
-  ['ct-ig','ft-ig'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.instagram||'#';});
-  ['ct-sc','ft-sc'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.snapchat||'#';});
-  ['ct-tt','ft-tt'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.tiktok||'#';});
-  ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=wa;});
-  var heroEl=document.getElementById('hero-img');
-  if(heroEl){var src=theme==='light'&&info.heroImgLight?info.heroImgLight:(info.heroImgDark||info.heroImg||'');if(src)heroEl.src=src;}
-  if(info.introImg&&info.introImg.trim())document.getElementById('ldr-eagle-img').src=info.introImg;
-  if(info.logoImg&&info.logoImg.trim()){
-    ['nav-logo-img','ft-logo-img'].forEach(function(id){var el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});
-  }
-  if(info.seoTitle)document.title=info.seoTitle;
-}
-
-/* ══════════════════════════════════════
-   BUILD CONTENT
-══════════════════════════════════════ */
-function buildMarquee(){
-  var svcs=(siteData.services||[]).filter(function(s){return s.status!=='hidden';}).map(function(s){return s.name.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();});
-  var items=svcs.concat(svcs).map(function(n){return '<div class="mq-item">'+n+'<span class="mq-dot"></span></div>';}).join('');
-  document.getElementById('mq-track').innerHTML=items+items;
-}
-
-function buildPkgs(){
-  var grid=document.getElementById('pkg-grid');
-  var visible=(siteData.packages||[]).filter(function(p){return p.status!=='draft'&&p.homepage!==false;});
-  var fallbacks=[
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBoq4Hk10V9IH8_zdpREU_1VWVmUXb1XwgzIBDHW9dd8c9ZciDuHV3QlG5C14cbG3x4l0MJ-3AFwGw-Kt1dwwV34Rnd9Wd-QVdoK7nbd9YHV_Odx8bFvPVT5h4ReGpzpGz-bnUgwo0kGL2oFWKuSD66oq_JGVZvHpzN6vuw0IxOH1VVD2DsQ7we-dq1dIpJb958-c3zWK1PcX7_AtutBmgh6OmtD4YWuW1P4a1iNhviCXBaOk4uLj7-zNNIXEaiPtRSQJL0FfHygOY',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBQMWaKeh_SthMiGbH5NE5-FlDFXzP4vp1tXor_wdl4Qpyjw1HAK2HWaUAqYA64R0GkO6me12lJ_vP69qcDgm0f_lycgwMCiTmauIi0Gtk2u026TZC52-482bSEFSF0wSUWuOAP7D0B4tvgSPAUdOeVtc8ccfVNgXqT1c0jYkZwhJ1Kp1e5vruEgl5HR1RficyAncBVG2zF73-sbqf6144gvLTwvy0fZI5ACwChoAIYIs4ZGizC8N9jPVzZ43wNNcGtv1ql2lJPEcY',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuAzxb48niqbEO5-TGSJ9V3f3wBHbm770jINIpSnXwED3rR9DRg5CVI21VJ7fWFwWxh6YWzKghun8RhTKysKHnNMbbnYTrN8oao77sWPLueYtPwtNsAK3bfh4u2SFGdyx4NJKft2SCBiL283po17V5WVHu8nW38Yp-YmoPHTgkmTSx87unZ_1zVjB9GxDDC-aIEDEbJme7iceR7zxPHZsJt4ifGjByRU2DNKsxLnxEZGe9j5snP3vNGnV5QgYdeeuQYDQr6Ecjs9x1k'
-  ];
-  var defaultCards=[
-    {nameEn:'Swiss Peak Sanctuary',catEn:'Alpine Elite',price:'2500',duration:'7 Nights'},
-    {nameEn:'Azure Maldives Villa',catEn:'Oceanic Escape',price:'3800',duration:'10 Nights'},
-    {nameEn:'Golden Sands Safari',catEn:'Desert Majesty',price:'1900',duration:'5 Nights'}
-  ];
-  var cards=visible.length?visible:defaultCards;
-  grid.innerHTML=cards.map(function(p,i){
-    return '<div class="pkg-card rv">'+(p.featured?'<div class="pkg-feat">⭐ Featured</div>':'')+
-      '<img src="'+(p.img||fallbacks[i%3])+'" alt="'+(p.nameEn||'')+'" onerror="this.src=\''+fallbacks[i%3]+'\'"/>'+
-      '<div class="pkg-ov"><div class="pkg-cat">'+(p.catEn||'—')+'</div>'+
-      '<div class="pkg-name">'+(p.nameEn||p.name||'—')+'</div>'+
-      (p.duration?'<div class="pkg-dur">'+p.duration+'</div>':'')+
-      (p.price?'<div class="pkg-prc">From '+p.price+' SAR</div>':'')+
-      '<div class="pkg-line"></div>'+
-      '<div class="pkg-cta" onclick="goTo(\'contact\')">Inquire Now →</div></div></div>';
-  }).join('');
-  var c2=grid.querySelector('.pkg-card:nth-child(2)');
-  if(c2&&cards.length>=2)c2.style.marginTop='50px';
-}
-
-function buildSvc(){
-  var active=(siteData.services||[]).filter(function(s){return s.status!=='hidden';});
-  var bento=document.getElementById('svc-bento');
-  function getIcon(n){var m=n.match(/[\u{1F300}-\u{1FFFF}]/gu);return m?m[0]:'✦';}
-  function getName(n){return n.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();}
-  var descsEn=['All global destinations covered with expert processing.','Verified luxury hotel partners worldwide.','Best rates across all major airlines.','Full support for your international education journey.','Drive legally in most countries worldwide.','Complete medical & security coverage.'];
-  var descsAr=['نغطي جميع الوجهات العالمية بمعالجة احترافية.','شركاء فنادق فاخرة موثوقة حول العالم.','أفضل الأسعار عبر جميع شركات الطيران.','دعم متكامل لرحلتك التعليمية الدولية.','قُد بشكل قانوني في معظم دول العالم.','تغطية طبية وأمنية شاملة.'];
-  var descs=lang==='ar'?descsAr:descsEn;
-  var html='<div class="b-base b-big rv"><div class="b-big-wm">✈</div><div>'+
-    '<span class="sec-tag" data-i18n="svc.tag">What We Offer</span>'+
-    '<h3 style="font-family:var(--fdisplay);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--txt);margin-bottom:14px;line-height:1.2;" data-i18n="svc.title">Global Eagle<br/>Concierge</h3>'+
-    '<p class="b-desc" style="max-width:300px;" data-i18n="svc.concierge">From visa processing to private transfers.</p></div>'+
-    '<button class="btn-ghost" style="width:fit-content;padding:11px 24px;font-size:.66rem;" onclick="goTo(\'contact\')" data-i18n="svc.explore">Explore Services</button></div>';
-  var types=['b-cell','b-cell','b-cell','b-wide','b-cell','b-cell'];
-  active.slice(0,6).forEach(function(s,i){
-    var ico=getIcon(s.name),name=getName(s.name),tp=types[i]||'b-cell';
-    if(tp==='b-wide'){
-      html+='<div class="b-base b-wide rv"><div class="b-icon-ring">'+ico+'</div><div><div class="b-title">'+name+'</div><div class="b-desc">'+(descs[i]||'')+'</div></div></div>';
-    }else{
-      html+='<div class="b-base b-cell rv"><div class="b-ico">'+ico+'</div><div class="b-title">'+name+'</div><div class="b-desc">'+(descs[i]||'')+'</div></div>';
-    }
-  });
-  bento.innerHTML=html;
-}
-
-function buildGal(){
-  var valid=(siteData.gallery||[]).filter(function(u){return u&&u.trim();});
-  if(!valid.length)return;
-  document.getElementById('gallery').style.display='block';
-  document.getElementById('gal-grid').innerHTML=valid.map(function(u){
-    return '<img class="gal-img rv" src="'+u+'" loading="lazy" onerror="this.style.display=\'none\'">';
-  }).join('');
-}
-
-function buildOffers(){
-  var offers=siteData.offers||[];
-  if(!offers.length)return;
-  document.getElementById('off-in').innerHTML=offers.map(function(o){
-    return '<div class="off-chip"><i class="fa-solid fa-tag"></i>'+o.title+'<span>— '+o.discount+'</span></div>';
-  }).join('');
-  document.getElementById('offers-banner').style.display='block';
-}
-
-/* ══════════════════════════════════════
-   PARTICLES
-══════════════════════════════════════ */
-function initParticles(canvasId){
-  var canvas=document.getElementById(canvasId);if(!canvas)return;
-  var ctx=canvas.getContext('2d');var W,H,pts;
-  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
-  function makePts(){pts=Array.from({length:90},function(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.12,r:Math.random()*1.4+.3,op:Math.random()*.55+.1,gold:Math.random()>.55};});}
-  resize();makePts();window.addEventListener('resize',function(){resize();makePts();});
-  (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?'rgba(201,162,39,'+p.op+')':'rgba(255,255,255,'+(p.op*.35)+')';ctx.fill();});requestAnimationFrame(loop);})();
-}
-
-function initLoaderCanvas(){
-  var canvas=document.getElementById('ldr-canvas');if(!canvas)return;
-  var ctx=canvas.getContext('2d');var W=canvas.width=innerWidth,H=canvas.height=innerHeight;
-  window.addEventListener('resize',function(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;});
-  var pts=Array.from({length:160},function(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.15,r:Math.random()*1.8+.2,op:Math.random()*.65+.05,gold:Math.random()>.6};});
-  var running=true;
-  (function loop(){if(!running)return;ctx.clearRect(0,0,W,H);pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?'rgba(201,162,39,'+p.op+')':'rgba(255,255,255,'+(p.op*.3)+')';ctx.fill();});requestAnimationFrame(loop);})();
-  return function(){running=false;};
-}
-
-/* ══════════════════════════════════════
-   LOADER + MAIN INIT
-══════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', async function(){
-  gsap.registerPlugin(ScrollTrigger);
-
-  var loader=document.getElementById('loader');
-  var stopPts=null;
-
-  // Start loader animation immediately
-  if(loader){
-    stopPts=initLoaderCanvas();
-    setTimeout(function(){document.getElementById('ldr-ring').classList.add('show');},200);
-    setTimeout(function(){document.getElementById('ldr-text').classList.add('show');},600);
-  }
-
-  // Animate progress bar while Firebase loads
-  var fill=document.getElementById('ldr-fill');
-  var pct=0;
-  var barInt=setInterval(function(){
-    // Slow down at 85% waiting for Firebase
-    var speed=pct<85?(Math.random()*3+2):(Math.random()*0.5+0.1);
-    pct=Math.min(pct+speed,99);
-    if(fill)fill.style.width=pct+'%';
-  },40);
-
-  // Load Firebase data in parallel with animation
-  await loadSiteData();
-  applyInfo();
-  _applyHeroTypo(theme);
-  buildMarquee();buildPkgs();buildSvc();buildGal();buildOffers();
-  if(!siteData.settings.wa)document.getElementById('wa-float').style.display='none';
-
-  // Complete the bar
-  clearInterval(barInt);
-  if(fill)fill.style.width='100%';
-
-  // If no loader or intro disabled, go straight in
-  if(!loader||!siteData.settings.intro){
-    if(loader)loader.remove();
-    animIn();return;
-  }
-
-  // Short pause then fade out
-  setTimeout(function(){
-    gsap.to(loader,{opacity:0,duration:.6,ease:'power2.in',onComplete:function(){
-      loader.remove();if(stopPts)stopPts();animIn();
-    }});
-  },400);
 });
 
-function animIn(){
-  updateThemePill(theme);
-  gsap.to('#h-eyebrow',{opacity:1,y:0,duration:1,delay:.1,ease:'power3.out'});
-  gsap.to('#h-h1',{opacity:1,y:0,duration:1.1,delay:.25,ease:'power3.out'});
-  gsap.to('#h-p',{opacity:1,y:0,duration:1,delay:.4,ease:'power3.out'});
-  gsap.to('#h-btns',{opacity:1,y:0,duration:.9,delay:.55,ease:'power3.out'});
-  var info=siteData.info||{};
-  countUp('s1',info.statDest||150,'+');
-  countUp('s2',info.statFleet||42,'+');
-  countUp('s3',info.statMembers||12,'K+');
-  countUp('s4',info.statYears||30,'+');
-  initParticles('hero-canvas');
-  initScrollReveals();
-  initProcessCards();
-  ScrollTrigger.create({trigger:'#hero',start:'top top',end:'bottom top',scrub:true,
-    onUpdate:function(self){gsap.set('.hero-bg img',{y:self.progress*80});}});
+function showLogin(fbOk){
+  document.getElementById('login').style.display='flex';
+  document.getElementById('lb-fb-mode').textContent=fbOk?'Connected to Firebase':'Offline — localStorage only';
 }
 
-function countUp(id,target,suffix){
-  var el=document.getElementById(id);if(!el)return;
-  var cur=0;var step=target/55;
-  var ti=setInterval(function(){cur=Math.min(cur+step,target);el.textContent=Math.floor(cur)+suffix;if(cur>=target)clearInterval(ti);},28);
+window.connectFirebase=async function(){
+  const url=document.getElementById('fs-url').value.trim();
+  const apiKey=document.getElementById('fs-apikey').value.trim();
+  const projectId=document.getElementById('fs-projectid').value.trim();
+  if(!url||!apiKey||!projectId){document.getElementById('fs-err').style.display='block';document.getElementById('fs-err').textContent='❌ Please fill all fields';return;}
+  const cfg={apiKey,databaseURL:url,projectId,authDomain:`${projectId}.firebaseapp.com`,storageBucket:`${projectId}.appspot.com`,messagingSenderId:'000000000000',appId:'1:000000000000:web:000000000000000000000000'};
+  document.getElementById('fs-err').style.display='none';
+  const btn=document.querySelector('.fs-btn');
+  btn.textContent='Connecting...';btn.disabled=true;
+  const ok=await initFirebase(cfg);
+  btn.textContent='🔥 Connect Firebase';btn.disabled=false;
+  if(ok){
+    showLogin(true);
+  }else{
+    document.getElementById('fs-err').style.display='block';
+    document.getElementById('fs-err').textContent='❌ Could not connect. Check your config and make sure the database exists.';
+  }
+};
+
+window.skipFirebase=function(){
+  showLogin(false);
+};
+
+/* ══════════════════════════════════════
+   AUTH
+══════════════════════════════════════ */
+function initLoginCanvas(){
+  const c=document.getElementById('login-canvas');if(!c)return;
+  const ctx=c.getContext('2d');
+  let W=c.width=innerWidth,H=c.height=innerHeight;
+  window.addEventListener('resize',()=>{W=c.width=innerWidth;H=c.height=innerHeight;});
+  const pts=Array.from({length:100},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.1,r:Math.random()*1.5+.3,op:Math.random()*.6+.1,gold:Math.random()>.6}));
+  (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.3})`;ctx.fill();});requestAnimationFrame(loop);})();
 }
 
-function initScrollReveals(){
-  document.querySelectorAll('.rv').forEach(function(el){
-    ScrollTrigger.create({trigger:el,start:'top 88%',onEnter:function(){gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out'});}});
-  });
+window.doLogin=async function(){
+  const u=document.getElementById('l-user').value;
+  const p=document.getElementById('l-pass').value;
+  if(u===CREDS.user&&p===CREDS.pass){
+    document.getElementById('login').style.opacity='0';
+    document.getElementById('login').style.transition='opacity .5s';
+    setTimeout(async()=>{
+      document.getElementById('login').style.display='none';
+      document.getElementById('app').style.display='block';
+      await loadAllData();
+      initApp();
+    },520);
+  }else{
+    const err=document.getElementById('l-err');
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',2500);
+  }
+};
+
+window.doLogout=function(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('login').style.display='flex';
+  document.getElementById('login').style.opacity='1';
+  document.getElementById('l-pass').value='';
+};
+
+/* ══════════════════════════════════════
+   LOAD ALL DATA
+══════════════════════════════════════ */
+async function loadAllData(){
+  packages= await fbGet('packages', []);
+  offers=   await fbGet('offers',   []);
+  pricing=  await fbGet('pricing',  defPricing());
+  services= await fbGet('services', defSvc());
+  gallery=  await fbGet('gallery',  []);
+  info=     await fbGet('info',     defInfo());
+  settings= await fbGet('settings', {intro:true,wa:true,maint:false});
+  if(!Array.isArray(packages))packages=Object.values(packages||{});
+  if(!Array.isArray(offers))offers=Object.values(offers||{});
+  if(!Array.isArray(pricing))pricing=defPricing();
+  if(!Array.isArray(services))services=defSvc();
+  if(!Array.isArray(gallery))gallery=[];
+  if(!info||typeof info!=='object')info=defInfo();
 }
 
 /* ══════════════════════════════════════
-   PROCESS CARDS
+   INIT APP
 ══════════════════════════════════════ */
-var procData=[
-  {num:'01',title:'Planning',desc:'Share your vision and travel preferences with our dedicated expert team.',icon:'🗺️'},
-  {num:'02',title:'Booking',desc:'We secure the finest accommodations and flights at the most competitive rates.',icon:'📋'},
-  {num:'03',title:'Experience',desc:'Enjoy a flawless luxury journey with 24/7 personal concierge support.',icon:'✨'},
-  {num:'04',title:'Destination',desc:'Arrive at your dream destination — we are with you every step of the way.',icon:'🏆'}
-];
-var currentStep=0,stepTimer=null;
-
-function initProcessCards(){
-  goToStep(0,true);
-  stepTimer=setInterval(function(){goToStep((currentStep+1)%4);},3000);
+function initApp(){
+  refreshDash();
+  loadInfo();
+  loadSettings();
+  loadHeroImages();
+  renderGalleryGrid();
+  if(info.logoImg){const li=document.getElementById('sb-logo-img');if(li){li.src=info.logoImg;}}
+  // Real-time listener
+  if(firebaseMode&&db){
+    db.ref('packages').on('value',snap=>{
+      if(snap.exists()){const v=snap.val();packages=Array.isArray(v)?v:Object.values(v||{});document.getElementById('sb-pkg-cnt').textContent=packages.length;document.getElementById('d-pkg').textContent=packages.length;}
+    });
+  }
 }
 
-window.goToStep=function(idx,instant){
-  currentStep=idx;
-  clearInterval(stepTimer);
-  if(!instant) stepTimer=setInterval(function(){goToStep((currentStep+1)%4);},3000);
+/* ══════════════════════════════════════
+   PAGES
+══════════════════════════════════════ */
+const pageNames={dashboard:'Dashboard',packages:'Packages',offers:'Offers',services:'Services','hero-settings':'Hero Settings',hero:'Images',gallery:'Gallery',seo:'Info & SEO',settings:'Settings'};
 
-  var d=procData[idx];
-  // Update active state on step items
-  document.querySelectorAll('.step-item').forEach(function(el,i){
-    el.classList.toggle('active',i===idx);
-  });
-
-  // Update detail card
-  var detailNum=document.getElementById('step-detail-num');
-  var detailTitle=document.getElementById('step-detail-title');
-  var detailDesc=document.getElementById('step-detail-desc');
-  var detailTag=document.querySelector('.step-detail-tag');
-  var detail=document.getElementById('step-detail');
-
-  if(!detail)return;
-
-  // Animate out then in
-  gsap.to(detail,{opacity:0,y:10,duration:.2,ease:'power2.in',onComplete:function(){
-    if(detailNum)detailNum.textContent=d.num;
-    if(detailTitle)detailTitle.textContent=d.title;
-    if(detailDesc)detailDesc.textContent=d.desc;
-    if(detailTag)detailTag.textContent='Step '+d.num;
-    gsap.to(detail,{opacity:1,y:0,duration:.4,ease:'power3.out'});
-  }});
+window.showPage=function(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelector(`.sb-item[onclick="showPage('${id}')"]`)?.classList.add('active');
+  document.getElementById('tb-title').textContent=pageNames[id]||id;
+  closeSidebar();
+  if(id==='dashboard')refreshDash();
+  if(id==='packages'){renderPkgTable();showPkgList();}
+  if(id==='offers'){renderOffers();renderPricing();}
+  if(id==='services')renderServices();
+  if(id==='hero-settings')loadHeroSettings();
+  if(id==='hero')loadHeroImages();
+  if(id==='gallery')renderGalleryGrid();
+  if(id==='seo')loadInfo();
+  if(id==='settings')loadSettings();
 };
 
-// Also expose goToCard as alias for language switcher
-window.goToCard=window.goToStep;
+window.openSidebar=function(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+};
+window.closeSidebar=function(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+};
 
 /* ══════════════════════════════════════
-   NAV + HELPERS
+   DASHBOARD
 ══════════════════════════════════════ */
-window.addEventListener('scroll',function(){
-  document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
-  var sections=['hero','packages','services','process-section','contact'];
-  sections.forEach(function(id){
-    var sec=document.getElementById(id);if(!sec)return;
-    var r=sec.getBoundingClientRect();
-    var link=document.querySelector('.nav-links a[href="#'+id+'"]');
-    if(link)link.classList.toggle('active',r.top<=100&&r.bottom>0);
+function refreshDash(){
+  document.getElementById('d-pkg').textContent=packages.length;
+  document.getElementById('d-off').textContent=offers.length;
+  document.getElementById('d-gal').textContent=gallery.filter(g=>!!g).length;
+  document.getElementById('d-svc').textContent=services.filter(s=>s.status==='active').length;
+  document.getElementById('sb-pkg-cnt').textContent=packages.length;
+  const tb=document.getElementById('d-tbl');
+  if(!packages.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:30px;">No packages yet.</td></tr>';return;}
+  tb.innerHTML=packages.map((p,i)=>`<tr>
+    <td><strong>${p.nameEn||'—'}</strong></td>
+    <td><span class="badge badge-blue">${p.catEn||'—'}</span></td>
+    <td style="color:var(--gold);">${p.price?p.price+' SAR':'—'}</td>
+    <td><span class="badge ${bc(p.status)}">${p.status||'active'}</span></td>
+    <td><button class="t-btn" onclick="showPage('packages');editPkg(${i})">Edit</button></td>
+  </tr>`).join('');
+}
+function bc(s){return s==='active'?'badge-green':s==='featured'?'badge-gold':'badge-red';}
+
+/* ══════════════════════════════════════
+   PACKAGES
+══════════════════════════════════════ */
+window.showPkgList=function(){document.getElementById('pkg-list').style.display='block';document.getElementById('pkg-form').style.display='none';renderPkgTable();};
+window.showPkgForm=function(idx){
+  editPkgIdx=idx;pkgImgData='';
+  const p=idx!==null?packages[idx]:{};
+  document.getElementById('pkg-list').style.display='none';
+  document.getElementById('pkg-form').style.display='block';
+  ['pk-name-en','pk-name-ar','pk-cat-en','pk-cat-ar','pk-price','pk-dur','pk-desc-en','pk-desc-ar'].forEach(id=>{
+    const key=id.replace('pk-','').replace(/-([a-z])/g,(_,c)=>c.toUpperCase());
+    document.getElementById(id).value=p[key]||'';
   });
-},{passive:true});
-
-document.addEventListener('mousemove',function(e){
-  var mx=(e.clientX/innerWidth-.5)*18;
-  var my=(e.clientY/innerHeight-.5)*10;
-  gsap.to('.hero-bg img',{x:mx*.2,y:my*.15,duration:1.2,ease:'power2.out'});
-});
-
-window.closeMob=function(){document.getElementById('mob-nav').classList.remove('open');};
-window.goTo=function(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});};
-
-window.sendWA=function(){
-  var f1=document.getElementById('f1').value.trim();
-  var f4=document.getElementById('f4').value.trim();
-  if(!f1||!f4){alert(lang==='ar'?'يرجى إدخال الاسم ورقم الهاتف':'Please fill in Name and Phone.');return;}
-  var waNum=(siteData.info&&siteData.info.wa)||'966501749914';
-  var msg='✈ New Inquiry — Global Eagle Travel\n\nName: '+f1+' '+document.getElementById('f2').value+'\nPhone: '+f4+'\nEmail: '+document.getElementById('f3').value+'\nService: '+document.getElementById('f5').value+'\nMessage: '+document.getElementById('f6').value;
-  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
+  document.getElementById('pk-status').value=p.status||'active';
+  document.getElementById('pk-hp').checked=p.homepage!==false;
+  document.getElementById('pk-ft').checked=!!p.featured;
+  document.getElementById('pk-bk').checked=p.bookable!==false;
+  renderIncs(p.includes||[]);
+  const prev=document.getElementById('pk-img-preview');
+  const img=document.getElementById('pk-img-el');
+  if(p.img){img.src=p.img;img.classList.add('loaded');prev.querySelector('span').style.display='none';pkgImgData=p.img;}
+  else{img.src='';img.classList.remove('loaded');prev.querySelector('span').style.display='';}
+  window.scrollTo(0,0);
 };
+window.cancelPkg=function(){window.showPkgList();};
+window.editPkg=function(i){window.showPkgForm(i);};
+
+window.handlePkgImg=function(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>4*1024*1024){showToast('❌ Image too large (max 4MB)');return;}
+  const r=new FileReader();
+  r.onload=e=>{pkgImgData=e.target.result;const img=document.getElementById('pk-img-el');img.src=pkgImgData;img.classList.add('loaded');document.getElementById('pk-img-preview').querySelector('span').style.display='none';};
+  r.readAsDataURL(file);
+};
+window.clearPkgImg=function(){pkgImgData='';const img=document.getElementById('pk-img-el');img.src='';img.classList.remove('loaded');document.getElementById('pk-img-preview').querySelector('span').style.display='';};
+
+window.savePkg=async function(){
+  const p={
+    nameEn:document.getElementById('pk-name-en').value.trim(),
+    nameAr:document.getElementById('pk-name-ar').value.trim(),
+    catEn:document.getElementById('pk-cat-en').value.trim(),
+    catAr:document.getElementById('pk-cat-ar').value.trim(),
+    price:document.getElementById('pk-price').value,
+    duration:document.getElementById('pk-dur').value,
+    descEn:document.getElementById('pk-desc-en').value,
+    descAr:document.getElementById('pk-desc-ar').value,
+    status:document.getElementById('pk-status').value,
+    homepage:document.getElementById('pk-hp').checked,
+    featured:document.getElementById('pk-ft').checked,
+    bookable:document.getElementById('pk-bk').checked,
+    img:pkgImgData,
+    includes:[...document.querySelectorAll('#pk-inc-list .f-inp')].map(i=>i.value).filter(Boolean)
+  };
+  if(!p.nameEn){showToast('❌ English name required');return;}
+  if(editPkgIdx!==null)packages[editPkgIdx]=p;else packages.push(p);
+  await fbSet('packages',packages);
+  showToast('✅ Package saved!');
+  window.showPkgList();refreshDash();
+};
+
+function renderPkgTable(){
+  const tb=document.getElementById('pkg-tbl');
+  if(!packages.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txt3);padding:30px;">No packages yet.</td></tr>';return;}
+  tb.innerHTML=packages.map((p,i)=>`<tr>
+    <td>${p.img?`<img src="${p.img}" style="width:46px;height:36px;object-fit:cover;border-radius:3px;">`:'<div style="width:46px;height:36px;background:var(--bg3);border-radius:3px;"></div>'}</td>
+    <td><strong>${p.nameEn||'—'}</strong></td>
+    <td><span class="badge badge-blue">${p.catEn||'—'}</span></td>
+    <td style="color:var(--gold);">${p.price?p.price+' SAR':'—'}</td>
+    <td><span class="badge ${bc(p.status)}">${p.status}</span></td>
+    <td><div class="td-actions"><button class="t-btn" onclick="editPkg(${i})"><i class="fa-solid fa-pen"></i></button><button class="t-btn danger" onclick="deletePkg(${i})"><i class="fa-solid fa-trash"></i></button></div></td>
+  </tr>`).join('');
+}
+
+window.deletePkg=function(i){confirmAction('Delete Package','Delete this package? Cannot be undone.',async()=>{packages.splice(i,1);await fbSet('packages',packages);renderPkgTable();refreshDash();showToast('🗑️ Deleted');});};
+window.filterPkgs=function(q){document.querySelectorAll('#pkg-tbl tr').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none');};
+function renderIncs(items){document.getElementById('pk-inc-list').innerHTML=items.map(v=>`<div class="row-item"><input class="f-inp ri-main" value="${v}" placeholder="e.g. Airport Transfer"/><button class="ri-rm" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button></div>`).join('');}
+window.addInc=function(){const el=document.getElementById('pk-inc-list');const d=document.createElement('div');d.className='row-item';d.innerHTML='<input class="f-inp ri-main" placeholder="e.g. Airport Transfer"/><button class="ri-rm" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>';el.appendChild(d);d.querySelector('input').focus();};
+
+/* ══════════════════════════════════════
+   OFFERS & PRICING
+══════════════════════════════════════ */
+function renderOffers(){
+  const el=document.getElementById('offers-list');
+  if(!offers.length){el.innerHTML='<div style="color:var(--txt3);font-size:.8rem;padding:10px 0;">No offers.</div>';return;}
+  el.innerHTML=offers.map((o,i)=>`<div class="row-item"><input class="f-inp ri-main" value="${o.title||''}" placeholder="Offer title" oninput="offers[${i}].title=this.value"/><input class="f-inp ri-sub" value="${o.discount||''}" placeholder="20% OFF" oninput="offers[${i}].discount=this.value"/><button class="ri-rm" onclick="offers.splice(${i},1);renderOffers()"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+}
+window.addOffer=function(){offers.push({title:'New Offer',discount:'10% OFF'});renderOffers();};
+function renderPricing(){
+  document.getElementById('pricing-list').innerHTML=pricing.map((r,i)=>`<div class="row-item"><input class="f-inp ri-main" value="${r.name||''}" placeholder="Service" oninput="pricing[${i}].name=this.value"/><input class="f-inp ri-sub" value="${r.price||''}" placeholder="Price" oninput="pricing[${i}].price=this.value"/><button class="ri-rm" onclick="pricing.splice(${i},1);renderPricing()"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+}
+window.addPriceRow=function(){pricing.push({name:'',price:''});renderPricing();};
+window.saveOffers=async function(){await fbSet('offers',offers);await fbSet('pricing',pricing);showToast('✅ Saved!');};
+
+/* ══════════════════════════════════════
+   SERVICES
+══════════════════════════════════════ */
+function renderServices(){
+  document.getElementById('svc-list').innerHTML=services.map((s,i)=>`<div class="row-item"><input class="f-inp ri-main" value="${s.name||''}" placeholder="Service 🌍" oninput="services[${i}].name=this.value"/><select class="f-inp f-sel ri-sub" onchange="services[${i}].status=this.value"><option value="active" ${s.status==='active'?'selected':''}>Active</option><option value="hidden" ${s.status==='hidden'?'selected':''}>Hidden</option></select><button class="ri-rm" onclick="services.splice(${i},1);renderServices()"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+}
+window.addSvc=function(){services.push({name:'New Service',status:'active'});renderServices();};
+window.saveServices=async function(){await fbSet('services',services);refreshDash();showToast('✅ Services saved!');};
+
+/* ══════════════════════════════════════
+   IMAGE UPLOAD
+══════════════════════════════════════ */
+window.uploadImg=function(input,infoKey,imgElId,boxId){
+  const file=input.files[0];if(!file)return;
+  if(file.size>6*1024*1024){showToast('❌ Image too large (max 6MB)');return;}
+  const r=new FileReader();
+  r.onload=async e=>{
+    info[infoKey]=e.target.result;
+    await fbSet('info',info);
+    const img=document.getElementById(imgElId);img.src=e.target.result;img.classList.add('loaded');
+    document.getElementById(boxId).querySelector('span').style.display='none';
+    if(infoKey==='logoImg'){const li=document.getElementById('sb-logo-img');if(li)li.src=e.target.result;}
+    showToast('✅ Image uploaded!');
+  };
+  r.readAsDataURL(file);
+};
+window.clearImg=async function(infoKey,imgElId,boxId){
+  info[infoKey]='';await fbSet('info',info);
+  const img=document.getElementById(imgElId);img.src='';img.classList.remove('loaded');
+  document.getElementById(boxId).querySelector('span').style.display='';
+  showToast('🗑️ Cleared');
+};
+function loadHeroImages(){
+  [{k:'introImg',i:'intro-preview-img',b:'intro-preview-box'},{k:'logoImg',i:'logo-preview-img',b:'logo-preview-box'}].forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
+  document.getElementById('s-dest').value=info.statDest||150;
+  document.getElementById('s-fleet').value=info.statFleet||42;
+  document.getElementById('s-mem').value=info.statMembers||12;
+  document.getElementById('s-years').value=info.statYears||30;
+}
+window.saveHero=async function(){
+  Object.assign(info,{statDest:+document.getElementById('s-dest').value,statFleet:+document.getElementById('s-fleet').value,statMembers:+document.getElementById('s-mem').value,statYears:+document.getElementById('s-years').value});
+  await fbSet('info',info);showToast('✅ Stats saved!');
+};
+
+/* ══════════════════════════════════════
+   HERO SETTINGS
+══════════════════════════════════════ */
+function loadHeroSettings(){
+  document.getElementById('hs-title').value=info.heroTitle||'';
+  document.getElementById('hs-subtitle').value=info.heroSubtitle||'';
+  document.getElementById('hs-tag').value=info.heroTag||'';
+  document.getElementById('hs-font').value=info.heroFont||'';
+  document.getElementById('hs-size').value=info.heroFontSize||'';
+  document.getElementById('hs-weight').value=info.heroFontWeight||'';
+  const col=info.heroColor||'#FFFFFF';
+  document.getElementById('hs-color').value=col;
+  document.getElementById('hs-color-hex').value=col;
+  document.getElementById('hs-ls').value=info.heroLetterSpacing||'';
+  document.getElementById('hs-align').value=info.heroTextAlign||'';
+  [{k:'heroImgDark',i:'hdark-img',b:'hdark-box'},{k:'heroImgLight',i:'hlight-img',b:'hlight-box'}].forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
+  previewTitle();previewSub();previewTypo();
+  document.getElementById('prev-tag').textContent=info.heroTag||'ELEVATING EVERY JOURNEY';
+}
+
+window.previewTitle=function(){document.getElementById('prev-title').innerHTML=document.getElementById('hs-title').value||'Beyond Every Horizon<br/><em style="color:var(--gold);">Your Journey</em>';};
+window.previewSub=function(){document.getElementById('prev-sub').textContent=document.getElementById('hs-subtitle').value||'Experience the world through the lens of pure luxury.';};
+window.previewTypo=function(){
+  const el=document.getElementById('prev-title');
+  el.style.fontFamily=document.getElementById('hs-font').value||'';
+  el.style.fontSize=document.getElementById('hs-size').value||'';
+  el.style.fontWeight=document.getElementById('hs-weight').value||'';
+  const col=document.getElementById('hs-color').value;
+  document.getElementById('hs-color-hex').value=col;
+  el.style.letterSpacing=document.getElementById('hs-ls').value||'';
+  el.style.textAlign=document.getElementById('hs-align').value||'';
+};
+window.saveHeroSettings=async function(){
+  Object.assign(info,{heroTitle:document.getElementById('hs-title').value.trim(),heroSubtitle:document.getElementById('hs-subtitle').value.trim(),heroTag:document.getElementById('hs-tag').value.trim(),heroFont:document.getElementById('hs-font').value,heroFontSize:document.getElementById('hs-size').value,heroFontWeight:document.getElementById('hs-weight').value,heroColor:document.getElementById('hs-color').value,heroLetterSpacing:document.getElementById('hs-ls').value,heroTextAlign:document.getElementById('hs-align').value});
+  await fbSet('info',info);showToast('✅ Hero saved — reload site to see!');
+};
+window.resetHeroSettings=async function(){
+  ['heroTitle','heroSubtitle','heroFont','heroFontSize','heroFontWeight','heroColor','heroLetterSpacing','heroTextAlign'].forEach(k=>info[k]='');
+  info.heroTag='ELEVATING EVERY JOURNEY';
+  await fbSet('info',info);loadHeroSettings();showToast('🔄 Reset to default');
+};
+
+/* ══════════════════════════════════════
+   GALLERY
+══════════════════════════════════════ */
+window.addGalleryImgs=function(input){
+  const files=[...input.files];
+  files.forEach(file=>{
+    if(file.size>4*1024*1024){showToast('❌ '+file.name+' too large');return;}
+    const r=new FileReader();
+    r.onload=e=>{gallery.push(e.target.result);renderGalleryGrid();};
+    r.readAsDataURL(file);
+  });
+};
+function renderGalleryGrid(){
+  const grid=document.getElementById('gal-grid');
+  const addBtn=`<button class="img-add-btn"><span style="pointer-events:none;">+</span><input type="file" accept="image/*" multiple onchange="addGalleryImgs(this)"/></button>`;
+  grid.innerHTML=gallery.filter(g=>!!g).map((g,i)=>`<div class="img-sq"><img src="${g}"/><button class="img-sq-rm" onclick="removeGalImg(${i})">✕</button></div>`).join('')+addBtn;
+}
+window.removeGalImg=function(i){gallery.splice(i,1);renderGalleryGrid();};
+window.saveGallery=async function(){await fbSet('gallery',gallery);refreshDash();showToast('✅ Gallery saved!');};
+
+/* ══════════════════════════════════════
+   INFO
+══════════════════════════════════════ */
+function loadInfo(){
+  document.getElementById('i-phone').value=info.phone||'';
+  document.getElementById('i-wa').value=info.wa||'';
+  document.getElementById('i-email').value=info.email||'';
+  document.getElementById('i-loc').value=info.location||'';
+  document.getElementById('i-ig').value=info.instagram||'';
+  document.getElementById('i-sc').value=info.snapchat||'';
+  document.getElementById('i-tt').value=info.tiktok||'';
+  document.getElementById('i-title').value=info.seoTitle||'';
+  document.getElementById('i-meta').value=info.seoMeta||'';
+}
+window.saveInfo=async function(){
+  Object.assign(info,{phone:document.getElementById('i-phone').value,wa:document.getElementById('i-wa').value,email:document.getElementById('i-email').value,location:document.getElementById('i-loc').value,instagram:document.getElementById('i-ig').value,snapchat:document.getElementById('i-sc').value,tiktok:document.getElementById('i-tt').value,seoTitle:document.getElementById('i-title').value,seoMeta:document.getElementById('i-meta').value});
+  await fbSet('info',info);showToast('✅ Info saved!');
+};
+
+/* ══════════════════════════════════════
+   SETTINGS
+══════════════════════════════════════ */
+function loadSettings(){
+  document.getElementById('set-intro').checked=settings.intro!==false;
+  document.getElementById('set-wa').checked=settings.wa!==false;
+  document.getElementById('set-maint').checked=!!settings.maint;
+  const cfg=getFbConfig()||{};
+  document.getElementById('set-fb-url').value=cfg.databaseURL||'';
+  document.getElementById('set-fb-apikey').value=cfg.apiKey||'';
+  document.getElementById('set-fb-projectid').value=cfg.projectId||'';
+}
+window.saveSettings=async function(){
+  settings={intro:document.getElementById('set-intro').checked,wa:document.getElementById('set-wa').checked,maint:document.getElementById('set-maint').checked};
+  await fbSet('settings',settings);showToast('✅ Settings saved!');
+};
+window.changePass=function(){
+  const cur=document.getElementById('cp-cur').value;
+  const nw=document.getElementById('cp-new').value;
+  const cf=document.getElementById('cp-conf').value;
+  if(cur!==CREDS.pass){showToast('❌ Current password wrong');return;}
+  if(nw!==cf||nw.length<6){showToast('❌ Passwords mismatch / too short');return;}
+  CREDS.pass=nw;LS.set('ge_pass',nw);showToast('✅ Password updated!');
+  ['cp-cur','cp-new','cp-conf'].forEach(id=>document.getElementById(id).value='');
+};
+window.updateFirebaseConfig=async function(){
+  const url=document.getElementById('set-fb-url').value.trim();
+  const apiKey=document.getElementById('set-fb-apikey').value.trim();
+  const projectId=document.getElementById('set-fb-projectid').value.trim();
+  if(!url||!apiKey||!projectId){showToast('❌ Fill all fields');return;}
+  const cfg={apiKey,databaseURL:url,projectId,
+    authDomain:projectId+'.firebaseapp.com',
+    storageBucket:projectId+'.appspot.com',
+    messagingSenderId:'000000000000',
+    appId:'1:000000000000:web:000000000000000000000000'};
+  const ok=await initFirebase(cfg);
+  if(ok){showToast('✅ Firebase updated!');}else{showToast('❌ Could not connect');}
+};
+
+/* ══════════════════════════════════════
+   SAVE ALL
+══════════════════════════════════════ */
+window.saveAll=async function(){
+  await fbSet('packages',packages);
+  await fbSet('offers',offers);
+  await fbSet('pricing',pricing);
+  await fbSet('services',services);
+  await fbSet('gallery',gallery);
+  await fbSet('info',info);
+  await fbSet('settings',settings);
+  showToast('✅ All saved to Firebase!');
+};
+
+/* ══════════════════════════════════════
+   RESET
+══════════════════════════════════════ */
+window.confirmReset=function(){confirmAction('Reset All Data','Delete ALL data from Firebase? This CANNOT be undone.',doReset);};
+async function doReset(){
+  if(firebaseMode&&db){for(const p of['packages','offers','pricing','services','gallery','info','settings']){await fbRemove(p);}}
+  packages=[];offers=[];pricing=defPricing();services=defSvc();gallery=[];info=defInfo();settings={intro:true,wa:true,maint:false};
+  refreshDash();renderGalleryGrid();loadInfo();loadSettings();loadHeroImages();
+  showToast('🗑️ All data reset');
+}
+
+/* ══════════════════════════════════════
+   CONFIRM MODAL
+══════════════════════════════════════ */
+window.confirmAction=function(title,msg,cb){
+  document.getElementById('cm-title').textContent=title;
+  document.getElementById('cm-msg').textContent=msg;
+  document.getElementById('cm-ok').onclick=()=>{closeConfirm();cb&&cb();};
+  document.getElementById('confirm-modal').classList.add('open');
+};
+window.closeConfirm=function(){document.getElementById('confirm-modal').classList.remove('open');};
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3000);
+}
+window.showToast=showToast;
+
 </script>
 </body>
 </html>
