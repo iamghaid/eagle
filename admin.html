@@ -1044,7 +1044,7 @@ window.handlePkgImg=function(input){
   r.onload=e=>{pkgImgData=e.target.result;const img=document.getElementById('pk-img-el');img.src=pkgImgData;img.classList.add('loaded');document.getElementById('pk-img-preview').querySelector('span').style.display='none';};
   r.readAsDataURL(file);
 };
-window.clearPkgImg=function(){pkgImgData='';const img=document.getElementById('pk-img-el');img.src='';img.classList.remove('loaded');document.getElementById('pk-img-preview').querySelector('span').style.display='';};
+window.clearPkgImg=function(){ pkgImgData='';const img=document.getElementById('pk-img-el');img.src='';img.classList.remove('loaded');document.getElementById('pk-img-preview').querySelector('span').style.display='';};
 
 window.savePkg=async function(){
   const p={
