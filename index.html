@@ -906,13 +906,14 @@ window.setLang=function(l){
 ══════════════════════════════════════ */
 var theme = localStorage.getItem('ge_theme')||'dark';
 var HERO_DARK_DEFAULT='eagle.jpeg';
+var HERO_LIGHT_DEFAULT='eagle whait.jpeg';
 
 function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
   localStorage.setItem('ge_theme',th);
   var heroImg=document.getElementById('hero-img');
   if(heroImg&&siteData.info){
-    var src=th==='light'&&siteData.info.heroImgLight?siteData.info.heroImgLight:(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
+    var src=th==='light'?(siteData.info.heroImgLight||HERO_LIGHT_DEFAULT):(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
     if(heroImg.src!==src){
       gsap.to(heroImg,{opacity:0,duration:.35,onComplete:function(){
         heroImg.src=src;
@@ -969,7 +970,7 @@ function applyInfo(){
   ['ct-tt','ft-tt'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.tiktok||'#';});
   ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=wa;});
   var heroEl=document.getElementById('hero-img');
-  if(heroEl){var src=theme==='light'&&info.heroImgLight?info.heroImgLight:(info.heroImgDark||info.heroImg||'');if(src)heroEl.src=src;}
+  if(heroEl){var src=theme==='light'?(info.heroImgLight||HERO_LIGHT_DEFAULT):(info.heroImgDark||info.heroImg||HERO_DARK_DEFAULT);if(src)heroEl.src=src;}
   if(info.introImg&&info.introImg.trim())document.getElementById('ldr-eagle-img').src=info.introImg;
   if(info.logoImg&&info.logoImg.trim()){
     ['nav-logo-img','ft-logo-img'].forEach(function(id){var el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});
