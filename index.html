@@ -912,8 +912,9 @@ function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
   localStorage.setItem('ge_theme',th);
   var heroImg=document.getElementById('hero-img');
-  if(heroImg&&siteData.info){
-    var src=th==='light'?(siteData.info.heroImgLight||HERO_LIGHT_DEFAULT):(siteData.info.heroImgDark||siteData.info.heroImg||HERO_DARK_DEFAULT);
+  if(heroImg){
+    var info=siteData.info||{};
+    var src=th==='light'?(info.heroImgLight||HERO_LIGHT_DEFAULT):(info.heroImgDark||info.heroImg||HERO_DARK_DEFAULT);
     if(heroImg.src!==src){
       gsap.to(heroImg,{opacity:0,duration:.35,onComplete:function(){
         heroImg.src=src;
