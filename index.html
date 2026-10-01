@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-theme="dark">
 <head>
+<script src="portfolio-presentation.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Global Eagle Travel | Rise Above. Aim High.</title>
@@ -859,11 +860,12 @@ var T={
   }
 };
 
-var lang='en';
+var lang=window.PortfolioPresentation?.language||localStorage.getItem('ge_language')||'en';
 function t(k){var p=k.split('.');var v=T[lang];for(var i=0;i<p.length;i++){if(v&&v[p[i]]!=null)v=v[p[i]];else return k;}return v;}
 
 window.setLang=function(l){
   lang=l;
+  try{localStorage.setItem("ge_language",l);}catch{}
   var html=document.documentElement;
   // Apply direction + font IMMEDIATELY before anything else
   html.lang=l;
@@ -1299,6 +1301,11 @@ window.sendWA=function(){
   var msg='✈ New Inquiry — Global Eagle Travel\n\nName: '+f1+' '+document.getElementById('f2').value+'\nPhone: '+f4+'\nEmail: '+document.getElementById('f3').value+'\nService: '+document.getElementById('f5').value+'\nMessage: '+document.getElementById('f6').value;
   window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
 };
+setLang(lang);
+window.PortfolioPresentation?.subscribe(p=>{
+  if(p.language)setLang(p.language);
+  if(p.theme){theme=p.theme;applyTheme(theme);}
+});
 </script>
 </body>
 </html>
