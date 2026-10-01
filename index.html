@@ -440,6 +440,17 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   .step-title{font-size:.75rem;}
 }
 </style>
+<style>
+.developer-credit{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:18px 12px;margin-top:16px;border-top:1px solid currentColor;font-size:13px;line-height:1.8;color:inherit;text-align:center;opacity:.9}
+.developer-credit nav{display:flex;align-items:center;justify-content:center;gap:12px;margin:0;padding:0;width:auto;overflow:visible}
+.developer-credit a{color:inherit!important;text-decoration:underline;text-underline-offset:4px;font:inherit}
+.developer-credit a:hover{opacity:.75}
+.developer-credit a:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:2px}
+.developer-credit-en{display:none}
+html[lang="en"] .developer-credit-ar{display:none}
+html[lang="en"] .developer-credit-en{display:inline}
+@media(max-width:600px){.developer-credit{flex-direction:column;gap:4px}}
+</style>
 </head>
 <body>
 
@@ -707,6 +718,7 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
       <a id="ft-wa-link" href="#" target="_blank" style="font-size:.68rem;color:var(--txt3);display:flex;align-items:center;gap:6px;transition:color .25s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--txt3)'"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="ft.wa-link">WhatsApp Us</span></a>
     </div>
   </div>
+<div class="developer-credit" aria-label="Developer credits"><span class="developer-credit-ar">تطوير غيد عبدالكريم</span><span class="developer-credit-en">Developed by Gheid Abdulkarim</span><nav aria-label="Developer profiles"><a href="https://github.com/iamghaid" target="_blank" rel="noopener noreferrer">GitHub</a><span aria-hidden="true">·</span><a href="https://www.linkedin.com/in/gheid-abdulkarim-6567872ab" target="_blank" rel="noopener noreferrer">LinkedIn</a></nav></div>
 </footer>
 
 <!-- WA Float -->
