@@ -2,6 +2,9 @@
 <html lang="en" dir="ltr" data-theme="dark">
 <head>
 <script src="portfolio-presentation.js"></script>
+<script src="hero-presentation.js"></script>
+<link rel="icon" type="image/png" href="assets/eagle-icon.png"/>
+<link rel="apple-touch-icon" href="assets/eagle-icon.png"/>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Global Eagle Travel | Rise Above. Aim High.</title>
@@ -440,6 +443,26 @@ footer{background:var(--bg0);padding:80px var(--px) 30px;border-top:1px solid va
   .step-num{width:18px;height:18px;font-size:.5rem;}
   .step-title{font-size:.75rem;}
 }
+
+/* Language-aware hero composition: copy and eagle always occupy opposite sides. */
+.hero-inner{--hero-copy-width:52%;}
+.hero-h1{max-width:var(--hero-copy-width);}
+.hero-p{max-width:min(480px,var(--hero-copy-width));color:var(--txt);}
+[dir="rtl"] .hero-h1,[dir="rtl"] .hero-p{margin-inline-start:0;margin-inline-end:auto;}
+.hero-bg::after{background:linear-gradient(90deg,rgba(4,2,1,.88) 0%,rgba(4,2,1,.55) 36%,rgba(4,2,1,.12) 68%,transparent 100%);}
+[dir="rtl"] .hero-bg::after{background:linear-gradient(270deg,rgba(4,2,1,.88) 0%,rgba(4,2,1,.55) 36%,rgba(4,2,1,.12) 68%,transparent 100%);}
+[data-theme="light"] .hero-bg::after,[data-theme="light"] .hero-bg::before{background:none;}
+[data-theme="light"] .hero-stats{background:none;}
+[data-theme="light"] .hero-h1,[data-theme="light"] .hero-p{text-shadow:0 1px 3px rgba(255,255,255,.55);}
+[data-theme="light"] .hero-h1 em{color:#6B4510;}
+[data-theme="light"] .stat-val,[data-theme="light"] .stat-lbl{color:#241807;text-shadow:0 1px 3px rgba(255,255,255,.7);}
+.nav-logo-ring,.ft-logo-ring{background:transparent;border:0;overflow:visible;}
+.nav-logo-ring img,.ft-logo-ring img{object-fit:contain;}
+[data-theme="light"] .nav-logo-ring img,[data-theme="light"] .ft-logo-ring img{filter:brightness(.72);}
+@media(max-width:900px){.hero-inner{--hero-copy-width:64%;}.hero-h1{font-size:clamp(2.8rem,7vw,5rem);}}
+@media(max-width:580px){.hero-inner{--hero-copy-width:100%;}.hero-bg img{object-position:68% center;opacity:.5;}[dir="rtl"] .hero-bg img{object-position:32% center;}.hero-h1{font-size:clamp(2.2rem,9vw,3.2rem);}.hero-p{max-width:100%;}}
+@media(max-width:580px){[data-theme="light"] .hero-bg img{opacity:1;}}
+
 </style>
 <style>
 .developer-credit{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:22px 12px;margin-top:16px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent);font-size:13px;font-weight:500;line-height:1.8;color:inherit;text-align:center}
@@ -486,7 +509,7 @@ html[lang="en"] .developer-credit-en{display:inline}
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
-    <div class="nav-logo-ring"><img id="nav-logo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/></div>
+    <div class="nav-logo-ring"><img id="nav-logo-img" src="assets/eagle-icon.png" alt="" onerror="this.parentElement.style.display='none'"/></div>
     <div class="nav-logo-wordmark">
       <span class="nav-logo-name">Global Eagle</span>
       <span class="nav-logo-tagline" data-i18n="nav.tagline">Travel &amp; Tourism</span>
@@ -524,7 +547,7 @@ html[lang="en"] .developer-credit-en{display:inline}
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-bg"><img id="hero-img" src="eagle.jpeg" alt="Hero"/></div>
+  <div class="hero-bg"><img id="hero-img" src="assets/hero-en-dark.jpg" alt="" fetchpriority="high"/></div>
   <canvas id="hero-canvas"></canvas>
   <div class="hero-inner">
     <div class="hero-eyebrow" id="h-eyebrow"><div class="hero-ey-line"></div><div class="hero-ey-text" data-i18n="hero.tag">ELEVATING EVERY JOURNEY</div></div>
@@ -681,7 +704,7 @@ html[lang="en"] .developer-credit-en{display:inline}
     <div class="ft-grid">
       <div>
         <div class="ft-logo">
-          <div class="ft-logo-ring"><img id="ft-logo-img" src="" alt="" onerror="this.parentElement.style.display='none'"/></div>
+          <div class="ft-logo-ring"><img id="ft-logo-img" src="assets/eagle-icon.png" alt="" onerror="this.parentElement.style.display='none'"/></div>
           <span class="ft-logo-name">Global Eagle</span>
         </div>
         <p class="ft-desc" data-i18n="ft.desc">Your trusted partner in premium travel & tourism.</p>
@@ -803,8 +826,9 @@ async function loadSiteData(){
   var ok = initFirebaseApp(FIREBASE_CONFIG);
   if(ok){
       try{
-        var snap = await db.ref('/').once('value');
-        var data = snap.val()||{};
+        var keys=['packages','offers','services','gallery','info','settings'];
+        var snapshots=await Promise.all(keys.map(function(key){return db.ref(key).once('value');}));
+        var data={};snapshots.forEach(function(snapshot,i){data[keys[i]]=snapshot.val();});
         siteData.packages = toArr(data.packages);
         siteData.offers   = toArr(data.offers);
         siteData.services = toArr(data.services).length ? toArr(data.services) : defaultSvc();
@@ -826,6 +850,8 @@ async function loadSiteData(){
         db.ref('services').on('value', function(s){
           siteData.services=toArr(s.val());buildSvc();buildMarquee();
         });
+        db.ref('gallery').on('value',function(s){siteData.gallery=toArr(s.val());buildGal();});
+        db.ref('settings').on('value',function(s){siteData.settings=s.val()||{intro:true,wa:true,maint:false};document.getElementById('wa-float').style.display=siteData.settings.wa===false?'none':'';});
         return;
       }catch(e){
         console.warn('Firebase read failed, fallback to localStorage',e);
@@ -870,6 +896,7 @@ window.setLang=function(l){
   // Apply direction + font IMMEDIATELY before anything else
   html.lang=l;
   html.dir=l==='ar'?'rtl':'ltr';
+  updateHeroImage();
   // Force font change instantly - no transition
   var fontBody=l==='ar'?"'IBM Plex Sans Arabic',sans-serif":"'Poppins',sans-serif";
   var fontDisplay=l==='ar'?"'Amiri',serif":"'Cinzel',serif";
@@ -911,6 +938,7 @@ window.setLang=function(l){
     procData.forEach(function(d,i){d.title=t('proc.c'+i+'t');d.desc=t('proc.c'+i+'d');});
     goToStep(currentStep,true);
     updateThemePill(theme);
+    _applyHeroTypo(theme);
     // Show all rv elements
     document.querySelectorAll('.rv:not(.on)').forEach(function(el){
       el.classList.add('on');
@@ -922,23 +950,30 @@ window.setLang=function(l){
    THEME
 ══════════════════════════════════════ */
 var theme = localStorage.getItem('ge_theme')||'dark';
-var HERO_DARK_DEFAULT='eagle.jpeg';
-var HERO_LIGHT_DEFAULT='eagle whait.jpeg';
+var heroRequest=0;
+function updateHeroImage(){
+  var heroImg=document.getElementById('hero-img');
+  if(!heroImg)return;
+  var src=EaglePresentation.heroSource(siteData.info,lang,theme);
+  var request=++heroRequest;
+  if(heroImg.getAttribute('src')===src)return;
+  var preload=new Image();
+  preload.onload=function(){
+    if(request!==heroRequest)return;
+    gsap.killTweensOf(heroImg,'opacity');
+    heroImg.src=src;
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      gsap.fromTo(heroImg,{opacity:.7},{opacity:1,duration:.45});
+    }else{heroImg.style.opacity='1';}
+  };
+  preload.onerror=function(){console.warn('Hero image unavailable');};
+  preload.src=src;
+}
 
 function applyTheme(th){
   document.documentElement.setAttribute('data-theme',th);
   localStorage.setItem('ge_theme',th);
-  var heroImg=document.getElementById('hero-img');
-  if(heroImg){
-    var info=siteData.info||{};
-    var src=th==='light'?(info.heroImgLight||HERO_LIGHT_DEFAULT):(info.heroImgDark||info.heroImg||HERO_DARK_DEFAULT);
-    if(heroImg.src!==src){
-      gsap.to(heroImg,{opacity:0,duration:.35,onComplete:function(){
-        heroImg.src=src;
-        heroImg.onload=function(){gsap.to(heroImg,{opacity:1,duration:.55});};
-      }});
-    }
-  }
+  updateHeroImage();
   _applyHeroTypo(th);
   requestAnimationFrame(function(){updateThemePill(th);});
 }
@@ -948,14 +983,17 @@ function _applyHeroTypo(th){
   var h1=document.getElementById('h-h1');
   var hp=document.getElementById('h-p');
   var ht=document.querySelector('.hero-ey-text');
-  if(info.heroTitle&&h1)h1.innerHTML=info.heroTitle;
-  if(info.heroSubtitle&&hp)hp.textContent=info.heroSubtitle;
-  if(info.heroTag&&ht)ht.textContent=info.heroTag;
+  var title=lang==='ar'?info.heroTitleAr:(info.heroTitleEn||info.heroTitle);
+  var subtitle=lang==='ar'?info.heroSubtitleAr:(info.heroSubtitleEn||info.heroSubtitle);
+  var tag=lang==='ar'?info.heroTagAr:(info.heroTagEn||info.heroTag);
+  if(h1)h1.innerHTML=title?title.replace(/^\s*<br\s*\/?\s*>/i,'').replace(/<\/br>/gi,'<br/>'):t('hero.h1');
+  if(hp)hp.textContent=subtitle||t('hero.desc');
+  if(ht)ht.textContent=tag||t('hero.tag');
   if(h1){
     if(info.heroFont)h1.style.fontFamily=info.heroFont;
     if(info.heroFontSize)h1.style.fontSize=info.heroFontSize;
     if(info.heroFontWeight)h1.style.fontWeight=info.heroFontWeight;
-    if(info.heroColor)h1.style.color=info.heroColor;
+    h1.style.color=th==='light'?(info.heroColorLight||''):(info.heroColorDark||info.heroColor||'');
     if(info.heroLetterSpacing)h1.style.letterSpacing=info.heroLetterSpacing;
     if(info.heroTextAlign)h1.style.textAlign=info.heroTextAlign;
   }
@@ -987,11 +1025,10 @@ function applyInfo(){
   ['ct-sc','ft-sc'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.snapchat||'#';});
   ['ct-tt','ft-tt'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=info.tiktok||'#';});
   ['ct-wa','ft-wa','wa-float','ft-wa-link'].forEach(function(id){var el=document.getElementById(id);if(el)el.href=wa;});
-  var heroEl=document.getElementById('hero-img');
-  if(heroEl){var src=theme==='light'?(info.heroImgLight||HERO_LIGHT_DEFAULT):(info.heroImgDark||info.heroImg||HERO_DARK_DEFAULT);if(src)heroEl.src=src;}
+  updateHeroImage();
   if(info.introImg&&info.introImg.trim())document.getElementById('ldr-eagle-img').src=info.introImg;
-  if(info.logoImg&&info.logoImg.trim()){
-    ['nav-logo-img','ft-logo-img'].forEach(function(id){var el=document.getElementById(id);if(el){el.src=info.logoImg;el.parentElement.style.display='';}});
+  if(info.brandLogoImg&&info.brandLogoImg.trim()){
+    ['nav-logo-img','ft-logo-img'].forEach(function(id){var el=document.getElementById(id);if(el){el.src=info.brandLogoImg;el.parentElement.style.display='';}});
   }
   if(info.seoTitle)document.title=info.seoTitle;
 }
@@ -1102,7 +1139,7 @@ function buildSvc(){
 
 function buildGal(){
   var valid=(siteData.gallery||[]).filter(function(u){return u&&u.trim();});
-  if(!valid.length)return;
+  if(!valid.length){document.getElementById('gallery').style.display='none';document.getElementById('gal-grid').innerHTML='';return;}
   document.getElementById('gallery').style.display='block';
   document.getElementById('gal-grid').innerHTML=valid.map(function(u){
     return '<img class="gal-img rv" src="'+u+'" loading="lazy" onerror="this.style.display=\'none\'">';

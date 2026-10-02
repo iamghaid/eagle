@@ -4,10 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Global Eagle — Admin</title>
+<link rel="icon" href="assets/eagle-icon.png"/>
+<script src="admin-access.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -411,16 +414,9 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
   <div class="login-box">
     <div class="lb-logo">Global Eagle</div>
     <div class="lb-sub">Admin Dashboard</div>
-    <div class="lb-field">
-      <label class="lb-label">Username</label>
-      <input class="lb-input" id="l-user" type="text" placeholder="admin" autocomplete="off"/>
-    </div>
-    <div class="lb-field">
-      <label class="lb-label">Password</label>
-      <input class="lb-input" id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <button class="lb-btn" onclick="doLogin()">Enter Dashboard</button>
-    <div class="lb-err" id="l-err">❌ Invalid credentials</div>
+    <p style="color:var(--txt2);font-size:.8rem;line-height:1.8;margin:24px 0;">Sign in with the authorized Google account to manage your website.</p>
+    <button class="lb-btn" id="login-btn" onclick="doLogin()"><i class="fa-brands fa-google"></i> Sign in with Google</button>
+    <div class="lb-err" id="l-err" role="alert"></div>
     <div class="lb-firebase-badge"><i class="fa-solid fa-fire"></i> <span id="lb-fb-mode">Connected to Firebase</span></div>
   </div>
 </div>
@@ -598,9 +594,12 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
         <div class="s-card">
           <div class="s-title"><i class="fa-solid fa-heading"></i> Hero Text</div>
           <div class="form-grid">
-            <div class="f-grp fg-full"><label class="f-lbl">Main Title <span style="color:var(--txt3);font-weight:300;text-transform:none;letter-spacing:0;">(use &lt;br/&gt; and &lt;em&gt;word&lt;/em&gt;)</span></label><textarea class="f-inp f-ta" id="hs-title" style="min-height:65px;" oninput="previewTitle()" placeholder="Beyond Every Horizon&lt;br/&gt;&lt;em&gt;Your Journey&lt;/em&gt;"></textarea></div>
-            <div class="f-grp fg-full"><label class="f-lbl">Subtitle</label><textarea class="f-inp f-ta" id="hs-subtitle" style="min-height:55px;" oninput="previewSub()"></textarea></div>
-            <div class="f-grp"><label class="f-lbl">Eyebrow Tag</label><input class="f-inp" id="hs-tag" type="text" oninput="document.getElementById('prev-tag').textContent=this.value" placeholder="ELEVATING EVERY JOURNEY"/></div>
+            <div class="f-grp fg-full"><label class="f-lbl">English Main Title <span style="color:var(--txt3);font-weight:300;text-transform:none;letter-spacing:0;">(use &lt;br/&gt; and &lt;em&gt;word&lt;/em&gt;)</span></label><textarea class="f-inp f-ta" id="hs-title" style="min-height:65px;" oninput="previewTitle()" placeholder="Beyond Every Horizon&lt;br/&gt;&lt;em&gt;Your Journey&lt;/em&gt;"></textarea></div>
+            <div class="f-grp fg-full"><label class="f-lbl">English Subtitle</label><textarea class="f-inp f-ta" id="hs-subtitle" style="min-height:55px;" oninput="previewSub()"></textarea></div>
+            <div class="f-grp"><label class="f-lbl">English Eyebrow Tag</label><input class="f-inp" id="hs-tag" type="text" oninput="document.getElementById('prev-tag').textContent=this.value" placeholder="ELEVATING EVERY JOURNEY"/></div>
+            <div class="f-grp fg-full"><label class="f-lbl" for="hs-title-ar">Arabic Main Title</label><textarea class="f-inp f-ta" id="hs-title-ar" dir="rtl" placeholder="عنوان الصفحة بالعربية (اتركيه فارغًا للنص الافتراضي)"></textarea></div>
+            <div class="f-grp fg-full"><label class="f-lbl" for="hs-subtitle-ar">Arabic Subtitle</label><textarea class="f-inp f-ta" id="hs-subtitle-ar" dir="rtl"></textarea></div>
+            <div class="f-grp"><label class="f-lbl" for="hs-tag-ar">Arabic Eyebrow Tag</label><input class="f-inp" id="hs-tag-ar" dir="rtl"/></div>
           </div>
         </div>
         <div class="s-card">
@@ -609,16 +608,18 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
             <div class="f-grp"><label class="f-lbl">Font Family</label><select class="f-inp f-sel" id="hs-font" onchange="previewTypo()"><option value="">Default (Cinzel)</option><option value="'Cinzel',serif">Cinzel</option><option value="'Poppins',sans-serif">Poppins</option><option value="'Amiri',serif">Amiri</option><option value="'IBM Plex Sans Arabic',sans-serif">IBM Plex Arabic</option></select></div>
             <div class="f-grp"><label class="f-lbl">Font Size</label><select class="f-inp f-sel" id="hs-size" onchange="previewTypo()"><option value="">Default</option><option value="3rem">Small</option><option value="4rem">Medium</option><option value="5rem">Large</option><option value="6rem">Extra Large</option></select></div>
             <div class="f-grp"><label class="f-lbl">Font Weight</label><select class="f-inp f-sel" id="hs-weight" onchange="previewTypo()"><option value="">Default</option><option value="300">Light</option><option value="400">Regular</option><option value="600">Semi Bold</option><option value="700">Bold</option><option value="900">Black</option></select></div>
-            <div class="f-grp"><label class="f-lbl">Text Color</label><div style="display:flex;gap:8px;align-items:center;"><input class="f-inp" id="hs-color" type="color" value="#FFFFFF" style="padding:5px;width:54px;height:40px;flex-shrink:0;" onchange="previewTypo()"/><input class="f-inp" id="hs-color-hex" type="text" placeholder="#FFFFFF" style="flex:1;" oninput="document.getElementById('hs-color').value=this.value;previewTypo()"/></div></div>
+            <div class="f-grp"><label class="f-lbl">Dark Theme Text Color</label><div style="display:flex;gap:8px;align-items:center;"><input class="f-inp" id="hs-color" type="color" value="#FFFFFF" style="padding:5px;width:54px;height:40px;flex-shrink:0;" onchange="previewTypo()"/><input class="f-inp" id="hs-color-hex" type="text" placeholder="#FFFFFF" style="flex:1;" oninput="document.getElementById('hs-color').value=this.value;previewTypo()"/></div></div>
             <div class="f-grp"><label class="f-lbl">Letter Spacing</label><select class="f-inp f-sel" id="hs-ls" onchange="previewTypo()"><option value="">Default</option><option value="-.03em">Tight</option><option value="-.01em">Normal</option><option value=".04em">Airy</option><option value=".1em">Wide</option></select></div>
             <div class="f-grp"><label class="f-lbl">Alignment</label><select class="f-inp f-sel" id="hs-align" onchange="previewTypo()"><option value="">Default (left)</option><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div>
           </div>
         </div>
         <div class="s-card">
-          <div class="s-title"><i class="fa-solid fa-circle-half-stroke"></i> Background Images by Theme</div>
+          <div class="s-title"><i class="fa-solid fa-circle-half-stroke"></i> Background Images by Language &amp; Theme</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
-            <div><label class="f-lbl" style="margin-bottom:10px;">🌙 Dark Theme</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" onchange="uploadImg(this,'heroImgDark','hdark-img','hdark-box')"/><div class="img-drop-ico" style="font-size:1.4rem;"><i class="fa-solid fa-moon"></i></div><div class="img-drop-txt" style="font-size:.72rem;">Upload Dark Hero</div></div><div class="img-preview-box" id="hdark-box" style="margin-top:8px;aspect-ratio:16/9;"><span>No image</span><img id="hdark-img" alt=""/><button class="img-clear" onclick="clearImg('heroImgDark','hdark-img','hdark-box')">&times;</button></div></div>
-            <div><label class="f-lbl" style="margin-bottom:10px;">☀️ Light Theme</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" onchange="uploadImg(this,'heroImgLight','hlight-img','hlight-box')"/><div class="img-drop-ico" style="font-size:1.4rem;"><i class="fa-solid fa-sun"></i></div><div class="img-drop-txt" style="font-size:.72rem;">Upload Light Hero</div></div><div class="img-preview-box" id="hlight-box" style="margin-top:8px;aspect-ratio:16/9;"><span>No image</span><img id="hlight-img" alt=""/><button class="img-clear" onclick="clearImg('heroImgLight','hlight-img','hlight-box')">&times;</button></div></div>
+            <div><label class="f-lbl" style="margin-bottom:10px;">English · Dark</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" aria-label="Upload English · Dark hero" onchange="uploadImg(this,'heroImgEnDark','h-en-dark-img','h-en-dark-box')"/><div class="img-drop-txt">Replace image</div></div><div class="img-preview-box" id="h-en-dark-box" style="margin-top:8px;aspect-ratio:3/2;"><span>Bundled image</span><img id="h-en-dark-img" alt="English · Dark hero" src="assets/hero-en-dark.jpg" class="loaded"/><button class="img-clear" aria-label="Restore English · Dark hero" onclick="clearImg('heroImgEnDark','h-en-dark-img','h-en-dark-box')">&times;</button></div></div>
+            <div><label class="f-lbl" style="margin-bottom:10px;">English · Light</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" aria-label="Upload English · Light hero" onchange="uploadImg(this,'heroImgEnLight','h-en-light-img','h-en-light-box')"/><div class="img-drop-txt">Replace image</div></div><div class="img-preview-box" id="h-en-light-box" style="margin-top:8px;aspect-ratio:3/2;"><span>Bundled image</span><img id="h-en-light-img" alt="English · Light hero" src="assets/hero-en-light.jpg" class="loaded"/><button class="img-clear" aria-label="Restore English · Light hero" onclick="clearImg('heroImgEnLight','h-en-light-img','h-en-light-box')">&times;</button></div></div>
+            <div><label class="f-lbl" style="margin-bottom:10px;">العربية · داكن</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" aria-label="Upload العربية · داكن hero" onchange="uploadImg(this,'heroImgArDark','h-ar-dark-img','h-ar-dark-box')"/><div class="img-drop-txt">Replace image</div></div><div class="img-preview-box" id="h-ar-dark-box" style="margin-top:8px;aspect-ratio:3/2;"><span>Bundled image</span><img id="h-ar-dark-img" alt="العربية · داكن hero" src="assets/hero-ar-dark.png" class="loaded"/><button class="img-clear" aria-label="Restore العربية · داكن hero" onclick="clearImg('heroImgArDark','h-ar-dark-img','h-ar-dark-box')">&times;</button></div></div>
+            <div><label class="f-lbl" style="margin-bottom:10px;">العربية · فاتح</label><div class="img-drop" style="padding:18px;"><input type="file" accept="image/*" aria-label="Upload العربية · فاتح hero" onchange="uploadImg(this,'heroImgArLight','h-ar-light-img','h-ar-light-box')"/><div class="img-drop-txt">Replace image</div></div><div class="img-preview-box" id="h-ar-light-box" style="margin-top:8px;aspect-ratio:3/2;"><span>Bundled image</span><img id="h-ar-light-img" alt="العربية · فاتح hero" src="assets/hero-ar-light.png" class="loaded"/><button class="img-clear" aria-label="Restore العربية · فاتح hero" onclick="clearImg('heroImgArLight','h-ar-light-img','h-ar-light-box')">&times;</button></div></div>
           </div>
         </div>
         <div class="form-actions">
@@ -635,7 +636,7 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
         </div>
         <div class="s-card">
           <div class="s-title"><i class="fa-solid fa-shield-halved"></i> Logo</div>
-          <div class="img-upload-wrap"><div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'logoImg','logo-preview-img','logo-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-shield-halved"></i></div><div class="img-drop-txt">Upload Logo</div><div class="img-drop-sub">Square image</div></div><div class="img-preview-box" id="logo-preview-box" style="aspect-ratio:1;max-width:160px;border-radius:50%;"><span>No logo</span><img id="logo-preview-img" alt=""/><button class="img-clear" onclick="clearImg('logoImg','logo-preview-img','logo-preview-box')">&times;</button></div></div>
+          <div class="img-upload-wrap"><div class="img-drop"><input type="file" accept="image/*" onchange="uploadImg(this,'brandLogoImg','logo-preview-img','logo-preview-box')"/><div class="img-drop-ico"><i class="fa-solid fa-shield-halved"></i></div><div class="img-drop-txt">Upload Logo</div><div class="img-drop-sub">Square image</div></div><div class="img-preview-box" id="logo-preview-box" style="aspect-ratio:1;max-width:160px;border-radius:50%;"><span>No logo</span><img id="logo-preview-img" alt=""/><button class="img-clear" onclick="clearImg('brandLogoImg','logo-preview-img','logo-preview-box')">&times;</button></div></div>
         </div>
         <div class="s-card">
           <div class="s-title"><i class="fa-solid fa-chart-bar"></i> Hero Stats</div>
@@ -697,15 +698,7 @@ input:checked+.tg-sl::before{transform:translateX(20px);background:#000;}
           </div>
           <div class="form-actions" style="margin-top:14px;"><button class="tb-btn primary" onclick="updateFirebaseConfig()"><i class="fa-solid fa-fire"></i> Update Firebase</button></div>
         </div>
-        <div class="s-card">
-          <div class="s-title"><i class="fa-solid fa-lock"></i> Change Password</div>
-          <div class="form-grid">
-            <div class="f-grp"><label class="f-lbl">Current Password</label><input class="f-inp" type="password" id="cp-cur"/></div>
-            <div class="f-grp"><label class="f-lbl">New Password</label><input class="f-inp" type="password" id="cp-new"/></div>
-            <div class="f-grp"><label class="f-lbl">Confirm</label><input class="f-inp" type="password" id="cp-conf"/></div>
-          </div>
-          <div class="form-actions" style="margin-top:14px;"><button class="tb-btn primary" onclick="changePass()">Update Password</button></div>
-        </div>
+        <div class="s-card"><div class="s-title"><i class="fa-solid fa-lock"></i> Admin access</div><p class="f-hint">Access is verified by Firebase Authentication and database security rules. Use your authorized Google account; no password is stored in this website.</p></div>
         <div class="s-card">
           <div class="s-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Website Settings</div>
           <div class="toggle-row"><div class="tg-info"><div class="tg-lbl">Intro Animation</div><div class="tg-hint">Cinematic eagle loader</div></div><label class="toggle"><input type="checkbox" id="set-intro" checked/><span class="tg-sl"></span></label></div>
@@ -752,7 +745,7 @@ const LS = {
 };
 
 /* ── Firebase config ── */
-let db=null, firebaseMode=false;
+let db=null, auth=null, firebaseMode=false;
 const FBKEY='ge_firebase_config';
 
 function getFbConfig(){return LS.get(FBKEY,null);}
@@ -762,8 +755,8 @@ async function initFirebase(cfg){
   try{
     const app=firebase.initializeApp(cfg, 'ge-admin-'+Date.now());
     db=firebase.database(app);
-    // test write
-    await db.ref('__ping__').set(Date.now());
+    auth=firebase.auth(app);
+    await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
     firebaseMode=true;
     setFbConfig(cfg);
     updateSyncBadge(true);
@@ -786,29 +779,19 @@ function updateSyncBadge(on){
 }
 
 /* ── Firebase R/W ── */
-async function fbSet(path, data){
-  if(firebaseMode&&db){
-    try{await db.ref(path).set(data);}catch(e){console.warn('FB write fail:',e);}
-  }
-  // Always mirror to localStorage
-  LS.set('ge_'+path.replace(/\//g,'_'), data);
+function requireAdmin(){
+  const user=auth&&auth.currentUser;
+  if(!firebaseMode||!db||!user||user.email!==window.EAGLE_ADMIN_EMAIL||!user.emailVerified)throw new Error('Admin sign-in required');
 }
-
-async function fbGet(path, def){
-  if(firebaseMode&&db){
-    try{
-      const snap=await db.ref(path).once('value');
-      if(snap.exists())return snap.val();
-    }catch(e){console.warn('FB read fail:',e);}
-  }
-  return LS.get('ge_'+path.replace(/\//g,'_'), def);
+async function fbSet(path,data){
+  requireAdmin();await db.ref(path).set(data);
+  LS.set('ge_'+path.replace(/\//g,'_'),data);
 }
-
+async function fbGet(path,def){
+  requireAdmin();const snap=await db.ref(path).once('value');return snap.exists()?snap.val():def;
+}
 async function fbRemove(path){
-  if(firebaseMode&&db){
-    try{await db.ref(path).remove();}catch(e){}
-  }
-  localStorage.removeItem('ge_'+path.replace(/\//g,'_'));
+  requireAdmin();await db.ref(path).remove();localStorage.removeItem('ge_'+path.replace(/\//g,'_'));
 }
 
 /* ══════════════════════════════════════
@@ -817,11 +800,10 @@ async function fbRemove(path){
 let packages=[], offers=[], pricing=[], services=[], gallery=[], info={}, settings={};
 let editPkgIdx=null, pkgImgData='';
 
-const defInfo=()=>({phone:'+966 50 174 9914',wa:'966501749914',email:'info@globaleagletrv.com',location:'Saudi Arabia',instagram:'https://instagram.com',snapchat:'https://snapchat.com',tiktok:'https://tiktok.com',heroTag:'ELEVATING EVERY JOURNEY',heroDesc:'',heroTitle:'',heroSubtitle:'',heroImgDark:'',heroImgLight:'',introImg:'',logoImg:'',heroFont:'',heroFontSize:'',heroFontWeight:'',heroColor:'',heroLetterSpacing:'',heroTextAlign:'',statDest:150,statFleet:42,statMembers:12,statYears:30,seoTitle:'Global Eagle Travel | Rise Above. Aim High.',seoMeta:''});
+const defInfo=()=>({phone:'+966 50 174 9914',wa:'966501749914',email:'info@globaleagletrv.com',location:'Saudi Arabia',instagram:'https://instagram.com',snapchat:'https://snapchat.com',tiktok:'https://tiktok.com',heroTag:'ELEVATING EVERY JOURNEY',heroDesc:'',heroTitle:'',heroSubtitle:'',heroImgDark:'',heroImgLight:'',introImg:'',brandLogoImg:'',heroFont:'',heroFontSize:'',heroFontWeight:'',heroColor:'',heroLetterSpacing:'',heroTextAlign:'',statDest:150,statFleet:42,statMembers:12,statYears:30,seoTitle:'Global Eagle Travel | Rise Above. Aim High.',seoMeta:''});
 const defSvc=()=>[{name:'Tourist Visas 🌍',status:'active'},{name:'Hotel Bookings 🏨',status:'active'},{name:'Flight Tickets ✈️',status:'active'},{name:'Student Visas 🎓',status:'active'},{name:'International Licenses 🚗',status:'active'},{name:'Travel Insurance 🛡',status:'active'}];
 const defPricing=()=>[{name:'Tourist Visa',price:'500 SAR'},{name:'Hotel Booking',price:'From 200/night'},{name:'Flight Tickets',price:'From 800 SAR'},{name:'Student Visa',price:'1200 SAR'},{name:'Int. License',price:'350 SAR'},{name:'Travel Insurance',price:'From 150 SAR'}];
 
-let CREDS={user:LS.get('ge_user','admin'), pass:LS.get('ge_pass','eagle2025')};
 
 /* ══════════════════════════════════════
    STARTUP FLOW
@@ -844,6 +826,16 @@ window.addEventListener('DOMContentLoaded', async ()=>{
   setFbConfig(saved); // احفظه للـ settings page
   const ok = await initFirebase(saved);
   showLogin(ok);
+  if(ok)auth.onAuthStateChanged(async user=>{
+    if(!user){document.getElementById('app').style.display='none';showLogin(true);return;}
+    if(user.email!==window.EAGLE_ADMIN_EMAIL||!user.emailVerified){
+      await auth.signOut();loginError('This account is not authorized to manage Eagle.');return;
+    }
+    try{
+      await loadAllData();initApp();
+      document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
+    }catch(e){loginError('Unable to load website content. Please try again.');}
+  });
   if(ok){
     const urlEl=document.getElementById('set-fb-url');
     const keyEl=document.getElementById('set-fb-apikey');
@@ -856,7 +848,7 @@ window.addEventListener('DOMContentLoaded', async ()=>{
 
 function showLogin(fbOk){
   document.getElementById('login').style.display='flex';
-  document.getElementById('lb-fb-mode').textContent=fbOk?'Connected to Firebase':'Offline — localStorage only';
+  document.getElementById('lb-fb-mode').textContent=fbOk?'Secure Google sign-in':'Connection unavailable — editing disabled';
 }
 
 window.connectFirebase=async function(){
@@ -894,31 +886,18 @@ function initLoginCanvas(){
   (function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.gold?`rgba(201,162,39,${p.op})`:`rgba(255,255,255,${p.op*.3})`;ctx.fill();});requestAnimationFrame(loop);})();
 }
 
+function loginError(message){const err=document.getElementById('l-err');err.textContent=message;err.style.display='block';}
 window.doLogin=async function(){
-  const u=document.getElementById('l-user').value;
-  const p=document.getElementById('l-pass').value;
-  if(u===CREDS.user&&p===CREDS.pass){
-    document.getElementById('login').style.opacity='0';
-    document.getElementById('login').style.transition='opacity .5s';
-    setTimeout(async()=>{
-      document.getElementById('login').style.display='none';
-      document.getElementById('app').style.display='block';
-      await loadAllData();
-      initApp();
-    },520);
-  }else{
-    const err=document.getElementById('l-err');
-    err.style.display='block';
-    setTimeout(()=>err.style.display='none',2500);
-  }
+  if(!auth){loginError('Database connection unavailable. Please reload.');return;}
+  const btn=document.getElementById('login-btn');btn.disabled=true;
+  try{
+    const provider=new firebase.auth.GoogleAuthProvider();provider.setCustomParameters({prompt:'select_account'});
+    await auth.signInWithPopup(provider);
+  }catch(e){loginError(e.code==='auth/popup-closed-by-user'?'Sign-in was cancelled.':'Sign-in failed. Check your account and try again.');}
+  finally{btn.disabled=false;}
 };
-
-window.doLogout=function(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('login').style.display='flex';
-  document.getElementById('login').style.opacity='1';
-  document.getElementById('l-pass').value='';
-};
+window.doLogout=async function(){if(db)db.ref('packages').off();if(auth)await auth.signOut();};
+window.addEventListener('unhandledrejection',event=>{showToast('❌ Changes were not saved. Check connection and admin access.');console.error('Save failed',event.reason);});
 
 /* ══════════════════════════════════════
    LOAD ALL DATA
@@ -948,9 +927,10 @@ function initApp(){
   loadSettings();
   loadHeroImages();
   renderGalleryGrid();
-  if(info.logoImg){const li=document.getElementById('sb-logo-img');if(li){li.src=info.logoImg;}}
+  if(info.brandLogoImg){const li=document.getElementById('sb-logo-img');if(li){li.src=info.brandLogoImg;}}
   // Real-time listener
   if(firebaseMode&&db){
+    db.ref('packages').off();
     db.ref('packages').on('value',snap=>{
       if(snap.exists()){const v=snap.val();packages=Array.isArray(v)?v:Object.values(v||{});document.getElementById('sb-pkg-cnt').textContent=packages.length;document.getElementById('d-pkg').textContent=packages.length;}
     });
@@ -1120,11 +1100,12 @@ window.uploadImg=function(input,infoKey,imgElId,boxId){
   if(file.size>6*1024*1024){showToast('❌ Image too large (max 6MB)');return;}
   const r=new FileReader();
   r.onload=async e=>{
+    if(!/^image\/(jpeg|png|webp|gif)$/.test(file.type)){showToast('❌ Use a JPG, PNG, WebP or GIF image');return;}
     info[infoKey]=e.target.result;
     await fbSet('info',info);
     const img=document.getElementById(imgElId);img.src=e.target.result;img.classList.add('loaded');
     document.getElementById(boxId).querySelector('span').style.display='none';
-    if(infoKey==='logoImg'){const li=document.getElementById('sb-logo-img');if(li)li.src=e.target.result;}
+    if(infoKey==='brandLogoImg'){const li=document.getElementById('sb-logo-img');if(li)li.src=e.target.result;}
     showToast('✅ Image uploaded!');
   };
   r.readAsDataURL(file);
@@ -1133,10 +1114,10 @@ window.clearImg=async function(infoKey,imgElId,boxId){
   info[infoKey]='';await fbSet('info',info);
   const img=document.getElementById(imgElId);img.src='';img.classList.remove('loaded');
   document.getElementById(boxId).querySelector('span').style.display='';
-  showToast('🗑️ Cleared');
+  loadHeroSettings();showToast('✅ Bundled image restored');
 };
 function loadHeroImages(){
-  [{k:'introImg',i:'intro-preview-img',b:'intro-preview-box'},{k:'logoImg',i:'logo-preview-img',b:'logo-preview-box'}].forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
+  [{k:'introImg',i:'intro-preview-img',b:'intro-preview-box'},{k:'brandLogoImg',i:'logo-preview-img',b:'logo-preview-box'}].forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
   document.getElementById('s-dest').value=info.statDest||150;
   document.getElementById('s-fleet').value=info.statFleet||42;
   document.getElementById('s-mem').value=info.statMembers||12;
@@ -1151,6 +1132,7 @@ window.saveHero=async function(){
    HERO SETTINGS
 ══════════════════════════════════════ */
 function loadHeroSettings(){
+  ['title','subtitle','tag'].forEach(field=>{document.getElementById('hs-'+field+'-ar').value=info['hero'+field[0].toUpperCase()+field.slice(1)+'Ar']||'';});
   document.getElementById('hs-title').value=info.heroTitle||'';
   document.getElementById('hs-subtitle').value=info.heroSubtitle||'';
   document.getElementById('hs-tag').value=info.heroTag||'';
@@ -1162,7 +1144,13 @@ function loadHeroSettings(){
   document.getElementById('hs-color-hex').value=col;
   document.getElementById('hs-ls').value=info.heroLetterSpacing||'';
   document.getElementById('hs-align').value=info.heroTextAlign||'';
-  [{k:'heroImgDark',i:'hdark-img',b:'hdark-box'},{k:'heroImgLight',i:'hlight-img',b:'hlight-box'}].forEach(({k,i,b})=>{if(info[k]){const img=document.getElementById(i);if(img){img.src=info[k];img.classList.add('loaded');document.getElementById(b).querySelector('span').style.display='none';}}});
+  ['en-dark','en-light','ar-dark','ar-light'].forEach(id=>{
+    const key='heroImg'+id.split('-').map(part=>part[0].toUpperCase()+part.slice(1)).join('');
+
+    const img=document.getElementById('h-'+id+'-img');
+    img.src=info[key]||'assets/hero-'+id+(id.startsWith('ar-')?'.png':'.jpg');img.classList.add('loaded');
+    document.getElementById('h-'+id+'-box').querySelector('span').style.display='none';
+  });
   previewTitle();previewSub();previewTypo();
   document.getElementById('prev-tag').textContent=info.heroTag||'ELEVATING EVERY JOURNEY';
 }
@@ -1180,11 +1168,12 @@ window.previewTypo=function(){
   el.style.textAlign=document.getElementById('hs-align').value||'';
 };
 window.saveHeroSettings=async function(){
+  ['title','subtitle','tag'].forEach(field=>{info['hero'+field[0].toUpperCase()+field.slice(1)+'Ar']=document.getElementById('hs-'+field+'-ar').value.trim();});
   Object.assign(info,{heroTitle:document.getElementById('hs-title').value.trim(),heroSubtitle:document.getElementById('hs-subtitle').value.trim(),heroTag:document.getElementById('hs-tag').value.trim(),heroFont:document.getElementById('hs-font').value,heroFontSize:document.getElementById('hs-size').value,heroFontWeight:document.getElementById('hs-weight').value,heroColor:document.getElementById('hs-color').value,heroLetterSpacing:document.getElementById('hs-ls').value,heroTextAlign:document.getElementById('hs-align').value});
   await fbSet('info',info);showToast('✅ Hero saved — reload site to see!');
 };
 window.resetHeroSettings=async function(){
-  ['heroTitle','heroSubtitle','heroFont','heroFontSize','heroFontWeight','heroColor','heroLetterSpacing','heroTextAlign'].forEach(k=>info[k]='');
+  ['heroTitle','heroSubtitle','heroTitleAr','heroSubtitleAr','heroTagAr','heroFont','heroFontSize','heroFontWeight','heroColor','heroLetterSpacing','heroTextAlign'].forEach(k=>info[k]='');
   info.heroTag='ELEVATING EVERY JOURNEY';
   await fbSet('info',info);loadHeroSettings();showToast('🔄 Reset to default');
 };
@@ -1243,15 +1232,6 @@ function loadSettings(){
 window.saveSettings=async function(){
   settings={intro:document.getElementById('set-intro').checked,wa:document.getElementById('set-wa').checked,maint:document.getElementById('set-maint').checked};
   await fbSet('settings',settings);showToast('✅ Settings saved!');
-};
-window.changePass=function(){
-  const cur=document.getElementById('cp-cur').value;
-  const nw=document.getElementById('cp-new').value;
-  const cf=document.getElementById('cp-conf').value;
-  if(cur!==CREDS.pass){showToast('❌ Current password wrong');return;}
-  if(nw!==cf||nw.length<6){showToast('❌ Passwords mismatch / too short');return;}
-  CREDS.pass=nw;LS.set('ge_pass',nw);showToast('✅ Password updated!');
-  ['cp-cur','cp-new','cp-conf'].forEach(id=>document.getElementById(id).value='');
 };
 window.updateFirebaseConfig=async function(){
   const url=document.getElementById('set-fb-url').value.trim();

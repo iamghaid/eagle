@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "packages": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"},
+    "offers": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"},
+    "pricing": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"},
+    "services": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"},
+    "gallery": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"},
+    "info": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"},
+    "settings": {".read": true, ".write": "auth != null && auth.token.email_verified === true && auth.token.email === 'gheidabdulkarim@gmail.com' && auth.token.firebase.sign_in_provider === 'google.com'"}
+  }
+}

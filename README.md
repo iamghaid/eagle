@@ -1,152 +1,59 @@
-# 🦅 Global Eagle Travel
-### Rise Above. Aim High.
+# Global Eagle Travel
 
-A luxury travel & tourism website for **Global Eagle Travel** — Saudi Arabia.
-Built with pure HTML/CSS/JS + Firebase Realtime Database for live sync across all devices.
+A bilingual travel and tourism website developed by Gheid Abdulkarim. Vercel hosts the website and admin dashboard; Firebase Realtime Database provides persistent content.
 
----
+- Website: https://eagle-azure.vercel.app/
+- Admin: https://eagle-azure.vercel.app/admin.html
+- GitHub: https://github.com/iamghaid/eagle
 
-## 🌐 Live Site
-**[iamghaid.github.io/eagle/index.html](https://iamghaid.github.io/eagle/index.html)**
+## Features
 
----
+English/Arabic with RTL layouts, dark/light themes, GSAP scroll reveals and parallax, travel packages, services, offers, gallery, statistics and WhatsApp inquiries. Visitor preferences persist locally. Portfolio links pass `portfolio_lang` and `portfolio_theme`; validated messages from the portfolio parent update previews without reloading.
 
-## 📁 Project Files
+Four independent hero assets keep the eagle opposite the copy:
 
-| File | Description |
-|------|-------------|
-| `index.html` | Main website — public facing |
-| `admin.html` | Admin dashboard — manage all content |
-| `README.md` | This file |
+| Language | Theme | Asset | Admin field |
+| --- | --- | --- | --- |
+| English | Dark | assets/hero-en-dark.jpg | heroImgEnDark |
+| English | Light | assets/hero-en-light.jpg | heroImgEnLight |
+| Arabic | Dark | assets/hero-ar-dark.png | heroImgArDark |
+| Arabic | Light | assets/hero-ar-light.png | heroImgArLight |
 
----
+The admin can replace or restore each image separately. Old shared images remain stored, while the site uses the four dedicated fields. Arabic hero text has separate fields. Theme-aware gradients and text colors retain contrast. A transparent gold eagle icon is used for the company mark and favicon.
 
-## ✨ Features
+## Admin and backend
 
-### Website (`index.html`)
-- 🌙 Dark / ☀️ Light mode toggle
-- 🌍 Bilingual — English & Arabic with full RTL support
-- 🔤 Instant font switching — no flash or delay
-- 🎬 Cinematic loader animation synced with Firebase loading
-- ✈️ Hero section with parallax & particle effects
-- 📦 Packages grid — pulled live from Firebase, fully bilingual
-- 🪜 How It Works — interactive steps timeline with auto-cycle
-- 🛎️ Services bento grid — translates names & descriptions
-- 🔤 Running marquee with translated service names
-- 🖼️ Gallery section — auto-shows when images exist
-- 📞 Contact form → sends directly via WhatsApp
-- 📱 Fully responsive — iPhone, Android, tablet & desktop
+The implemented admin code uses Firebase Authentication with Google sign-in, session persistence and an authorized-account check. The published database rules enforce writes by the verified Google account `gheidabdulkarim@gmail.com` only; the frontend check alone is not the security boundary. The old client-side password and local password-change controls have been removed.
 
-### Admin (`admin.html`)
-- 🔐 Password protected login
-- 🔥 Firebase Realtime Database — changes appear instantly on ALL devices worldwide
-- 📦 Add / edit / delete travel packages with images, Arabic & English names
-- 🏷️ Manage special offers & service pricing
-- 🛎️ Show / hide services in bento & marquee
-- 🎨 Hero text, typography & background images (separate dark + light versions)
-- 📸 Gallery management with drag & drop upload
-- 📊 Hero stats — destinations, fleet, members, years
-- ℹ️ Company info — phone, WhatsApp, email, social links
-- ⚙️ Site settings — intro animation, WhatsApp button, maintenance mode
-- 📱 Fully mobile responsive — works on phone & laptop
+Public nodes are `packages`, `offers`, `pricing`, `services`, `gallery`, `info` and `settings`. Root reads, other nodes and anonymous writes are denied. Existing data is retained. The previous time-limited test rules expired on July 1, 2026; `database.rules.json` replaces them with non-expiring scoped access.
 
----
+Writes must succeed in Firebase before success is shown. Failed writes are reported; local storage is a secondary cache, not a production database. Login no longer writes a test node.
 
-## 🔥 Firebase Setup
+The dashboard manages bilingual packages, offers, prices, services, English/Arabic hero text, four hero images, company icon, intro image, statistics, gallery, contact details and settings. Image uploads use data URLs with a 6 MB limit. Large galleries should move to dedicated object storage. Inquiries go to WhatsApp; no reservation or payment backend is included.
 
-Firebase config is **hardcoded directly** in both files.
-Any device that opens either file connects to the same database automatically — no setup needed.
+Firebase remains the managed backend. Vercel serves static files, so no long-running server or temporary filesystem storage is necessary. Firebase public web configuration identifies the app; private service-account credentials are not shipped.
 
-**Project:** `eagle-b6d1c`
-**Database:** `eagle-b6d1c-default-rtdb` (asia-southeast1 region)
+## Console configuration
 
-### Database Structure
-```
-/packages    → travel package objects (nameEn, nameAr, catEn, catAr, price, img...)
-/offers      → special offer objects (title, discount)
-/pricing     → service pricing rows
-/services    → service objects (name, status)
-/gallery     → base64 image strings array
-/info        → company info & hero settings
-/settings    → site feature toggles
-```
+Database rules have been published. Google provider activation and the authorized Vercel domain must also be configured before admin sign-in works.
 
----
+1. Enable Google under Authentication → Sign-in method.
+2. Add `eagle-azure.vercel.app` under Authentication → Settings → Authorized domains.
+3. Publish `database.rules.json` under Realtime Database → Rules.
+4. Sign in at `/admin.html` with the authorized account.
 
-## 🚀 Deployment
+The email in `admin-access.js` must match the rules. The OAuth support email does not grant editing rights.
 
-Hosted on **GitHub Pages** — auto-deploys on every push to `main`.
+## Deployment and stack
 
-### To update the site:
-1. Edit files in **VS Code**
-2. Write a commit message (e.g. `update packages`)
-3. Click **Commit** → **Sync Changes**
-4. Wait ~60 seconds → live on all devices ✅
+Push to GitHub and run `vercel deploy --prod` for the linked Eagle project. `vercel.json` adds MIME protection, referrer policy and no-store/noindex/frame-denial headers to the admin page. The public page remains embeddable in the portfolio.
 
----
+HTML, CSS, JavaScript, GSAP 3 / ScrollTrigger, Firebase Authentication, Firebase Realtime Database v9 compatibility SDK, Font Awesome, Google Fonts, Git/GitHub and Vercel. English typography uses Cinzel/Poppins; Arabic uses Amiri/IBM Plex Sans Arabic.
 
-## 🔐 Admin Access
+## Generated assets
 
-| Field | Value |
-|-------|-------|
-| **URL** | `iamghaid.github.io/eagle/admin.html` |
-| **Username** | `admin` |
-| **Default Password** | `eagle2025` |
+Built-in image generation created the Arabic variants and transparent icon, saved under `assets/`. English photos are retained unchanged.
 
-> ⚠️ Change the password from **Settings** inside the dashboard after first login.
+Arabic prompt: horizontally mirror the original eagle and landscape, preserve its identity, lighting, dark/light palette and 3:2 composition; put the eagle on the left facing right with negative space on the right; no text or added objects.
 
----
-
-## 🌍 Bilingual Support
-
-The site supports full English ↔ Arabic switching including:
-
-| Element | Translated |
-|---------|-----------|
-| All static text | ✅ |
-| Package names & categories | ✅ |
-| Service names & descriptions | ✅ |
-| Package duration (Nights/Days) | ✅ |
-| Contact form labels & placeholders | ✅ |
-| How It Works steps | ✅ |
-| Running marquee | ✅ |
-| Fonts (Cinzel/Poppins ↔ Amiri/IBM Plex Arabic) | ✅ instant |
-
----
-
-## 📱 Responsive Breakpoints
-
-| Breakpoint | Target |
-|-----------|--------|
-| `390px` | iPhone SE / small phones |
-| `580px` | Standard mobile |
-| `768px` | Small tablet |
-| `900px` | Tablet / iPad |
-| `1100px` | Small laptop |
-| `1300px+` | Desktop |
-
----
-
-## 📱 Tech Stack
-
-| Technology | Usage |
-|-----------|-------|
-| HTML / CSS / JavaScript | No frameworks — pure vanilla |
-| GSAP 3 | Animations, scroll triggers, parallax |
-| Firebase Realtime DB v9 | Live data sync across all devices |
-| Font Awesome 6 | Icons |
-| Google Fonts | Cinzel, Poppins, Amiri, IBM Plex Arabic |
-| GitHub Pages | Free hosting with auto-deploy |
-
----
-
-## 📞 Contact
-
-**Global Eagle Travel**
-📱 +966 50 174 9914
-📧 info@globaleagletrv.com
-📍 Saudi Arabia
-
----
-
-*© 2025 Global Eagle Travel. The Majesty of Flight.*
+Icon prompt: compact professional flying eagle, ascending swept wings, gold and bronze, clean recognizable silhouette, no text, circle, shield, scenery or background.
